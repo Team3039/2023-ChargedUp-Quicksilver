@@ -19,18 +19,26 @@ public class Vision extends SubsystemBase {
   public PhotonPipelineResult result;
   public PhotonTrackedTarget target;
   
-  public Vision() {}
+  public double TargetX;
+
+  public Vision() {
+    camera.setDriverMode(false);
+  }
 
   /**  Set variable "target" to the latest and best fitting target tracked by the camera.   */
   public void recieveTarget() {
+    System.out.println("oh my fucking god");
     result = camera.getLatestResult();
+    System.out.println(result.hasTargets());
     if (result.hasTargets()) {
       target = result.getBestTarget();
+      System.out.println(target.getYaw());
     }
   }
 
   @Override
   public void periodic() {
    recieveTarget();
+
   }
 }

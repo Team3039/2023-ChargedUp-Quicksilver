@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.Vision;
 
 
 /**
@@ -18,6 +19,7 @@ import frc.robot.Constants.OperatorConstants;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  public static final Vision vision = new Vision();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
