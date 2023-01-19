@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.lib.SwerveModuleConstants;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,7 +15,75 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+
+  public static final class Swerve{
+
+    public static final double DRIVE_KS = 0;
+    public static final double DRIVE_KA = 0;
+    public static final double DRIVE_KV = 0;
+    public static final double MAX_SPEED = 0;
+    public static final double DRIVE_GEAR_RATIO = 0;
+    public static final double WHEEL_CIRCUMFERENCE = 0;
+    public static final double ANGLE_GEAR_RATIO = 0;
+    public static final boolean CANCONDER_INVERT = false;
+    
+    public static final boolean DRIVE_MOTOR_INVERT = false;
+    public static final boolean ANGLE_MOTOR_INVERT = false;
+    public static final double DRIVE_CLOSED_LOOP_RAMP = 0;
+    public static final double DRIVE_OPEN_LOOP_RAMP = 0;
+    public static final int ANGLE_MOTOR_SMART_CURRENT = 25;
+    public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
+    public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
+    public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
+    public static final double ANGLE_MOTOR_KP = 0;
+    public static final double ANGLE_MOTOR_KI = 0;
+    public static final double ANGLE_MOTOR_KD = 0;
+    public static final double DRIVE_MOTOR_KP = 0;
+    public static final double DRIVE_MOTOR_KI = 0;
+    public static final double DRIVE_MOTOR_KD = 0;
+    public static final double DRIVE_MOTOR_KF = 0;
+    public static final double DRIVE_MOTOR_MIN_OUTPUT = -1;
+    public static final double DRIVE_MOTOR_MAX_OUTPUT = 1;
+
+    public static final class Mod0 {
+            public static final int driveMotorID = 0;
+            public static final int angleMotorID = 1;
+            public static final int canCoderID = 0;
+            public static final double angleOffset = 0;
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
+        }
+
+        /* Front Right Module - Module 1 */
+        public static final class Mod1 {
+            public static final int driveMotorID = 2;
+            public static final int angleMotorID = 3;
+            public static final int canCoderID = 1;
+            public static final double angleOffset = 0;
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
+        }
+
+        /* Back Left Module - Module 2 */
+        public static final class Mod2 {
+            public static final int driveMotorID = 4;
+            public static final int angleMotorID = 5;
+            public static final int canCoderID = 2;
+            public static final double angleOffset = 0;
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
+        }
+
+        /* Back Right Module - Module 3 */
+        public static final class Mod3 {
+            public static final int driveMotorID = 6;
+            public static final int angleMotorID = 7;
+            public static final int canCoderID = 3;
+            public static final double angleOffset = 0;
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
+        }
   }
+
+
 }

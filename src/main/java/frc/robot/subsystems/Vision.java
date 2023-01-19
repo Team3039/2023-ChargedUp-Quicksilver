@@ -27,7 +27,7 @@ public class Vision extends SubsystemBase {
 
   /**  Set variable "target" to the latest and best fitting target tracked by the camera.   */
   public void recieveTarget() {
-    System.out.println("oh my fucking god");
+    System.out.println("oh my [redacted] god");
     result = camera.getLatestResult();
     System.out.println(result.hasTargets());
     if (result.hasTargets()) {
