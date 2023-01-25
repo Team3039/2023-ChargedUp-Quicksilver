@@ -21,7 +21,8 @@ public final class Constants {
   public static final class Ports{ 
         public static final int PIGEON_2 = 0;
 
-
+        public static final int CLAW_LEFT_WHEELS = 1;
+        public static final int CLAW_RIGHT_WHEELS = 2;
   }
 
   public static final class Swerve{

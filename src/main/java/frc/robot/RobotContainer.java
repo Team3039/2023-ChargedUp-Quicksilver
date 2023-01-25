@@ -18,6 +18,8 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final Vision vision = new Vision();
+  public static final Drive drive = new Drive();
+  public static final Claw claw = new Claw();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   
