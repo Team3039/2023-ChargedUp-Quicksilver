@@ -25,11 +25,9 @@ public class RobotContainer {
   public static final Vision vision = new Vision();
   public static final Drive drive = new Drive();
   // public static final Claw claw = new Claw();
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   
-  private static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
-  private static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
+  public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
+  public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
   
   private final JoystickButton driverX = new JoystickButton(driverPad, PS4Controller.Button.kCross.value);
   private final JoystickButton driverSquare = new JoystickButton(driverPad, PS4Controller.Button.kSquare.value);

@@ -23,6 +23,46 @@ public final class Constants {
 
         public static final int CLAW_LEFT_WHEELS = 6;
         public static final int CLAW_RIGHT_WHEELS = 7;
+
+        public static final int ELEVATOR_A = 9;
+        public static final int ELEVATOR_B = 10;
+
+        public static final int ARM = 11;
+
+        public static final int WRIST = 0;
+  }
+
+  public static final class Elevator {
+        // Elevator PID //
+        public static final double ELEVATOR_KP = 0;
+        public static final double ELEVATOR_KI = 0;
+        public static final double ELEVATOR_KD = 0;
+
+        // Elevator FF //
+        public static final double ELEVATOR_KS = 0;
+        public static final double ELEVATOR_KG = 0;
+        public static final double ELEVATOR_KV = 0;
+
+        // Shoulder PID //
+        public static final double SHOULDER_KP = 0;
+        public static final double SHOULDER_KI = 0;
+        public static final double SHOULDER_KD = 0;
+
+        // Shoulder FF //
+        public static final double SHOULDER_KS = 0;
+        public static final double SHOULDER_KG = 0;
+        public static final double SHOULDER_KV = 0;
+  }
+  
+  public static final class Wrist {
+
+    public static final double KP = 0;
+    public static final double KI = 0;
+    public static final double KD = 0;
+    public static final double KS = 0;
+    public static final double KG = 0;
+    public static final double KV = 0;
+
   }
 
   public static final class Swerve{
