@@ -40,11 +40,12 @@ public class TeleopAprilTags extends CommandBase {
             if (vision.result.hasTargets()) {
                 System.out.println(vision.result.hasTargets());
                 double error = vision.result.getBestTarget().getYaw();
-                rotation = error * Constants.Swerve.KP_APRIL_TAGS * -1;
+                rotation = error * .1 * -1;
             }
             else {
                 rotation = 0;
             }
+
 
             translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.MAX_SPEED);
             drive.drive(translation, rotation, fieldRelative, openLoop);

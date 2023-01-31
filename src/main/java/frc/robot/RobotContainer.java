@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Drive;
 // import frc.robot.subsystems.Drive;
@@ -77,6 +78,12 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    drive.setDefaultCommand(
+      new TeleopSwerve(drive, 
+      driverPad, 
+      true, 
+      true)
+    );
     // Configure the trigger bindings
     configureBindings();
   }

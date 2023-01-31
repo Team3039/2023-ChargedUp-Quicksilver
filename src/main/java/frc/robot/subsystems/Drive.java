@@ -21,38 +21,32 @@ import frc.robot.RobotContainer;
 
 public class Drive extends SubsystemBase {
 
-    public static Drive INSTANCE = new Drive();
-
+    public Pigeon2 gyro = new Pigeon2(Constants.Ports.PIGEON_2);
+    public SwerveModule[] mSwerveMods = new SwerveModule[] {
+        new SwerveModule(0, Constants.Swerve.Mod0.constants),
+        new SwerveModule(1, Constants.Swerve.Mod1.constants),
+        new SwerveModule(2, Constants.Swerve.Mod2.constants),
+        new SwerveModule(3, Constants.Swerve.Mod3.constants)
+};
     public SwerveDriveOdometry swerveOdometry;
-    public SwerveModule[] mSwerveMods;
-    public Pigeon2 gyro;
    
     public static Trajectory trajectory = new Trajectory();
     public static TrapezoidProfile.Constraints thetaController;
 
     public double[] previousPose = new double[2];
 
+    public boolean test = false;
+
     public Drive() {
         gyro = new Pigeon2(Constants.Ports.PIGEON_2);
         gyro.configFactoryDefault();
         setGyro(0);
-
-        mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
-    };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions());
 
         thetaController = new TrapezoidProfile.Constraints(
                 Constants.AutoConstants.K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND,
                 Constants.AutoConstants.K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
-    }
-
-    public static Drive getInstance() {
-        return INSTANCE;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -128,6 +122,7 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (test) {
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getPositions());
@@ -141,5 +136,9 @@ public class Drive extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
        }
+        }
+        else {
+            test = true;
+        }
     }
 }

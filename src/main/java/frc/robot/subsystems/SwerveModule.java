@@ -44,6 +44,7 @@ public class SwerveModule extends SubsystemBase{
         /* Angle Encoder Config */
         angleEncoder = new CANCoder(moduleConstants.cancoderID);
         configAngleEncoder();
+        angleEncoder.configMagnetOffset(moduleConstants.angleOffset);
 
         /* Angle Motor Config */
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -87,6 +88,7 @@ public class SwerveModule extends SubsystemBase{
         double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle
                 : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
                                                    // Jittering.
+        System.out.println(angle + "e" + moduleNumber );
         lastAngle = angle;
         angleMotor.set(MathUtil.clamp(angleOutput, -1, 1));
         // angleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle, Constants.Swerve.ANGLE_GEAR_RATIO));
@@ -162,5 +164,8 @@ public class SwerveModule extends SubsystemBase{
     @Override
     public void periodic() {
     angleOutput = angleController.calculate(angleEncoder.getAbsolutePosition(), lastAngle);
+    // System.out.println(angleOutput + "    eeeeeeee");
+    // System.out.println(lastAngle + "      TTTTTTTTTTTTTTT");
+
   }
 }

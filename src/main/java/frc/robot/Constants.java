@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.SwerveModuleConstants;
@@ -19,17 +20,15 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
 
   public static final class Ports{ 
-        public static final int PIGEON_2 = 0;
+        public static final int PIGEON_2 = 4;
 
-        public static final int CLAW_LEFT_WHEELS = 6;
-        public static final int CLAW_RIGHT_WHEELS = 7;
+        public static final int CLAW_LEFT_WHEELS = 12;
+        public static final int CLAW_RIGHT_WHEELS = 11;
 
         public static final int ELEVATOR_A = 9;
         public static final int ELEVATOR_B = 10;
 
-        public static final int ARM = 11;
-
-        public static final int WRIST = 0;
+        public static final int WRIST = 13;
   }
 
   public static final class Elevator {
@@ -70,11 +69,15 @@ public final class Constants {
     public static final double DRIVE_KS = 0;
     public static final double DRIVE_KA = 0;
     public static final double DRIVE_KV = 0;
-    public static final double MAX_SPEED = 0;
     public static final double DRIVE_GEAR_RATIO = (6.12 / 1); //6.12 : 1
     public static final double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
     public static final double ANGLE_GEAR_RATIO = ((150 / 7) / 1); //150/7 : 1
     public static final boolean CANCONDER_INVERT = false;
+
+    public static final double TRACK_WIDTH = Units.inchesToMeters(21.70);
+    public static final double WHEEL_BASE = Units.inchesToMeters(21.70);
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.99);
+
     
     public static final boolean DRIVE_MOTOR_INVERT = false;
     public static final boolean ANGLE_MOTOR_INVERT = false;
@@ -84,10 +87,10 @@ public final class Constants {
     public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
     public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
     public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
-    public static final double ANGLE_MOTOR_KP = 0;
+    public static final double ANGLE_MOTOR_KP = 0.002;
     public static final double ANGLE_MOTOR_KI = 0;
     public static final double ANGLE_MOTOR_KD = 0;
-    public static final double DRIVE_MOTOR_KP = 0;
+    public static final double DRIVE_MOTOR_KP = 0.1;
     public static final double DRIVE_MOTOR_KI = 0;
     public static final double DRIVE_MOTOR_KD = 0;
     public static final double DRIVE_MOTOR_KF = 0;
@@ -95,46 +98,51 @@ public final class Constants {
     public static final double DRIVE_MOTOR_MAX_OUTPUT = 1;
     public static final double DRIVE_MOTOR_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO;
     public static final double DRIVE_MOTOR_VELOCITY_CONVERSION = (WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO) / 60;
-    public static final SwerveDriveKinematics SWERVE_KINEMATICS = null;
+    public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
+      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+      
 public static final boolean INVERT_GYRO = false;
-public static final double MAX_ANGULAR_VELOCITY = 0;
-public static final double KP_APRIL_TAGS = 0;
+public static final double MAX_ANGULAR_VELOCITY = 11;
+public static final double MAX_SPEED = 4;
 
         public static final class Mod0 {
-            public static final int driveMotorID = 0;
-            public static final int angleMotorID = 1;
+            public static final int driveMotorID = 1;
+            public static final int angleMotorID = 2;
             public static final int canCoderID = 0;
-            public static final double angleOffset = 0;
+            public static final double angleOffset = -138.8671875;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final int driveMotorID = 2;
-            public static final int angleMotorID = 3;
+            public static final int driveMotorID = 3;
+            public static final int angleMotorID = 4;
             public static final int canCoderID = 1;
-            public static final double angleOffset = 0;
+            public static final double angleOffset = -223.2421875;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final int driveMotorID = 4;
-            public static final int angleMotorID = 5;
+            public static final int driveMotorID = 5;
+            public static final int angleMotorID = 6;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 0;
+            public static final double angleOffset = -113.3789062;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final int driveMotorID = 6;
-            public static final int angleMotorID = 7;
+            public static final int driveMotorID = 7;
+            public static final int angleMotorID = 8;
             public static final int canCoderID = 3;
-            public static final double angleOffset = 0;
+            public static final double angleOffset = -3.51562;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
