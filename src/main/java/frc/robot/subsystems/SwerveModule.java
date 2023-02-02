@@ -28,8 +28,10 @@ public class SwerveModule extends SubsystemBase{
     private CANSparkMax angleMotor;
     private CANSparkMax driveMotor;
     private RelativeEncoder driveEncoder;
+    private RelativeEncoder integratedAngleEncoder;
     private CANCoder angleEncoder;
     private SparkMaxPIDController driveController;
+    private SparkMaxPIDController integratedAngleController;
     private PIDController angleController;
     private double angleOutput;
     private double lastAngle;
@@ -43,6 +45,7 @@ public class SwerveModule extends SubsystemBase{
 
         /* Angle Encoder Config */
         angleEncoder = new CANCoder(moduleConstants.cancoderID);
+        
         configAngleEncoder();
         angleEncoder.configMagnetOffset(moduleConstants.angleOffset);
 
@@ -65,6 +68,17 @@ public class SwerveModule extends SubsystemBase{
             Constants.Swerve.ANGLE_MOTOR_KI, 
             Constants.Swerve.ANGLE_MOTOR_KD);
         configAngleController();
+
+        integratedAngleEncoder = angleMotor.getEncoder();
+        resetToAbsolute();
+        integratedAngleEncoder.setPositionConversionFactor(1);
+        integratedAngleController = angleMotor.getPIDController();
+        integratedAngleController.setP(-.02);
+        integratedAngleController.setD(0);
+        // integratedAngleController.setPositionPIDWrappingMinInput(0);
+        // integratedAngleController.setPositionPIDWrappingMaxInput(21.42857142857);
+        integratedAngleController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
+
         lastAngle = getState().angle.getDegrees();
 
         angleMotor.burnFlash();
@@ -74,11 +88,12 @@ public class SwerveModule extends SubsystemBase{
     
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+        // System.out.println(desiredState.angle.getDegrees() + "     e     " + moduleNumber );
+        desiredState = SwerveModuleState.optimize(desiredState, getState().angle );
 
         if (isOpenLoop) {
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.MAX_SPEED;
-            driveMotor.set(percentOutput);
+            // driveMotor.set(percentOutput);
         } else {
             double velocity = desiredState.speedMetersPerSecond;
             driveController.setReference(velocity, ControlType.kVelocity, 0, 
@@ -88,24 +103,41 @@ public class SwerveModule extends SubsystemBase{
         double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle
                 : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
                                                    // Jittering.
-        System.out.println(angle + "e" + moduleNumber );
+
+        // System.out.println(angleOutput + "   hdgjhsd   " + moduleNumber);
+        // angleOutput = Math.abs(angleOutput) < .3 ? 0 : angleOutput;
+        // angleOutput *= angleEncoder.getAbsolutePosition() < 180 ? 1 : -1;
+
+        integratedAngleController.setReference(wheelDegreesToNeo(angle), CANSparkMax.ControlType.kPosition);
+
+
+        // System.out.println(neoToWheelDegrees(integratedAngleEncoder.getPosition()) + "   e      " + moduleNumber);
+    //    System.out.println(wheelDegree);
+        // System.out.println(wheelDegreesToNeo(angle));
+
+        // System.out.println(angleEncoder.getAbsolutePosition() + "      e       " + moduleNumber);
+        System.out.println(angle + "      e       " + moduleNumber);
+        // System.out.println(desiredState.speedMetersPerSecond + "      e       " + moduleNumber);
+
+
+                
         lastAngle = angle;
-        angleMotor.set(MathUtil.clamp(angleOutput, -1, 1));
-        // angleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle, Constants.Swerve.ANGLE_GEAR_RATIO));
+
+        
+        // angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle) * -1);
     }
 
-    // private void resetToAbsolute() {
-    //     double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset,
-    //             Constants.Swerve.ANGLE_GEAR_RATIO);
-    //     angleMotor.setSelectedSensorPosition(absolutePosition);
-    // }
+    private void resetToAbsolute() {
+        double absolutePosition = wheelDegreesToNeo(getCanCoder().getDegrees() - angleOffset);
+        integratedAngleEncoder.setPosition(absolutePosition);
+    }
 
     private void configAngleMotor() {
         angleMotor.restoreFactoryDefaults();
         angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SMART_CURRENT);
         angleMotor.setSecondaryCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SECONDARY_LIMIT);
-        angleMotor.setIdleMode(IdleMode.kBrake);
+        angleMotor.setIdleMode(IdleMode.kCoast);
 
     }
 
@@ -120,6 +152,7 @@ public class SwerveModule extends SubsystemBase{
     }
 
     private void configDriveEncoder() {
+        driveEncoder.setPosition(0);
         driveEncoder.setPositionConversionFactor(Constants.Swerve.DRIVE_MOTOR_POSITION_CONVERSION);
         driveEncoder.setVelocityConversionFactor(Constants.Swerve.DRIVE_MOTOR_VELOCITY_CONVERSION);
     }
@@ -134,14 +167,14 @@ public class SwerveModule extends SubsystemBase{
 
     private void configAngleEncoder() {
         angleEncoder.configFactoryDefault();
-        angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         angleEncoder.configSensorDirection(Constants.Swerve.CANCONDER_INVERT);
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         angleEncoder.configFeedbackCoefficient(.087890625, "Degrees", SensorTimeBase.PerSecond);
     }
 
     private void configAngleController() {
-        angleController.enableContinuousInput(0, 360);
+        angleController.enableContinuousInput(-180, 180);
     }
 
 
@@ -151,21 +184,37 @@ public class SwerveModule extends SubsystemBase{
 
     public SwerveModuleState getState() {
         double velocity = driveEncoder.getVelocity();
-        Rotation2d angle = Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+        Rotation2d angle = Rotation2d.fromDegrees(angleEncoder.getPosition());
         return new SwerveModuleState(velocity, angle);
     }
 
     public SwerveModulePosition getPosition() {
         double position = driveEncoder.getPosition(); 
-        Rotation2d angle = Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+        Rotation2d angle = Rotation2d.fromDegrees(angleEncoder.getPosition());
         return new SwerveModulePosition(position, angle);
+    }
+
+    public double neoToWheelDegrees(double neoTicks) {
+        return neoTicks * 360 / 21.42857142857 ;
+    }
+
+    public double wheelDegreesToNeo(double wheelDegrees) {
+        return (wheelDegrees * Constants.Swerve.ANGLE_GEAR_RATIO) / 360;
     }
 
     @Override
     public void periodic() {
-    angleOutput = angleController.calculate(angleEncoder.getAbsolutePosition(), lastAngle);
-    // System.out.println(angleOutput + "    eeeeeeee");
-    // System.out.println(lastAngle + "      TTTTTTTTTTTTTTT");
+    // integratedAngleEncoder.setPosition(integratedAngleEncoder.getPosition() >= 0 ? 
+    //                                    integratedAngleEncoder.getPosition() % 21.42857142857 :
+    //                                    (21.42857142857 - Math.abs(integratedAngleEncoder.getPosition())) % 21.42857142857);
+    // angleController.setSetpoint(lastAngle)
+    // if (!angleController.atSetpoint()) {
+    
+    // }
+    // else {
+    // angleOutput = 0;
+    // }
 
+    
   }
 }

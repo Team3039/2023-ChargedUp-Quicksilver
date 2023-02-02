@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -100,6 +101,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // driverX.toggleOnTrue(new ClawIntake());
+    driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
+
 
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,

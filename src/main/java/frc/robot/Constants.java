@@ -70,26 +70,26 @@ public final class Constants {
     public static final double DRIVE_KA = 0;
     public static final double DRIVE_KV = 0;
     public static final double DRIVE_GEAR_RATIO = (6.12 / 1); //6.12 : 1
-    public static final double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
     public static final double ANGLE_GEAR_RATIO = ((150 / 7) / 1); //150/7 : 1
     public static final boolean CANCONDER_INVERT = false;
 
     public static final double TRACK_WIDTH = Units.inchesToMeters(21.70);
     public static final double WHEEL_BASE = Units.inchesToMeters(21.70);
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.99);
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
     
     public static final boolean DRIVE_MOTOR_INVERT = false;
     public static final boolean ANGLE_MOTOR_INVERT = false;
     public static final double DRIVE_CLOSED_LOOP_RAMP = 0;
-    public static final double DRIVE_OPEN_LOOP_RAMP = 0;
+    public static final double DRIVE_OPEN_LOOP_RAMP = .25;
     public static final int ANGLE_MOTOR_SMART_CURRENT = 25;
     public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
     public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
     public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
-    public static final double ANGLE_MOTOR_KP = 0.002;
+    public static final double ANGLE_MOTOR_KP = 0.008;
     public static final double ANGLE_MOTOR_KI = 0;
-    public static final double ANGLE_MOTOR_KD = 0;
+    public static final double ANGLE_MOTOR_KD = 0.0001;
     public static final double DRIVE_MOTOR_KP = 0.1;
     public static final double DRIVE_MOTOR_KI = 0;
     public static final double DRIVE_MOTOR_KD = 0;
@@ -104,9 +104,9 @@ public final class Constants {
       new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
       new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
       
-public static final boolean INVERT_GYRO = false;
-public static final double MAX_ANGULAR_VELOCITY = 11;
-public static final double MAX_SPEED = 4;
+public static final boolean INVERT_GYRO = true;
+public static final double MAX_ANGULAR_VELOCITY = 11.5;
+public static final double MAX_SPEED = 4.5;
 
         public static final class Mod0 {
             public static final int driveMotorID = 1;
