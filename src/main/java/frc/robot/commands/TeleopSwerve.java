@@ -35,8 +35,7 @@ public class TeleopSwerve extends CommandBase {
             double yAxis = -controller.interpolatedLeftYAxis();
             double xAxis = -controller.interpolatedLeftXAxis();
             double rAxis = controller.interpolatedRightXAxis();
-
-            // System.out.println(xAxis);
+            System.out.println(drive.gyro.getYaw() % 360);
 
             translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.MAX_SPEED);
             rotation = rAxis * Constants.Swerve.MAX_ANGULAR_VELOCITY;

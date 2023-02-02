@@ -73,8 +73,10 @@ public class SwerveModule extends SubsystemBase{
         resetToAbsolute();
         integratedAngleEncoder.setPositionConversionFactor(1);
         integratedAngleController = angleMotor.getPIDController();
-        integratedAngleController.setP(-.02);
-        integratedAngleController.setD(0);
+        integratedAngleController.setP(-2);
+        integratedAngleController.setI(0);
+        integratedAngleController.setD(0
+        );
         // integratedAngleController.setPositionPIDWrappingMinInput(0);
         // integratedAngleController.setPositionPIDWrappingMaxInput(21.42857142857);
         integratedAngleController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
@@ -93,7 +95,7 @@ public class SwerveModule extends SubsystemBase{
 
         if (isOpenLoop) {
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.MAX_SPEED;
-            // driveMotor.set(percentOutput);
+            driveMotor.set(percentOutput);
         } else {
             double velocity = desiredState.speedMetersPerSecond;
             driveController.setReference(velocity, ControlType.kVelocity, 0, 
@@ -107,29 +109,25 @@ public class SwerveModule extends SubsystemBase{
         // System.out.println(angleOutput + "   hdgjhsd   " + moduleNumber);
         // angleOutput = Math.abs(angleOutput) < .3 ? 0 : angleOutput;
         // angleOutput *= angleEncoder.getAbsolutePosition() < 180 ? 1 : -1;
-
-        integratedAngleController.setReference(wheelDegreesToNeo(angle), CANSparkMax.ControlType.kPosition);
+        // angleMotor.set((wheelDegreesToNeo(angle) - integratedAngleEncoder.getPosition())  * -.0004);
+    
 
 
         // System.out.println(neoToWheelDegrees(integratedAngleEncoder.getPosition()) + "   e      " + moduleNumber);
     //    System.out.println(wheelDegree);
-        // System.out.println(wheelDegreesToNeo(angle));
+        System.out.println(wheelDegreesToNeo(angle));
 
         // System.out.println(angleEncoder.getAbsolutePosition() + "      e       " + moduleNumber);
-        System.out.println(angle + "      e       " + moduleNumber);
+        // System.out.println(angle + "      e       " + moduleNumber);
         // System.out.println(desiredState.speedMetersPerSecond + "      e       " + moduleNumber);
-
-
-                
+        angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));
         lastAngle = angle;
-
-        
-        // angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle) * -1);
     }
+
 
     private void resetToAbsolute() {
         double absolutePosition = wheelDegreesToNeo(getCanCoder().getDegrees() - angleOffset);
-        integratedAngleEncoder.setPosition(absolutePosition);
+        integratedAngleEncoder.setPosition(wheelDegreesToNeo(angleEncoder.getAbsolutePosition()));
     }
 
     private void configAngleMotor() {
@@ -167,14 +165,14 @@ public class SwerveModule extends SubsystemBase{
 
     private void configAngleEncoder() {
         angleEncoder.configFactoryDefault();
-        angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         angleEncoder.configSensorDirection(Constants.Swerve.CANCONDER_INVERT);
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         angleEncoder.configFeedbackCoefficient(.087890625, "Degrees", SensorTimeBase.PerSecond);
     }
 
     private void configAngleController() {
-        angleController.enableContinuousInput(-180, 180);
+        angleController.enableContinuousInput(0, 360);
     }
 
 
@@ -204,6 +202,7 @@ public class SwerveModule extends SubsystemBase{
 
     @Override
     public void periodic() {
+        // System.out.println(integratedAngleEncoder.getPosition() + "   v  gh      " + moduleNumber);
     // integratedAngleEncoder.setPosition(integratedAngleEncoder.getPosition() >= 0 ? 
     //                                    integratedAngleEncoder.getPosition() % 21.42857142857 :
     //                                    (21.42857142857 - Math.abs(integratedAngleEncoder.getPosition())) % 21.42857142857);

@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Drive;
-// import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Vision;
 
 
 /**
@@ -24,7 +22,7 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public static final Vision vision = new Vision();
+  // public static final Vision vision = new Vision();
   public static final Drive drive = new Drive();
   // public static final Claw claw = new Claw();
   
