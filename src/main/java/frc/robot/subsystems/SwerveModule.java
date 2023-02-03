@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.CTREModuleState;
 import frc.lib.Conversions;
 import frc.lib.SwerveModuleConstants;
 import frc.robot.Constants;
@@ -73,10 +74,9 @@ public class SwerveModule extends SubsystemBase{
         resetToAbsolute();
         integratedAngleEncoder.setPositionConversionFactor(1);
         integratedAngleController = angleMotor.getPIDController();
-        integratedAngleController.setP(-2);
+        integratedAngleController.setP(-.02);
         integratedAngleController.setI(0);
-        integratedAngleController.setD(0
-        );
+        integratedAngleController.setD(0);
         // integratedAngleController.setPositionPIDWrappingMinInput(0);
         // integratedAngleController.setPositionPIDWrappingMaxInput(21.42857142857);
         integratedAngleController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
@@ -91,7 +91,7 @@ public class SwerveModule extends SubsystemBase{
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         // System.out.println(desiredState.angle.getDegrees() + "     e     " + moduleNumber );
-        desiredState = SwerveModuleState.optimize(desiredState, getState().angle );
+        desiredState = CTREModuleState.optimize(desiredState, getState().angle );
 
         if (isOpenLoop) {
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.MAX_SPEED;
@@ -102,10 +102,11 @@ public class SwerveModule extends SubsystemBase{
                     feedforward.calculate(desiredState.speedMetersPerSecond));
         }
 
-        double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle
-                : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
+        // double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle
+        //         : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
                                                    // Jittering.
 
+        double angle = desiredState.angle.getDegrees();
         // System.out.println(angleOutput + "   hdgjhsd   " + moduleNumber);
         // angleOutput = Math.abs(angleOutput) < .3 ? 0 : angleOutput;
         // angleOutput *= angleEncoder.getAbsolutePosition() < 180 ? 1 : -1;
@@ -115,7 +116,7 @@ public class SwerveModule extends SubsystemBase{
 
         // System.out.println(neoToWheelDegrees(integratedAngleEncoder.getPosition()) + "   e      " + moduleNumber);
     //    System.out.println(wheelDegree);
-        System.out.println(wheelDegreesToNeo(angle));
+        // System.out.println((angle + "    w    " + moduleNumber));
 
         // System.out.println(angleEncoder.getAbsolutePosition() + "      e       " + moduleNumber);
         // System.out.println(angle + "      e       " + moduleNumber);
@@ -169,6 +170,7 @@ public class SwerveModule extends SubsystemBase{
         angleEncoder.configSensorDirection(Constants.Swerve.CANCONDER_INVERT);
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         angleEncoder.configFeedbackCoefficient(.087890625, "Degrees", SensorTimeBase.PerSecond);
+        angleEncoder.setPosition(angleEncoder.getAbsolutePosition());
     }
 
     private void configAngleController() {
