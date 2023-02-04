@@ -98,7 +98,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // driverX.toggleOnTrue(new ClawIntake());
+    // driverX.whileTrue(new ClawIntake());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
 

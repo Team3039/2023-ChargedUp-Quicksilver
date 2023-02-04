@@ -12,13 +12,13 @@
 
 // public class Claw extends SubsystemBase {
   
-//   // public CANSparkMax leftWheels = new CANSparkMax(Constants.Ports.CLAW_LEFT_WHEELS, MotorType.kBrushless);
+//   public CANSparkMax leftWheels = new CANSparkMax(Constants.Ports.CLAW_LEFT_WHEELS, MotorType.kBrushless);
 //   public CANSparkMax rightWheels = new CANSparkMax(Constants.Ports.CLAW_RIGHT_WHEELS, MotorType.kBrushless);
   
 //   public Claw() {}
 
 //   public void setWheelSpeeds(double leftSpeed, double rightSpeed) {
-//     // leftWheels.set(leftSpeed);
+//     leftWheels.set(leftSpeed);
 //     rightWheels.set(rightSpeed);
 //   }
 

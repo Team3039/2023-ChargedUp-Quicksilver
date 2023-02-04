@@ -124,11 +124,11 @@ public class SwerveModule extends SubsystemBase{
         angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));
         lastAngle = angle;
     }
-
+// 
 
     private void resetToAbsolute() {
         double absolutePosition = wheelDegreesToNeo(getCanCoder().getDegrees() - angleOffset);
-        integratedAngleEncoder.setPosition(wheelDegreesToNeo(angleEncoder.getAbsolutePosition()));
+        integratedAngleEncoder.setPosition(absolutePosition);
     }
 
     private void configAngleMotor() {
@@ -136,7 +136,7 @@ public class SwerveModule extends SubsystemBase{
         angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SMART_CURRENT);
         angleMotor.setSecondaryCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SECONDARY_LIMIT);
-        angleMotor.setIdleMode(IdleMode.kCoast);
+        angleMotor.setIdleMode(IdleMode.kBrake);
 
     }
 

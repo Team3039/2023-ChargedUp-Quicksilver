@@ -16,7 +16,7 @@
 //   // Called when the command is initially scheduled.
 //   @Override
 //   public void initialize() {
-//     RobotContainer.claw.setWheelSpeeds(-.2, .2);
+//     RobotContainer.claw.setWheelSpeeds(-.3, .3);
 //   }
 
 //   // Called every time the scheduler runs while the command is scheduled.

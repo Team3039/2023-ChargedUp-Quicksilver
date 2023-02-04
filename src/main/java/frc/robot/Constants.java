@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.SwerveModuleConstants;
 
@@ -22,8 +24,8 @@ public final class Constants {
   public static final class Ports{ 
         public static final int PIGEON_2 = 4;
 
-        public static final int CLAW_LEFT_WHEELS = 12;
-        public static final int CLAW_RIGHT_WHEELS = 11;
+        public static final int CLAW_LEFT_WHEELS = 13;
+        public static final int CLAW_RIGHT_WHEELS = 12;
 
         public static final int ELEVATOR_A = 9;
         public static final int ELEVATOR_B = 10;
@@ -103,8 +105,15 @@ public final class Constants {
       new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
       new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
       new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+
+      public static final SwerveModuleState[] ZERO_STATES = {
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState()
+};
       
-public static final boolean INVERT_GYRO = true;
+public static final boolean INVERT_GYRO = false;
 public static final double MAX_ANGULAR_VELOCITY = 11.5;
 public static final double MAX_SPEED = 4.5;
 
@@ -148,8 +157,20 @@ public static final double MAX_SPEED = 4.5;
         }
   }
 
-  public static final class AutoConstants {
-    public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 0;
-    public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = 0;
-  }
+  
+
+ public static final class AutoConstants {
+  public static final double K_MAX_SPEED_METERS_PER_SECOND = 3.5;
+  public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4.25;
+  public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
+  public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
+
+  public static final double KPX_CONTROLLER = 1;
+  public static final double KPY_CONTROLLER = 1;
+  public static final double KP_THETA_CONTROLLER = 1;
+
+  // Constraint for the motion profilied robot angle controller
+  public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
+          K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
+}
 }

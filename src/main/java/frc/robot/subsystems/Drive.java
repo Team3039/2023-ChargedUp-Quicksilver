@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        getYaw() )
+                        getYaw())
                         : new ChassisSpeeds(
                                 translation.getX(),
                                 translation.getY(),
@@ -132,7 +132,7 @@ public class Drive extends SubsystemBase {
     public Rotation2d getYaw() {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
-        return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees((360 - ypr[0]) % 360) : Rotation2d.fromDegrees(ypr[0] % 360);
+        return Rotation2d.fromDegrees(ypr[0]);
     }
 
     public double getAngle() {
@@ -141,6 +141,9 @@ public class Drive extends SubsystemBase {
     
     public double getRoll() {
         return gyro.getRoll();
+    }
+    public double getPitch() {
+        return gyro.getPitch();
     }
 
     // public RigidTransform2 getPoseAtTime(double timestamp) {
@@ -156,14 +159,14 @@ public class Drive extends SubsystemBase {
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getPositions());
 
-    //     SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
-    //     SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
-    //     SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
+        SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
 
-    //     for (SwerveModule mod : mSwerveMods) {
-    //         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-    //         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-    //         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-    //    }
+        for (SwerveModule mod : mSwerveMods) {
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+       }
     }
 }
