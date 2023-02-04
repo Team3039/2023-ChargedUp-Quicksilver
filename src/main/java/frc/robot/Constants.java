@@ -43,16 +43,6 @@ public final class Constants {
         public static final double ELEVATOR_KS = 0;
         public static final double ELEVATOR_KG = 0;
         public static final double ELEVATOR_KV = 0;
-
-        // Shoulder PID //
-        public static final double SHOULDER_KP = 0;
-        public static final double SHOULDER_KI = 0;
-        public static final double SHOULDER_KD = 0;
-
-        // Shoulder FF //
-        public static final double SHOULDER_KS = 0;
-        public static final double SHOULDER_KG = 0;
-        public static final double SHOULDER_KV = 0;
   }
   
   public static final class Wrist {
@@ -64,13 +54,15 @@ public final class Constants {
     public static final double KG = 0;
     public static final double KV = 0;
 
+    public static final double WRIST_GEAR_RATIO = 127.27272727;
+
   }
 
   public static final class Swerve{
 
-    public static final double DRIVE_KS = 0;
-    public static final double DRIVE_KA = 0;
-    public static final double DRIVE_KV = 0;
+    public static final double DRIVE_KS = 0.11937;
+    public static final double DRIVE_KV = 2.6335;
+    public static final double DRIVE_KA = 0.46034;
     public static final double DRIVE_GEAR_RATIO = (6.12 / 1); //6.12 : 1
     public static final double ANGLE_GEAR_RATIO = ((150 / 7) / 1); //150/7 : 1
     public static final boolean CANCONDER_INVERT = false;
@@ -92,7 +84,7 @@ public final class Constants {
     public static final double ANGLE_MOTOR_KP = 0.01;
     public static final double ANGLE_MOTOR_KI = 0;
     public static final double ANGLE_MOTOR_KD = 0.0001;
-    public static final double DRIVE_MOTOR_KP = 0.1;
+    public static final double DRIVE_MOTOR_KP = 0.01;
     public static final double DRIVE_MOTOR_KI = 0;
     public static final double DRIVE_MOTOR_KD = 0;
     public static final double DRIVE_MOTOR_KF = 0;
@@ -160,7 +152,7 @@ public static final double MAX_SPEED = 4.5;
   
 
  public static final class AutoConstants {
-  public static final double K_MAX_SPEED_METERS_PER_SECOND = 3.5;
+  public static final double K_MAX_SPEED_METERS_PER_SECOND = 3;
   public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4.25;
   public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
   public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;

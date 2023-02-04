@@ -81,7 +81,7 @@ public class RobotContainer {
       new TeleopSwerve(drive, 
       driverPad, 
       true, 
-      true)
+      false)
     );
     // Configure the trigger bindings
     configureBindings();

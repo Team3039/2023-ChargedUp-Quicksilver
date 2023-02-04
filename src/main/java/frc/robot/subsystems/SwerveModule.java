@@ -202,19 +202,13 @@ public class SwerveModule extends SubsystemBase{
         return (wheelDegrees * Constants.Swerve.ANGLE_GEAR_RATIO) / 360;
     }
 
+    // Auto 
+    public void lockWheels() {
+        angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), 90));
+    }
+
     @Override
     public void periodic() {
-        // System.out.println(integratedAngleEncoder.getPosition() + "   v  gh      " + moduleNumber);
-    // integratedAngleEncoder.setPosition(integratedAngleEncoder.getPosition() >= 0 ? 
-    //                                    integratedAngleEncoder.getPosition() % 21.42857142857 :
-    //                                    (21.42857142857 - Math.abs(integratedAngleEncoder.getPosition())) % 21.42857142857);
-    // angleController.setSetpoint(lastAngle)
-    // if (!angleController.atSetpoint()) {
-    
-    // }
-    // else {
-    // angleOutput = 0;
-    // }
 
     
   }

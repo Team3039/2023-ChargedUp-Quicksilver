@@ -24,7 +24,7 @@ public class Drive extends SubsystemBase {
     // public static Drive INSTANCE = new Drive();
 
     public SwerveDriveOdometry swerveOdometry;
-    public SwerveModule[] mSwerveMods;
+    public SwerveModule[] swerveMods;
     public Pigeon2 gyro;
     // private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2> latencyCompensationMap = new InterpolatingTreeMap<>();
 
@@ -40,7 +40,7 @@ public class Drive extends SubsystemBase {
         gyro.configFactoryDefault();
         setGyro(0);
 
-        mSwerveMods = new SwerveModule[] {
+        swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
             new SwerveModule(1, Constants.Swerve.Mod1.constants),
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
@@ -71,7 +71,7 @@ public class Drive extends SubsystemBase {
                                 rotation));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
             // System.out.println(swerveModuleStates[mod.moduleNumber].angle.getDegrees() + "      e     " + mod.moduleNumber);
 
@@ -90,7 +90,7 @@ public class Drive extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
 
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }
@@ -110,7 +110,7 @@ public class Drive extends SubsystemBase {
 
     public SwerveModuleState[] getStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveModule mod : swerveMods) {
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
@@ -119,7 +119,7 @@ public class Drive extends SubsystemBase {
     public SwerveModulePosition[] getPositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (int i = 0; i < positions.length; i++) {
-            positions[i] = mSwerveMods[i].getPosition();
+            positions[i] = swerveMods[i].getPosition();
         }
         return positions;
     }
@@ -146,12 +146,12 @@ public class Drive extends SubsystemBase {
         return gyro.getPitch();
     }
 
-    // public RigidTransform2 getPoseAtTime(double timestamp) {
-    //     if (latencyCompensationMap.isEmpty()) {
-    //         return RigidTransform2.ZERO;
-    //     }
-    //     return latencyCompensationMap.getInterpolated(new InterpolatingDouble(timestamp));
-    // }
+    // Auto 
+    public void lockModules() {
+        for (SwerveModule mod : swerveMods) {
+            mod.lockWheels();
+        }
+    }
 
     @Override
     public void periodic() {
@@ -163,7 +163,7 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
 
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);

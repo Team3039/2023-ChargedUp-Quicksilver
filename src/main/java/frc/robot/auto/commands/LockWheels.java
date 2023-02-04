@@ -20,21 +20,23 @@ public class LockWheels extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drive.drive(new Translation2d(0.1, 0 ), 0, true, true);
+    drive.drive(new Translation2d(), 0, true, true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    drive.lockModules();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  drive.drive(new Translation2d(0, 0), 0, true, true);
+ 
   }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

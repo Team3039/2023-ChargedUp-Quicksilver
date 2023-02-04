@@ -7,6 +7,7 @@ package frc.robot.auto.routines;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.auto.commands.ChargeStationBalance;
 import frc.robot.auto.commands.DriveOntoChargeStation;
 import frc.robot.auto.commands.LockWheels;
 import frc.robot.subsystems.Drive;
@@ -22,6 +23,7 @@ public class ChargeStationAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
       new DriveOntoChargeStation(s_Swerve),
+      new ChargeStationBalance(s_Swerve),
       new LockWheels(s_Swerve)
     );
   }

@@ -18,7 +18,6 @@ double highestRoll = 0;
   public DriveOntoChargeStation(Drive drive) {
    addRequirements(drive);
    this.drive = drive;
-
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +27,7 @@ double highestRoll = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.translation = new Translation2d(-0.15, 0).times(Constants.Swerve.MAX_SPEED);
+    translation = new Translation2d(-0.15, 0).times(Constants.Swerve.MAX_SPEED);
     drive.drive(translation, 0, true, true);
     System.out.println(highestRoll + "     AUTO    ");
     if(highestRoll > drive.gyro.getRoll()){
@@ -48,8 +47,11 @@ double highestRoll = 0;
   @Override
   public boolean isFinished() {
    if(drive.gyro.getRoll() > -10  && highestRoll < -13) {
+    System.out.println("Finished Docking");
     return true;
    }
+   else {
     return false;
+   } 
   }
 }
