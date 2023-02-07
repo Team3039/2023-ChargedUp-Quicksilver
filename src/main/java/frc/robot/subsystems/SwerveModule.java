@@ -102,11 +102,11 @@ public class SwerveModule extends SubsystemBase{
                     feedforward.calculate(desiredState.speedMetersPerSecond));
         }
 
-        // double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle
-        //         : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
+        double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle
+                : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
                                                    // Jittering.
 
-        double angle = desiredState.angle.getDegrees();
+        // double angle = desiredState.angle.getDegrees();
         // System.out.println(angleOutput + "   hdgjhsd   " + moduleNumber);
         // angleOutput = Math.abs(angleOutput) < .3 ? 0 : angleOutput;
         // angleOutput *= angleEncoder.getAbsolutePosition() < 180 ? 1 : -1;

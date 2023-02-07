@@ -31,6 +31,10 @@ public final class Constants {
         public static final int ELEVATOR_B = 10;
 
         public static final int WRIST = 13;
+
+        public static final int CLAW_SOLENOID = 0;
+
+        public static final int CLAW_BEAM_BREAK = 0;
   }
 
   public static final class Elevator {
@@ -81,7 +85,7 @@ public final class Constants {
     public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
     public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
     public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
-    public static final double ANGLE_MOTOR_KP = 0.01;
+    public static final double ANGLE_MOTOR_KP = 0.009;
     public static final double ANGLE_MOTOR_KI = 0;
     public static final double ANGLE_MOTOR_KD = 0.0001;
     public static final double DRIVE_MOTOR_KP = 0.01;
@@ -113,7 +117,7 @@ public static final double MAX_SPEED = 4.5;
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 0;
-            public static final double angleOffset = -47.98828125;
+            public static final double angleOffset = -47.636;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -123,7 +127,7 @@ public static final double MAX_SPEED = 4.5;
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 1;
-            public static final double angleOffset = -130.4296875;
+            public static final double angleOffset = -250.488;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -133,7 +137,7 @@ public static final double MAX_SPEED = 4.5;
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 2;
-            public static final double angleOffset = -21.357421875;
+            public static final double angleOffset = -23.203;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -143,7 +147,7 @@ public static final double MAX_SPEED = 4.5;
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 3;
-            public static final double angleOffset = -0.52734375;
+            public static final double angleOffset = -4.658;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }

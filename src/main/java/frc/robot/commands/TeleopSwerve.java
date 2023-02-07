@@ -36,10 +36,6 @@ public class TeleopSwerve extends CommandBase {
             double yAxis = -controller.interpolatedLeftYAxis();
             double xAxis = -controller.interpolatedLeftXAxis();
             double rAxis = controller.interpolatedRightXAxis();
-            System.out.println(highestRoll + "    TELEOP   ");
-            if(highestRoll > drive.gyro.getRoll()){
-                highestRoll = drive.gyro.getRoll();
-              }
 
             translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.MAX_SPEED);
             rotation = rAxis * Constants.Swerve.MAX_ANGULAR_VELOCITY;

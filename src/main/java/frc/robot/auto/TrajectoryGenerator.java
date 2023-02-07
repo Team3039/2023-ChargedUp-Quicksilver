@@ -22,7 +22,7 @@ public class TrajectoryGenerator {
         // .setReversed(true);
 
         public static TrajectoryConfig configSlow = new TrajectoryConfig(
-                        Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 2.9,
+                        Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 2,
                         Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED - 2.5)
                                         .setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
         // .setReversed(true);
@@ -32,7 +32,7 @@ public class TrajectoryGenerator {
                         List.of(
                                 new Pose2d(),
                                 new Pose2d(new Translation2d(Units.inchesToMeters(-200), Units.inchesToMeters(0)),
-                                        Rotation2d.fromDegrees(180))),
+                                        Rotation2d.fromDegrees(0))),
                         configSlow);
         }
 
