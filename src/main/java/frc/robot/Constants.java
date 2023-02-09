@@ -85,9 +85,9 @@ public final class Constants {
     public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
     public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
     public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
-    public static final double ANGLE_MOTOR_KP = 0.009;
+    public static final double ANGLE_MOTOR_KP = 0.007;
     public static final double ANGLE_MOTOR_KI = 0;
-    public static final double ANGLE_MOTOR_KD = 0.0001;
+    public static final double ANGLE_MOTOR_KD = 0.00004;
     public static final double DRIVE_MOTOR_KP = 0.01;
     public static final double DRIVE_MOTOR_KI = 0;
     public static final double DRIVE_MOTOR_KD = 0;

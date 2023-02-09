@@ -34,6 +34,8 @@ public class TrajectoryGenerator {
                                 new Pose2d(new Translation2d(Units.inchesToMeters(-200), Units.inchesToMeters(0)),
                                         Rotation2d.fromDegrees(0))),
                         configSlow);
+
+                        
         }
 
         public static Trajectory getGamePieceToStart() {

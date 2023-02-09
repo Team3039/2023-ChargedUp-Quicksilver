@@ -121,7 +121,16 @@ public class SwerveModule extends SubsystemBase{
         // System.out.println(angleEncoder.getAbsolutePosition() + "      e       " + moduleNumber);
         // System.out.println(angle + "      e       " + moduleNumber);
         // System.out.println(desiredState.speedMetersPerSecond + "      e       " + moduleNumber);
-        angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));
+    
+  
+            // if (moduleNumber =a= 3) {
+                angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));
+            //     System.out.println(angleMotor.get());
+            // }
+            // else {
+            //     angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));
+            // }
+
         lastAngle = angle;
     }
 // 
@@ -168,6 +177,9 @@ public class SwerveModule extends SubsystemBase{
         angleEncoder.configFactoryDefault();
         angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         angleEncoder.configSensorDirection(Constants.Swerve.CANCONDER_INVERT);
+        // if (moduleNumber == 3) {
+        //     angleEncoder.configSensorDirection(true);
+        // }
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         angleEncoder.configFeedbackCoefficient(.087890625, "Degrees", SensorTimeBase.PerSecond);
         angleEncoder.setPosition(angleEncoder.getAbsolutePosition());

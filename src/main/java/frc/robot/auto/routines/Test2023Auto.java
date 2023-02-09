@@ -4,15 +4,20 @@
 
 package frc.robot.auto.routines;
 
-import edu.wpi.first.math.controller.PIDController;
+import java.util.HashMap;
+
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
+import frc.robot.auto.PPTrajectoryGenerator;
 import frc.robot.auto.commands.LockWheels;
-import frc.robot.auto.commands.StopTrajectory;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,43 +25,61 @@ import frc.robot.subsystems.Drive;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Test2023Auto extends SequentialCommandGroup {
     
-    public Test2023Auto(Drive s_Swerve) {
+    public Test2023Auto(Drive swerve) {
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand testCommandOne = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getstartToGamePiece(),
-                s_Swerve::getPose,
-                Constants.Swerve.SWERVE_KINEMATICS,
-                new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-                new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-                thetaController,
-                Drive.getSwerveHeadingSupplier(90),
-                s_Swerve::setModuleStates,
-                s_Swerve);
+        // SwerveControllerCommand testCommandOne = new SwerveControllerCommand(
+        //         frc.robot.auto.TrajectoryGenerator.getstartToGamePiece(),
+        //         swerve::getPose,
+        //         Constants.Swerve.SWERVE_KINEMATICS,
+        //         new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
+        //         new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
+        //         thetaController,
+        //         Drive.getSwerveHeadingSupplier(90),
+        //         swerve::setModuleStates,
+        //         swerve);
 
-        SwerveControllerCommand testCommandTwo = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getGamePieceToStart(),
-                s_Swerve::getPose,
-                Constants.Swerve.SWERVE_KINEMATICS,
-                new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-                new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-                thetaController,
-                Drive.getSwerveHeadingSupplier(180),
-                s_Swerve::setModuleStates,
-                s_Swerve);
+        // SwerveControllerCommand testCommandTwo = new SwerveControllerCommand(
+        //         frc.robot.auto.TrajectoryGenerator.getGamePieceToStart(),
+        //         swerve::getPose,
+        //         Constants.Swerve.SWERVE_KINEMATICS,
+        //         new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
+        //         new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
+        //         thetaController,
+        //         Drive.getSwerveHeadingSupplier(180),
+        //         swerve::setModuleStates,
+        //         swerve);
+
+        HashMap<String, Command> eventMap = new HashMap<>();
+        eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+
+        SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        swerve::getPose,
+        swerve::resetOdometry,
+        Constants.Swerve.SWERVE_KINEMATICS,
+        new PIDConstants(1.0, 0.0, 0.0),
+        new PIDConstants(0.4, 0.0, 0.00),
+        swerve::setModuleStates,
+        eventMap,
+        true,
+        swerve
+        );
+
+        Command testCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getTestPath());
+
+
 
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
+                new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
                 testCommandOne,
                 // new StopTrajectory(),
-                testCommandTwo,
-                new LockWheels(s_Swerve)
+                new LockWheels(swerve)
                 
               );
 

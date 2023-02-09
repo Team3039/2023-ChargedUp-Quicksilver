@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
 public class LockWheels extends CommandBase {
-  /** Creates a new LockWheels. */
+
  Drive drive;
   public LockWheels(Drive drive) {
     addRequirements(drive);
@@ -37,6 +37,11 @@ public class LockWheels extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (Math.abs(Math.abs(drive.getPositions()[0].angle.getDegrees() - 90)) < 10 ||
+        Math.abs(Math.abs(drive.getPositions()[0].angle.getDegrees() - 270)) < 10) {
+      return true;
+    }
     return false;
+
   }
 }
