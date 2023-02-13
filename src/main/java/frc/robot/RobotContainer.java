@@ -9,9 +9,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClawIntake;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
+import frc.robot.subsystems.BuddyClimb;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Wrist;
 
 
 /**
@@ -22,10 +28,13 @@ import frc.robot.subsystems.Drive;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // public static final Vision vision = new Vision();
+  public static final Vision vision = new Vision();
   public static final Drive drive = new Drive();
-  // public static final Claw claw = new Claw();
-  
+  public static final Claw claw = new Claw();
+  public static final Elevator elevator = new Elevator();
+  public static final Wrist wrist = new Wrist();
+  public static final BuddyClimb buddyClimb = new BuddyClimb();
+
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
   
@@ -98,7 +107,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // driverX.whileTrue(new ClawIntake());
+    driverX.whileTrue(new ClawIntake());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
 

@@ -8,7 +8,9 @@ import java.util.HashMap;
 
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,23 +64,49 @@ public class Test2023Auto extends SequentialCommandGroup {
         swerve::resetOdometry,
         Constants.Swerve.SWERVE_KINEMATICS,
         new PIDConstants(1.0, 0.0, 0.0),
-        new PIDConstants(0.4, 0.0, 0.00),
+        new PIDConstants(0.4, 0.0, 0.0),
         swerve::setModuleStates,
         eventMap,
         true,
         swerve
         );
 
-        Command testCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getTestPath());
+        PPSwerveControllerCommand testCommandOne = new PPSwerveControllerCommand(
+            PPTrajectoryGenerator.getForwardTestPath(),
+            swerve::getPose,
+            Constants.Swerve.SWERVE_KINEMATICS,
+            new PIDController(0.1, 0, 0),
+            new PIDController(0.1, 0, 0),
+            new PIDController(.3, 0, 0),
+            swerve::setModuleStates,
+            true,
+            swerve);
 
+        PPSwerveControllerCommand testCommandTwo = new PPSwerveControllerCommand(
+            PPTrajectoryGenerator.getReverseTestPath(),
+            swerve::getPose,
+            Constants.Swerve.SWERVE_KINEMATICS,
+            new PIDController(.1, 0, 0),
+            new PIDController(.1, 0, 0),
+            new PIDController(.35, 0, 0),
+            swerve::setModuleStates,
+            true,
+            swerve);
 
+        Command forwardTestCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getForwardTestPath());
+        Command reverseTestCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getReverseTestPath());
+
+        Command threePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getPathThreePiece());
 
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
-                testCommandOne,
-                // new StopTrajectory(),
+                // threePieceTest,
+                forwardTestCommandOne,
+                reverseTestCommandOne,
+                // testCommandOne,
+                // testCommandTwo,
                 new LockWheels(swerve)
                 
               );

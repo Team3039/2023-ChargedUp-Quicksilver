@@ -70,16 +70,14 @@ public class SwerveModule extends SubsystemBase{
             Constants.Swerve.ANGLE_MOTOR_KD);
         configAngleController();
 
-        integratedAngleEncoder = angleMotor.getEncoder();
-        resetToAbsolute();
-        integratedAngleEncoder.setPositionConversionFactor(1);
-        integratedAngleController = angleMotor.getPIDController();
-        integratedAngleController.setP(-.02);
-        integratedAngleController.setI(0);
-        integratedAngleController.setD(0);
-        // integratedAngleController.setPositionPIDWrappingMinInput(0);
-        // integratedAngleController.setPositionPIDWrappingMaxInput(21.42857142857);
-        integratedAngleController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
+        // integratedAngleEncoder = angleMotor.getEncoder();
+        // resetToAbsolute();
+        // integratedAngleEncoder.setPositionConversionFactor(1);
+        // integratedAngleController = angleMotor.getPIDController();
+        // integratedAngleController.setP(-.02);
+        // integratedAngleController.setI(0);
+        // integratedAngleController.setD(0);
+        // integratedAngleController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
 
         lastAngle = getState().angle.getDegrees();
 
@@ -177,9 +175,6 @@ public class SwerveModule extends SubsystemBase{
         angleEncoder.configFactoryDefault();
         angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         angleEncoder.configSensorDirection(Constants.Swerve.CANCONDER_INVERT);
-        // if (moduleNumber == 3) {
-        //     angleEncoder.configSensorDirection(true);
-        // }
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         angleEncoder.configFeedbackCoefficient(.087890625, "Degrees", SensorTimeBase.PerSecond);
         angleEncoder.setPosition(angleEncoder.getAbsolutePosition());
@@ -207,7 +202,7 @@ public class SwerveModule extends SubsystemBase{
     }
 
     public double neoToWheelDegrees(double neoTicks) {
-        return neoTicks * 360 / 21.42857142857 ;
+        return neoTicks * 360 / Constants.Swerve.ANGLE_GEAR_RATIO;
     }
 
     public double wheelDegreesToNeo(double wheelDegrees) {

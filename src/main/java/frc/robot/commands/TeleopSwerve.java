@@ -13,7 +13,6 @@ public class TeleopSwerve extends CommandBase {
     private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
-    double highestRoll;
 
     private Drive drive;
     private InterpolatedPS4Gamepad controller;
@@ -33,11 +32,12 @@ public class TeleopSwerve extends CommandBase {
     @Override
     public void execute() {
         if (RobotState.isTeleop()) {
-            double yAxis = -controller.interpolatedLeftYAxis();
-            double xAxis = -controller.interpolatedLeftXAxis();
+            double xAxis = -controller.interpolatedLeftYAxis();
+            double yAxis = -controller.interpolatedLeftXAxis();
             double rAxis = controller.interpolatedRightXAxis();
 
-            translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.MAX_SPEED);
+            // (forward/back, left/right) the controller axis is rotated from the Translation 2d axis.
+            translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
             rotation = rAxis * Constants.Swerve.MAX_ANGULAR_VELOCITY;
             drive.drive(translation, rotation, fieldRelative, openLoop);
         }

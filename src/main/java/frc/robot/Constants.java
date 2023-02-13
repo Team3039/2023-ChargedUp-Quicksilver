@@ -30,11 +30,23 @@ public final class Constants {
         public static final int ELEVATOR_A = 9;
         public static final int ELEVATOR_B = 10;
 
-        public static final int WRIST = 13;
-
-        public static final int CLAW_SOLENOID = 0;
+        public static final int WRIST = 11;
+        
+        public static final int BUDDYCLIMB_WINCH_A = 14;
+        public static final int BUDDYCLIMB_WINCH_B = 15;
 
         public static final int CLAW_BEAM_BREAK = 0;
+
+        public static final int CLAW_SOLENOID = 1;
+
+        public static final int BUDDYCLIMB_LIFT_A = 2;
+        public static final int BUDDYCLIMB_LIFT_B = 3;
+        public static final int BUDDYCLIMB_DEPLOY_A = 4;
+        public static final int BUDDYCLIMB_DEPLOY_B = 5;
+
+        public static final int LED_OUTPUT_A = 0;
+
+        public static final int LED_OUTPUT_B = 0;
   }
 
   public static final class Elevator {
@@ -47,60 +59,62 @@ public final class Constants {
         public static final double ELEVATOR_KS = 0;
         public static final double ELEVATOR_KG = 0;
         public static final double ELEVATOR_KV = 0;
+        public static final double ELEVATOR_MAX_VEL = 0;
+        public static final double ELEVATOR_MAX_ACCEL = 0;
   }
   
   public static final class Wrist {
+        public static final double WRIST_KP = 0;
+        public static final double WRIST_KI = 0;
+        public static final double WRIST_KD = 0;
+        public static final double WRIST_KS = 0;
+        public static final double WRIST_KG = 0;
+        public static final double WRIST_KV = 0;
 
-    public static final double KP = 0;
-    public static final double KI = 0;
-    public static final double KD = 0;
-    public static final double KS = 0;
-    public static final double KG = 0;
-    public static final double KV = 0;
-
-    public static final double WRIST_GEAR_RATIO = 127.27272727;
-
+        public static final double WRIST_GEAR_RATIO = 127.27272727;   
+        public static final double WRIST_MAX_VEL = 0;
+        public static final double WRIST_MAX_ACCEL = 0;
   }
 
   public static final class Swerve{
 
-    public static final double DRIVE_KS = 0.11937;
-    public static final double DRIVE_KV = 2.6335;
-    public static final double DRIVE_KA = 0.46034;
-    public static final double DRIVE_GEAR_RATIO = (6.12 / 1); //6.12 : 1
-    public static final double ANGLE_GEAR_RATIO = ((150 / 7) / 1); //150/7 : 1
-    public static final boolean CANCONDER_INVERT = false;
+        public static final double DRIVE_KS = 0.11937 / 12;
+        public static final double DRIVE_KV = 2.6335 / 12;
+        public static final double DRIVE_KA = 0.46034 / 12;
+        public static final double DRIVE_GEAR_RATIO = (6.12 / 1); //6.12 : 1
+        public static final double ANGLE_GEAR_RATIO = ((150.0 / 7.0) / 1); //150/7 : 1
+        public static final boolean CANCONDER_INVERT = false;
 
-    public static final double TRACK_WIDTH = Units.inchesToMeters(21.70);
-    public static final double WHEEL_BASE = Units.inchesToMeters(21.70);
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+        public static final double TRACK_WIDTH = Units.inchesToMeters(21.70);
+        public static final double WHEEL_BASE = Units.inchesToMeters(21.70);
+        public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
+        public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
-    
-    public static final boolean DRIVE_MOTOR_INVERT = false;
-    public static final boolean ANGLE_MOTOR_INVERT = true;
-    public static final double DRIVE_CLOSED_LOOP_RAMP = 0;
-    public static final double DRIVE_OPEN_LOOP_RAMP = .25;
-    public static final int ANGLE_MOTOR_SMART_CURRENT = 25;
-    public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
-    public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
-    public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
-    public static final double ANGLE_MOTOR_KP = 0.007;
-    public static final double ANGLE_MOTOR_KI = 0;
-    public static final double ANGLE_MOTOR_KD = 0.00004;
-    public static final double DRIVE_MOTOR_KP = 0.01;
-    public static final double DRIVE_MOTOR_KI = 0;
-    public static final double DRIVE_MOTOR_KD = 0;
-    public static final double DRIVE_MOTOR_KF = 0;
-    public static final double DRIVE_MOTOR_MIN_OUTPUT = -1;
-    public static final double DRIVE_MOTOR_MAX_OUTPUT = 1;
-    public static final double DRIVE_MOTOR_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO;
-    public static final double DRIVE_MOTOR_VELOCITY_CONVERSION = (WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO) / 60;
-    public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
-      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+        
+        public static final boolean DRIVE_MOTOR_INVERT = false;
+        public static final boolean ANGLE_MOTOR_INVERT = true;
+        public static final double DRIVE_CLOSED_LOOP_RAMP = 0;
+        public static final double DRIVE_OPEN_LOOP_RAMP = .25;
+        public static final int ANGLE_MOTOR_SMART_CURRENT = 25;
+        public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
+        public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
+        public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
+        public static final double ANGLE_MOTOR_KP = 0.007;
+        public static final double ANGLE_MOTOR_KI = 0;
+        public static final double ANGLE_MOTOR_KD = 0.0000;
+        public static final double DRIVE_MOTOR_KP = 0.01;
+        public static final double DRIVE_MOTOR_KI = 0;
+        public static final double DRIVE_MOTOR_KD = 0;
+        public static final double DRIVE_MOTOR_KF = 0;
+        public static final double DRIVE_MOTOR_MIN_OUTPUT = -1;
+        public static final double DRIVE_MOTOR_MAX_OUTPUT = 1;
+        public static final double DRIVE_MOTOR_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO;
+        public static final double DRIVE_MOTOR_VELOCITY_CONVERSION = (WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO) / 60;
+        public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
+        new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+        new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+        new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
 
       public static final SwerveModuleState[] ZERO_STATES = {
         new SwerveModuleState(),
