@@ -101,8 +101,7 @@ public class Test2023Auto extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
-                // threePieceTest,
+                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getForwardTestPath().getInitialHolonomicPose())),              // threePieceTest,
                 forwardTestCommandOne,
                 reverseTestCommandOne,
                 // testCommandOne,

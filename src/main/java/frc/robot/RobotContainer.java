@@ -5,17 +5,21 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClawIntake;
+import frc.robot.commands.GridTagTrack;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TrackingMode;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.BuddyClimb;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
 
@@ -34,6 +38,7 @@ public class RobotContainer {
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final BuddyClimb buddyClimb = new BuddyClimb();
+  public static final LEDs leds = new LEDs();
 
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
@@ -107,8 +112,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverX.whileTrue(new ClawIntake());
+    operatorX.whileTrue(new ClawIntake());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
+    
+    driverShare.toggleOnTrue(new TrackingMode());
+    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
+    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
+    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
 
 
 

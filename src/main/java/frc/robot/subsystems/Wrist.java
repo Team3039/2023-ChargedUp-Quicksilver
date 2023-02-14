@@ -20,7 +20,7 @@ public class Wrist extends SubsystemBase {
   public enum WristState {
     IDLE,
     MANUAL,
-    CLOSED_LOOP
+    POSITION
   }
 
   public WristState wristState;
@@ -106,7 +106,7 @@ public class Wrist extends SubsystemBase {
       case MANUAL:
         System.out.println("lol no");
         break;
-      case CLOSED_LOOP:
+      case POSITION:
         setWristPosition();
         break;
     }

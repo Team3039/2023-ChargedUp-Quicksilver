@@ -2,35 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Wrist.WristState;
 
-public class ActuateToSetpoint extends CommandBase {
-  
-double setpointE;
-double setpointW;
+public class SetElevatorIdleMode extends CommandBase {
 
-  /** Creates a new ActuateToSetpoint. */
-  public ActuateToSetpoint(double setpointElevator, double setpointWrist) {
-    addRequirements(RobotContainer.elevator, RobotContainer.wrist);
-    setpointE = setpointElevator;
-    setpointW = setpointWrist;
-  }
+  public SetElevatorIdleMode() {}
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Elevator.setSetpoint(setpointE);
-    Wrist.setSetpoint(setpointW);
+    Elevator.setSetpoint(0);
     RobotContainer.elevator.setState(ElevatorState.POSITION);
-    RobotContainer.wrist.setState(WristState.POSITION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,14 +26,11 @@ double setpointW;
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    RobotContainer.elevator.setState(ElevatorState.IDLE);
-    RobotContainer.wrist.setState(WristState.IDLE);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

@@ -20,99 +20,98 @@ import frc.robot.RobotContainer;
 
 public class Elevator extends SubsystemBase {
 
-  public enum ElevatorState{ 
-    IDLE,
-    MANUAL,
-    CLOSED_LOOP
-  }
+	public enum ElevatorState {
+		IDLE,
+		MANUAL,
+		POSITION
+	}
 
-  public ElevatorState elevatorState = ElevatorState.IDLE;
+	public ElevatorState elevatorState = ElevatorState.IDLE;
 
-  public CANSparkMax elevatorA = new CANSparkMax(Constants.Ports.ELEVATOR_A, MotorType.kBrushless);
-  public CANSparkMax elevatorB = new CANSparkMax(Constants.Ports.ELEVATOR_B, MotorType.kBrushless);
+	public CANSparkMax elevatorA = new CANSparkMax(Constants.Ports.ELEVATOR_A, MotorType.kBrushless);
+	public CANSparkMax elevatorB = new CANSparkMax(Constants.Ports.ELEVATOR_B, MotorType.kBrushless);
 
-  public RelativeEncoder encoderA = elevatorA.getEncoder();
+	public RelativeEncoder encoderA = elevatorA.getEncoder();
 
-  public SparkMaxPIDController controllerA = elevatorA.getPIDController();
+	public SparkMaxPIDController controllerA = elevatorA.getPIDController();
 
-  public ElevatorFeedforward feedForward = new ElevatorFeedforward(
-            Constants.Elevator.ELEVATOR_KS, 
-            Constants.Elevator.ELEVATOR_KG, 
-            Constants.Elevator.ELEVATOR_KV);
-     
-  private ProfiledPIDController controller = new ProfiledPIDController(
-            Constants.Elevator.ELEVATOR_KP, 
-            Constants.Elevator.ELEVATOR_KI, 
-            Constants.Elevator.ELEVATOR_KD, 
-            new TrapezoidProfile.Constraints(
-                Constants.Elevator.ELEVATOR_MAX_VEL, 
-                Constants.Elevator.ELEVATOR_MAX_ACCEL));
+	public ElevatorFeedforward feedForward = new ElevatorFeedforward(
+			Constants.Elevator.ELEVATOR_KS,
+			Constants.Elevator.ELEVATOR_KG,
+			Constants.Elevator.ELEVATOR_KV);
 
-  // rotations
-  public static double setpointElevator = 0;
+	private ProfiledPIDController controller = new ProfiledPIDController(
+			Constants.Elevator.ELEVATOR_KP,
+			Constants.Elevator.ELEVATOR_KI,
+			Constants.Elevator.ELEVATOR_KD,
+			new TrapezoidProfile.Constraints(
+					Constants.Elevator.ELEVATOR_MAX_VEL,
+					Constants.Elevator.ELEVATOR_MAX_ACCEL));
 
-  public Elevator() {
-   elevatorB.follow(elevatorA, false);
+	// rotations
+	public static double setpointElevator = 0;
 
-   elevatorA.setIdleMode(IdleMode.kBrake);
-   elevatorB.setIdleMode(IdleMode.kBrake);
+	public Elevator() {
+		elevatorB.follow(elevatorA, false);
 
-   elevatorA.setInverted(false);
-  //  elevatorB.setInverted(false);
+		elevatorA.setIdleMode(IdleMode.kBrake);
+		elevatorB.setIdleMode(IdleMode.kBrake);
 
-   elevatorA.setSoftLimit(SoftLimitDirection.kForward, 0);
-   elevatorA.setSoftLimit(SoftLimitDirection.kReverse, 0);
-   elevatorB.setSoftLimit(SoftLimitDirection.kForward, 0);
-   elevatorB.setSoftLimit(SoftLimitDirection.kReverse, 0);
+		elevatorA.setInverted(false);
+		// elevatorB.setInverted(false);
 
-//    controllerA.setP(Constants.Elevator.ELEVATOR_KP);
-//    controllerA.setI(Constants.Elevator.ELEVATOR_KI);
-//    controllerA.setD(Constants.Elevator.ELEVATOR_KD);
+		elevatorA.setSoftLimit(SoftLimitDirection.kForward, 0);
+		elevatorA.setSoftLimit(SoftLimitDirection.kReverse, 0);
+		elevatorB.setSoftLimit(SoftLimitDirection.kForward, 0);
+		elevatorB.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
-   elevatorA.burnFlash();
-   elevatorB.burnFlash();
-  }
+		// controllerA.setP(Constants.Elevator.ELEVATOR_KP);
+		// controllerA.setI(Constants.Elevator.ELEVATOR_KI);
+		// controllerA.setD(Constants.Elevator.ELEVATOR_KD);
 
-  public void setState(ElevatorState state) {
-    elevatorState = state;
-  }
+		elevatorA.burnFlash();
+		elevatorB.burnFlash();
+	}
 
-  public ElevatorState getState() {
-    return elevatorState;
-  }
+	public void setState(ElevatorState state) {
+		elevatorState = state;
+	}
 
-  public void setElevatorOpenLoop(double percent) {
-    elevatorA.set(percent);
-  }
+	public ElevatorState getState() {
+		return elevatorState;
+	}
 
-  public void setElevatorClosedLoop() {
-    controller.setGoal(setpointElevator);
-    elevatorA.set(controller.calculate(encoderA.getPosition()) + 
-         feedForward.calculate(controller.getSetpoint().velocity));
-  }
-  
-  public static double getSetpoint() {
-    return setpointElevator;
-  }
+	public void setElevatorOpenLoop(double percent) {
+		elevatorA.set(percent);
+	}
 
-  public static void setSetpoint(double setpoint){
-    setpointElevator = setpoint;
-  } 
+	public void setElevatorClosedLoop() {
+		controller.setGoal(setpointElevator);
+		elevatorA.set(controller.calculate(encoderA.getPosition()) +
+				feedForward.calculate(controller.getSetpoint().velocity));
+	}
 
+	public static double getSetpoint() {
+		return setpointElevator;
+	}
 
-  @Override
-  public void periodic() {
-    switch(elevatorState) {
-      case IDLE:
-        setSetpoint(0);
-        setElevatorClosedLoop();
-        break;
-      case MANUAL:
-        setElevatorOpenLoop(RobotContainer.operatorPad.getLeftY());
-        break;
-      case CLOSED_LOOP:
-        setElevatorClosedLoop();
-        break;
-    }
-  }
+	public static void setSetpoint(double setpoint) {
+		setpointElevator = setpoint;
+	}
+
+	@Override
+	public void periodic() {
+		switch (elevatorState) {
+			case IDLE:
+				setSetpoint(0);
+				setElevatorClosedLoop();
+				break;
+			case MANUAL:
+				setElevatorOpenLoop(RobotContainer.operatorPad.getLeftY());
+				break;
+			case POSITION:
+				setElevatorClosedLoop();
+				break;
+		}
+	}
 }

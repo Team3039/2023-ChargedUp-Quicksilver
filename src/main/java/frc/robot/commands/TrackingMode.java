@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Vision.VisionState;
 
-public class TrackTarget extends CommandBase {
+public class TrackingMode extends CommandBase {
   /** Creates a new TrackTarget. */
-  public TrackTarget() {
+  public TrackingMode() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

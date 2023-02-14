@@ -26,7 +26,8 @@ public class Drive extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] swerveMods;
     public Pigeon2 gyro;
-    // private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2> latencyCompensationMap = new InterpolatingTreeMap<>();
+    // private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2>
+    // latencyCompensationMap = new InterpolatingTreeMap<>();
 
     public static Trajectory trajectory = new Trajectory();
     public static TrapezoidProfile.Constraints thetaController;
@@ -41,11 +42,11 @@ public class Drive extends SubsystemBase {
         setGyro(0);
 
         swerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
-    };
+                new SwerveModule(0, Constants.Swerve.Mod0.constants),
+                new SwerveModule(1, Constants.Swerve.Mod1.constants),
+                new SwerveModule(2, Constants.Swerve.Mod2.constants),
+                new SwerveModule(3, Constants.Swerve.Mod3.constants)
+        };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions());
 
@@ -56,12 +57,10 @@ public class Drive extends SubsystemBase {
         isHighGear = false;
     }
 
-
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                        isHighGear ? MathUtil.clamp(translation.getX(), -1.0, 1.0) : 
-                        translation.getX(),
+                        isHighGear ? MathUtil.clamp(translation.getX(), -1.0, 1.0) : translation.getX(),
                         translation.getY(),
                         rotation,
                         getYaw())
@@ -73,7 +72,8 @@ public class Drive extends SubsystemBase {
 
         for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-            // System.out.println(swerveModuleStates[mod.moduleNumber].angle.getDegrees() + "      e     " + mod.moduleNumber);
+            // System.out.println(swerveModuleStates[mod.moduleNumber].angle.getDegrees() +
+            // " e " + mod.moduleNumber);
 
         }
     }
@@ -138,15 +138,16 @@ public class Drive extends SubsystemBase {
     public double getAngle() {
         return gyro.getYaw() % 360;
     }
-    
+
     public double getRoll() {
         return gyro.getRoll();
     }
+
     public double getPitch() {
         return gyro.getPitch();
     }
 
-    // Auto 
+    // Auto
     public void lockModules() {
         for (SwerveModule mod : swerveMods) {
             mod.lockWheels();
@@ -167,6 +168,6 @@ public class Drive extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-       }
+        }
     }
 }
