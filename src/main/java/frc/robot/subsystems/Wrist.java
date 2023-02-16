@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
     POSITION
   }
 
-  public WristState wristState;
+  public WristState wristState = WristState.IDLE;
 
   public TalonSRX wrist = new TalonSRX(Constants.Ports.WRIST);
 

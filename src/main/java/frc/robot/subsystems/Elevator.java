@@ -14,6 +14,7 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -34,6 +35,8 @@ public class Elevator extends SubsystemBase {
 	public RelativeEncoder encoderA = elevatorA.getEncoder();
 
 	public SparkMaxPIDController controllerA = elevatorA.getPIDController();
+
+	public DigitalInput limitSwitch = new DigitalInput(Constants.Ports.ELEVATOR_LIMIT_SWITCH);
 
 	public ElevatorFeedforward feedForward = new ElevatorFeedforward(
 			Constants.Elevator.ELEVATOR_KS,
@@ -82,13 +85,23 @@ public class Elevator extends SubsystemBase {
 	}
 
 	public void setElevatorOpenLoop(double percent) {
-		elevatorA.set(percent);
+		if (!isAtHardLimit(percent)) {
+			elevatorA.set(percent);
+		}
 	}
 
-	public void setElevatorClosedLoop() {
-		controller.setGoal(setpointElevator);
-		elevatorA.set(controller.calculate(encoderA.getPosition()) +
-				feedForward.calculate(controller.getSetpoint().velocity));
+	public void setElevatorClosedLoop() {		
+			controller.setGoal(setpointElevator);
+			double output = controller.calculate(encoderA.getPosition()) +
+					         feedForward.calculate(controller.getSetpoint().velocity);
+			if (!isAtHardLimit(output)) {
+				elevatorA.set(output);
+			}
+		}
+	
+
+	public boolean isAtHardLimit(double output) {
+		return (getLimitSwitch() && output > 0);
 	}
 
 	public static double getSetpoint() {
@@ -97,6 +110,10 @@ public class Elevator extends SubsystemBase {
 
 	public static void setSetpoint(double setpoint) {
 		setpointElevator = setpoint;
+	}
+
+	public boolean getLimitSwitch() {
+		return limitSwitch.get();
 	}
 
 	@Override

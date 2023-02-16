@@ -121,9 +121,9 @@ public class SwerveModule extends SubsystemBase{
         // System.out.println(desiredState.speedMetersPerSecond + "      e       " + moduleNumber);
     
   
-        // if (moduleNumber =a= 3) {
+        // if (moduleNumber == 3) {
             angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));
-        //     System.out.println(angleMotor.get());
+            // System.out.println(angleMotor.get());
         // }
         // else {
         //     angleMotor.set(angleController.calculate(angleEncoder.getAbsolutePosition(), angle));

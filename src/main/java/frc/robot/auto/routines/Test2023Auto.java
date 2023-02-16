@@ -12,14 +12,13 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.auto.PPTrajectoryGenerator;
-import frc.robot.auto.commands.LockWheels;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -75,9 +74,9 @@ public class Test2023Auto extends SequentialCommandGroup {
             PPTrajectoryGenerator.getForwardTestPath(),
             swerve::getPose,
             Constants.Swerve.SWERVE_KINEMATICS,
-            new PIDController(0.1, 0, 0),
-            new PIDController(0.1, 0, 0),
-            new PIDController(.3, 0, 0),
+            new PIDController(0.2, 0, 0),
+            new PIDController(0.2, 0, 0),
+            new PIDController(.4, 0, 0),
             swerve::setModuleStates,
             true,
             swerve);
@@ -86,9 +85,9 @@ public class Test2023Auto extends SequentialCommandGroup {
             PPTrajectoryGenerator.getReverseTestPath(),
             swerve::getPose,
             Constants.Swerve.SWERVE_KINEMATICS,
-            new PIDController(.1, 0, 0),
-            new PIDController(.1, 0, 0),
-            new PIDController(.35, 0, 0),
+            new PIDController(.2, 0, 0),
+            new PIDController(.2, 0, 0),
+            new PIDController(.4, 0, 0),
             swerve::setModuleStates,
             true,
             swerve);
@@ -96,17 +95,22 @@ public class Test2023Auto extends SequentialCommandGroup {
         Command forwardTestCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getForwardTestPath());
         Command reverseTestCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getReverseTestPath());
 
-        Command threePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getPathThreePiece());
+        Command bottomThreePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathThreePiece());
+        Command topThreePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getTopPathThreePiece());
+        
 
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getForwardTestPath().getInitialHolonomicPose())),              // threePieceTest,
-                forwardTestCommandOne,
-                reverseTestCommandOne,
+                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathThreePiece().getInitialHolonomicPose())),    
+                // forwardTestCommandOne,
+                // reverseTestCommandOne,
+                //bottomThreePieceTest,
+                topThreePieceTest,
                 // testCommandOne,
                 // testCommandTwo,
-                new LockWheels(swerve)
+                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+                new PrintCommand("hello this is the auto speaking, LLLLLL")
                 
               );
 

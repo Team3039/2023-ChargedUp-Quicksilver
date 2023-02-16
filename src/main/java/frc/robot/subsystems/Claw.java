@@ -27,8 +27,8 @@ public class Claw extends SubsystemBase {
 		INTAKE
 	}
 
-	public Spark motor = new Spark(0);
-	public Spark motorTwo = new Spark(1);
+	// public Spark motor = new Spark(0);
+	// public Spark motorTwo = new Spark(1);
 
 	public ClawState clawState = ClawState.IDLE;
 
@@ -51,10 +51,10 @@ public class Claw extends SubsystemBase {
 	}
 
 	public void setWheelSpeeds(double leftSpeed, double rightSpeed) {
-		// leftWheels.set(leftSpeed);
+		// leftWheels.set(leftSpee%d);
 		// rightWheels.set(rightSpeed);
-		motor.set(leftSpeed);
-		motorTwo.set(rightSpeed);
+		// motor.set(leftSpeed);
+		// motorTwo.set(rightSpeed);
 
 	}
 

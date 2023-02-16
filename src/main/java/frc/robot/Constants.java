@@ -44,9 +44,8 @@ public final class Constants {
         public static final int BUDDYCLIMB_DEPLOY_A = 4;
         public static final int BUDDYCLIMB_DEPLOY_B = 5;
 
-        public static final int LED_OUTPUT_A = 0;
 
-        public static final int LED_OUTPUT_B = 0;
+        public static final int ELEVATOR_LIMIT_SWITCH = 1;
   }
 
   public static final class Elevator {
@@ -61,6 +60,8 @@ public final class Constants {
         public static final double ELEVATOR_KV = 0;
         public static final double ELEVATOR_MAX_VEL = 0;
         public static final double ELEVATOR_MAX_ACCEL = 0;
+      public static final double MID_GRID_SETPOINT = 0;
+    public static final double HIGH_GRID_SETPOINT = 0;
   }
   
   public static final class Wrist {

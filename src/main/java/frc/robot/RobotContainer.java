@@ -112,7 +112,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    operatorX.whileTrue(new ClawIntake());
+    // operatorX.whileTrue(new ClawIntake());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
     
     driverShare.toggleOnTrue(new TrackingMode());
