@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ResourceBundle.Control;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -49,7 +51,8 @@ public class Wrist extends SubsystemBase {
     // wrist.config_kP(0, Constants.Wrist.KI);
     // wrist.config_kP(0, Constants.Wrist.KD);
 
-    wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+
 
     wrist.configForwardSoftLimitEnable(false);
     wrist.configReverseSoftLimitEnable(false);
@@ -89,6 +92,11 @@ public class Wrist extends SubsystemBase {
                                    feedForward.calculate(Math.toRadians(controller.getSetpoint().position), 
                                                               controller.getSetpoint().velocity));
   }
+
+  public void setWristPercent(double percent){
+    wrist.set(ControlMode.PercentOutput, percent);
+  }
+
   public static double getSetpoint(){
     return setpointWrist;
   }
@@ -101,7 +109,7 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     switch(wristState) {
       case IDLE:
-        setWristPosition();
+        // setWristPosition();
         break;
       case MANUAL:
         System.out.println("lol no");

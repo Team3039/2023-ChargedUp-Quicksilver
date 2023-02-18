@@ -8,10 +8,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,10 +33,11 @@ public class Claw extends SubsystemBase {
 
 	public CANSparkMax leftWheels = new CANSparkMax(Constants.Ports.CLAW_LEFT_WHEELS, MotorType.kBrushless);
 	public CANSparkMax rightWheels = new CANSparkMax(Constants.Ports.CLAW_RIGHT_WHEELS, MotorType.kBrushless);
-	public Solenoid snapper = new Solenoid(PneumaticsModuleType.REVPH, Constants.Ports.CLAW_SOLENOID);
-	public DigitalInput beamTrigger = new DigitalInput(Constants.Ports.CLAW_BEAM_BREAK);
+	public PneumaticHub pH = new PneumaticHub(Constants.Ports.PH_CAN_ID);
+	public Solenoid snapper = pH.makeSolenoid(Constants.Ports.CLAW_SOLENOID);
 
 	public Claw() {
+		pH.enableCompressorAnalog(100, 120);
 		leftWheels.setIdleMode(IdleMode.kBrake);
 		rightWheels.setIdleMode(IdleMode.kBrake);
 	}
@@ -51,23 +51,20 @@ public class Claw extends SubsystemBase {
 	}
 
 	public void setWheelSpeeds(double leftSpeed, double rightSpeed) {
-		// leftWheels.set(leftSpee%d);
-		// rightWheels.set(rightSpeed);
-		// motor.set(leftSpeed);
-		// motorTwo.set(rightSpeed);
-
+		if (leftWheels.getOutputCurrent() < 1.8) {
+			leftWheels.set(leftSpeed);
+			rightWheels.set(rightSpeed);
+		}
 	}
 
 	public void setSnapper(boolean isReleased) {
 		snapper.set(isReleased);
 	}
 
-	public boolean getBeam() {
-		return beamTrigger.get();
-	}
-
 	@Override
 	public void periodic() {
+
+		SmartDashboard.putNumber("Claw Current", leftWheels.getOutputCurrent());
 
 		switch (clawState) {
 			case IDLE:
@@ -81,6 +78,7 @@ public class Claw extends SubsystemBase {
 			case CUBE:
 				break;
 			case INTAKE:
+				setWheelSpeeds(-0.3, 0.3);
 				break;
 		}
 	}

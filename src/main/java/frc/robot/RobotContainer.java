@@ -10,10 +10,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ActuateClaw;
 import frc.robot.commands.ClawIntake;
+import frc.robot.commands.DesiresCone;
+import frc.robot.commands.DesiresCube;
 import frc.robot.commands.GridTagTrack;
+import frc.robot.commands.SetElevatorPercent;
+import frc.robot.commands.SetWristPercent;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TrackingMode;
+import frc.robot.commands.TurnLEDsOff;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.BuddyClimb;
 import frc.robot.subsystems.Claw;
@@ -22,6 +28,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.LEDs.LEDState;
 
 
 /**
@@ -39,6 +46,8 @@ public class RobotContainer {
   public static final Wrist wrist = new Wrist();
   public static final BuddyClimb buddyClimb = new BuddyClimb();
   public static final LEDs leds = new LEDs();
+
+  private static final AutoCommands auto = new AutoCommands(drive);
 
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
@@ -112,18 +121,35 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // operatorX.whileTrue(new ClawIntake());
+    operatorX.whileTrue(new ClawIntake());
+    operatorCircle.toggleOnTrue(new ActuateClaw());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
+
+    operatorL1.whileTrue(new SetElevatorPercent(.3));
+    operatorR1.whileTrue(new SetElevatorPercent(-.3));
+    operatorL2.whileTrue(new SetWristPercent(0.4));
+    operatorR2.whileTrue(new SetWristPercent(-0.2));
     
     driverShare.toggleOnTrue(new TrackingMode());
     driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
     driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
     driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
 
+    if (leds.getState().equals(LEDState.IDLE)){
+      driverL1.onTrue(new DesiresCone());
+    } 
+    else if (leds.getState().equals(LEDState.CONE)){
+      driverL1.onTrue(new DesiresCube());
+    }
+    else {
+      driverL1.onTrue(new TurnLEDsOff());
+    }
 
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+  }
+
+  public Command getAutonomousCommand() {
+    return auto.getSelectedCommand();
   }
 
 }

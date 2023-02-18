@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -22,7 +23,7 @@ public class LEDs extends SubsystemBase {
 
 	public LEDState ledState = LEDState.IDLE;
 
-    public final int LEDcount = 36;
+    public final int LEDcount = 50;
 
     public AddressableLED leds = new AddressableLED(8);
     public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
@@ -31,6 +32,14 @@ public class LEDs extends SubsystemBase {
         leds.setLength(LEDcount);
         leds.setData(buffer);
         leds.start();
+	}
+
+	public LEDState getState(){
+		return ledState;
+	}
+
+	public void setState(LEDState state){
+		ledState = state;
 	}
 
     public void setColorRGB(int r, int g, int b) {
@@ -44,13 +53,18 @@ public class LEDs extends SubsystemBase {
 	public void periodic() {
 		switch(ledState) {
 			case IDLE:
-       
+			  if (DriverStation.isDisabled()) {
+			  //Fire goes here
+			  }
+			  else {
+			  setColorRGB(0, 0, 0);
+			  }
 			  break;
 			case CONE:
-              setColorRGB(200, 200, 0);
+              setColorRGB(100, 100, 0);
 			  break;
 			case CUBE:
-              setColorRGB(200, 0, 200);
+              setColorRGB(100, 0, 100);
 			  break;
 		}
 

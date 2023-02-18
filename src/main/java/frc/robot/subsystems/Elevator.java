@@ -29,14 +29,14 @@ public class Elevator extends SubsystemBase {
 
 	public ElevatorState elevatorState = ElevatorState.IDLE;
 
-	public CANSparkMax elevatorA = new CANSparkMax(Constants.Ports.ELEVATOR_A, MotorType.kBrushless);
+	// public CANSparkMax elevatorA = new CANSparkMax(Constants.Ports.ELEVATOR_A, MotorType.kBrushless);
 	public CANSparkMax elevatorB = new CANSparkMax(Constants.Ports.ELEVATOR_B, MotorType.kBrushless);
 
-	public RelativeEncoder encoderA = elevatorA.getEncoder();
+	public RelativeEncoder encoderA = elevatorB.getEncoder();
 
-	public SparkMaxPIDController controllerA = elevatorA.getPIDController();
+	public SparkMaxPIDController controllerA = elevatorB.getPIDController();
 
-	public DigitalInput limitSwitch = new DigitalInput(Constants.Ports.ELEVATOR_LIMIT_SWITCH);
+	// public DigitalInput limitSwitch = new DigitalInput(Constants.Ports.ELEVATOR_LIMIT_SWITCH);
 
 	public ElevatorFeedforward feedForward = new ElevatorFeedforward(
 			Constants.Elevator.ELEVATOR_KS,
@@ -55,24 +55,24 @@ public class Elevator extends SubsystemBase {
 	public static double setpointElevator = 0;
 
 	public Elevator() {
-		elevatorB.follow(elevatorA, false);
+		// elevatorB.follow(elevatorA, true);
 
-		elevatorA.setIdleMode(IdleMode.kBrake);
+		// elevatorA.setIdleMode(IdleMode.kBrake);
 		elevatorB.setIdleMode(IdleMode.kBrake);
 
-		elevatorA.setInverted(false);
-		// elevatorB.setInverted(false);
+		// elevatorA.setInverted(false);
+		elevatorB.setInverted(false);
 
-		elevatorA.setSoftLimit(SoftLimitDirection.kForward, 0);
-		elevatorA.setSoftLimit(SoftLimitDirection.kReverse, 0);
-		elevatorB.setSoftLimit(SoftLimitDirection.kForward, 0);
-		elevatorB.setSoftLimit(SoftLimitDirection.kReverse, 0);
+		// elevatorA.setSoftLimit(SoftLimitDirection.kForward, 10000);
+		// elevatorA.setSoftLimit(SoftLimitDirection.kReverse, -1000);
+		elevatorB.setSoftLimit(SoftLimitDirection.kForward, 10000);
+		elevatorB.setSoftLimit(SoftLimitDirection.kReverse, -1000);
 
 		// controllerA.setP(Constants.Elevator.ELEVATOR_KP);
 		// controllerA.setI(Constants.Elevator.ELEVATOR_KI);
 		// controllerA.setD(Constants.Elevator.ELEVATOR_KD);
 
-		elevatorA.burnFlash();
+		// elevatorA.burnFlash();
 		elevatorB.burnFlash();
 	}
 
@@ -85,24 +85,25 @@ public class Elevator extends SubsystemBase {
 	}
 
 	public void setElevatorOpenLoop(double percent) {
-		if (!isAtHardLimit(percent)) {
-			elevatorA.set(percent);
-		}
+		// if (!isAtHardLimit(percent)) {
+			// elevatorA.set(percent);
+			elevatorB.set(percent);
+		// }
 	}
 
 	public void setElevatorClosedLoop() {		
 			controller.setGoal(setpointElevator);
 			double output = controller.calculate(encoderA.getPosition()) +
 					         feedForward.calculate(controller.getSetpoint().velocity);
-			if (!isAtHardLimit(output)) {
-				elevatorA.set(output);
-			}
+			// if (!isAtHardLimit(output)) {
+				elevatorB.set(output);
+			// }
 		}
 	
 
-	public boolean isAtHardLimit(double output) {
-		return (getLimitSwitch() && output > 0);
-	}
+	// public boolean isAtHardLimit(double output) {
+	// 	return (getLimitSwitch() && output > 0);
+	// }
 
 	public static double getSetpoint() {
 		return setpointElevator;
@@ -112,16 +113,16 @@ public class Elevator extends SubsystemBase {
 		setpointElevator = setpoint;
 	}
 
-	public boolean getLimitSwitch() {
-		return limitSwitch.get();
-	}
+	// public boolean getLimitSwitch() {
+	// 	// return limitSwitch.get();
+	// }
 
 	@Override
 	public void periodic() {
 		switch (elevatorState) {
 			case IDLE:
-				setSetpoint(0);
-				setElevatorClosedLoop();
+				// setSetpoint(0);
+				// setElevatorClosedLoop();
 				break;
 			case MANUAL:
 				setElevatorOpenLoop(RobotContainer.operatorPad.getLeftY());

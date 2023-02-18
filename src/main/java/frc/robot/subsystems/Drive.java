@@ -72,9 +72,6 @@ public class Drive extends SubsystemBase {
 
         for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-            // System.out.println(swerveModuleStates[mod.moduleNumber].angle.getDegrees() +
-            // " e " + mod.moduleNumber);
-
         }
     }
 
