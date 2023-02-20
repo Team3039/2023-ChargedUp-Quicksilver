@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.SwerveModule;
 
 public class Drive extends SubsystemBase {
 
@@ -40,6 +41,7 @@ public class Drive extends SubsystemBase {
         gyro = new Pigeon2(4);
         gyro.configFactoryDefault();
         setGyro(0);
+
 
         swerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.Mod0.constants),
