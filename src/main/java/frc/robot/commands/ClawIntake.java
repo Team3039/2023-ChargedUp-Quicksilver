@@ -6,29 +6,34 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Claw.ClawState;
 
 public class ClawIntake extends CommandBase {
   /** Creates a new ClawIntake. */
+
   public ClawIntake() {
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    RobotContainer.claw.setState(ClawState.INTAKE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.claw.setWheelSpeeds(.3, .3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.claw.setWheelSpeeds(0, 0);
+    if (!RobotContainer.claw.isIntakeDeactivated()) {
+      RobotContainer.claw.setState(ClawState.IDLE);
+    } else {
+      RobotContainer.claw.setState(ClawState.PASSIVE);
+    }
   }
 
   // Returns true when the command should end.

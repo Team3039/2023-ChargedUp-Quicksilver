@@ -23,50 +23,66 @@ public class LEDs extends SubsystemBase {
 
 	public LEDState ledState = LEDState.IDLE;
 
-    public final int LEDcount = 50;
+	public final int LEDcount = 50;
 
-    public AddressableLED leds = new AddressableLED(8);
-    public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
+	private int rainbowStart = 0;
+
+	public AddressableLED leds = new AddressableLED(9);
+	public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
 
 	public LEDs() {
-        leds.setLength(LEDcount);
-        leds.setData(buffer);
-        leds.start();
+		leds.setLength(LEDcount);
+		leds.setData(buffer);
+		leds.start();
 	}
 
-	public LEDState getState(){
+	public LEDState getState() {
 		return ledState;
 	}
 
-	public void setState(LEDState state){
+	public void setState(LEDState state) {
 		ledState = state;
 	}
 
-    public void setColorRGB(int r, int g, int b) {
-        for (var i = 0; i < buffer.getLength(); i++) {
-            buffer.setRGB(i, r, g, b);
-         }
-         leds.setData(buffer);
-    }
+	public void setColorRGB(int r, int g, int b) {
+		for (var i = 0; i < buffer.getLength(); i++) {
+			buffer.setRGB(i, r, g, b);
+		}
+		leds.setData(buffer);
+	}
+
+	private void rainbow() {
+		// For every pixel
+		for (var i = 0; i < buffer.getLength(); i++) {
+		  // Calculate the hue - hue is easier for rainbows because the color
+		  // shape is a circle so only one value needs to precess
+		  final var hue = (rainbowStart + (i * 180 / buffer.getLength())) % 180;
+		  // Set the value
+		  buffer.setHSV(i, hue, 255, 128);
+		}
+		// Increase by to make the rainbow "move"
+		rainbowStart += 3;
+		// Check bounds
+		rainbowStart %= 180;
+	  }
 
 	@Override
 	public void periodic() {
-		switch(ledState) {
+		switch (ledState) {
 			case IDLE:
-			  if (DriverStation.isDisabled()) {
-			  //Fire goes here
-			  }
-			  else {
-			  setColorRGB(0, 0, 0);
-			  }
-			  break;
+				if (DriverStation.isDisabled()) {
+					// Fire goes here
+				} else {
+					setColorRGB(0, 0, 0);
+				}
+				break;
 			case CONE:
-              setColorRGB(100, 100, 0);
-			  break;
+				setColorRGB(50, 50, 0);
+				break;
 			case CUBE:
-              setColorRGB(100, 0, 100);
-			  break;
+				setColorRGB(50, 0, 50);
+				break;
 		}
 
-}
+	}
 }

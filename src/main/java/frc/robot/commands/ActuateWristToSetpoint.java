@@ -4,23 +4,24 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.LEDs.LEDState;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Wrist.WristState;
 
-public class TurnLEDsOff extends CommandBase {
-  /** Creates a new LEDsOff. */
-  public TurnLEDsOff() {
-    addRequirements(RobotContainer.leds);
-    // Use addRequirements() here to declare subsystem dependencies.
+public class ActuateWristToSetpoint extends CommandBase {
+
+  double setpoint = 0;
+  public ActuateWristToSetpoint(double setpoint) {
+    addRequirements(RobotContainer.wrist);
+    this.setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.leds.setState(LEDState.IDLE);
+    Wrist.setSetpoint(setpoint);
+    RobotContainer.wrist.setState(WristState.POSITION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -29,11 +30,13 @@ public class TurnLEDsOff extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    // RobotContainer.wrist.setState(WristState.IDLE);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return RobotContainer.wrist.isAtSetpoint(false);
   }
 }

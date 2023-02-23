@@ -6,18 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Wrist;
 
 public class ActuateClaw extends CommandBase {
   /** Creates a new ActuateClaw. */
-  public ActuateClaw() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+  public ActuateClaw() {}
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     RobotContainer.claw.setSnapper(true);
-    System.out.println("eeeeeeeeeeeeeeeeeeeeeeeee");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -28,7 +26,6 @@ public class ActuateClaw extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     RobotContainer.claw.setSnapper(false);
-    System.out.println("gjmhvjtcdghWWWWWWWWWWW");
   }
 
   // Returns true when the command should end.

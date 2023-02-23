@@ -4,12 +4,16 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,11 +23,8 @@ public class Claw extends SubsystemBase {
 	public enum ClawState {
 		IDLE,
 		PASSIVE,
-		// if the necessary sequence for intaking is different
-		CONE,
-		CUBE,
-		// if the necessary sequence for intaking is the same
-		INTAKE
+		INTAKE,
+		RELEASE
 	}
 
 	// public Spark motor = new Spark(0);
@@ -33,13 +34,25 @@ public class Claw extends SubsystemBase {
 
 	public CANSparkMax leftWheels = new CANSparkMax(Constants.Ports.CLAW_LEFT_WHEELS, MotorType.kBrushless);
 	public CANSparkMax rightWheels = new CANSparkMax(Constants.Ports.CLAW_RIGHT_WHEELS, MotorType.kBrushless);
+	public TalonFX claw = new TalonFX(Constants.Ports.CLAW);
 	public PneumaticHub pH = new PneumaticHub(Constants.Ports.PH_CAN_ID);
 	public Solenoid snapper = pH.makeSolenoid(Constants.Ports.CLAW_SOLENOID);
+
+	public Timer timer = new Timer();
+
+	public boolean deactivateIntake = false;
 
 	public Claw() {
 		pH.enableCompressorAnalog(100, 120);
 		leftWheels.setIdleMode(IdleMode.kBrake);
 		rightWheels.setIdleMode(IdleMode.kBrake);
+		claw.setNeutralMode(NeutralMode.Brake);
+
+		leftWheels.setInverted(false);
+		rightWheels.setInverted(true);
+		claw.setInverted(false);
+
+		timer.reset();
 	}
 
 	public void setState(ClawState state) {
@@ -50,36 +63,66 @@ public class Claw extends SubsystemBase {
 		return clawState;
 	}
 
-	public void setWheelSpeeds(double leftSpeed, double rightSpeed) {
-		if (leftWheels.getOutputCurrent() < 1.8) {
-			leftWheels.set(leftSpeed);
-			rightWheels.set(rightSpeed);
-		}
+	public void setWheelSpeeds(double speed) {
+		// if (leftWheels.getOutputCurrent() < 1.8) {
+		leftWheels.set(speed);
+		rightWheels.set(speed);
+		claw.set(ControlMode.PercentOutput, speed);
+		// }
 	}
 
 	public void setSnapper(boolean isReleased) {
 		snapper.set(isReleased);
 	}
 
+	public boolean getSnapper() {
+		return snapper.get();
+	}
+
+	public boolean isIntakeDeactivated() {
+		return deactivateIntake;
+	}
 	@Override
 	public void periodic() {
-
 		SmartDashboard.putNumber("Claw Current", leftWheels.getOutputCurrent());
+
+		// System.out.println(getState());
+		// System.out.println(isIntakeDeactivated());
+		System.out.println(leftWheels.getOutputCurrent());
 
 		switch (clawState) {
 			case IDLE:
-				setWheelSpeeds(0, 0);
+				timer.stop();
+				timer.reset();
+				setWheelSpeeds(0);
+				deactivateIntake = false;
 				break;
 			case PASSIVE:
-				setWheelSpeeds(-0.05, 0.05);
-				break;
-			case CONE:
-				break;
-			case CUBE:
+				deactivateIntake = true;
+				setWheelSpeeds(0.05);
 				break;
 			case INTAKE:
-				setWheelSpeeds(-0.3, 0.3);
+				
+				timer.start();
+				if (timer.get() > 0.3 && leftWheels.getOutputCurrent() >= 10 && !deactivateIntake) {
+					deactivateIntake = true;
+					timer.stop();
+					timer.reset();
+					timer.start();
+				}
+				else if (!deactivateIntake) {
+				setWheelSpeeds(0.2);
+				}
+				if (deactivateIntake && timer.get() > 0.2) {
+					setWheelSpeeds(0);
+					timer.stop();
+					timer.reset();
+					setState(ClawState.PASSIVE);
+				}
 				break;
+			case RELEASE:
+				deactivateIntake = false;
+				setWheelSpeeds(-0.1);
 		}
 	}
 }

@@ -55,9 +55,6 @@ public class SwerveModule extends SubsystemBase{
         
         configureDevices();
 
-        // configAngleEncoder();
-
-
         lastAngle = getState().angle.getDegrees();
 
         angleMotor.burnFlash();
@@ -112,63 +109,68 @@ public class SwerveModule extends SubsystemBase{
         lastAngle = angle;
     }
     
-    private void configAngleMotor() {
-        angleMotor.restoreFactoryDefaults();
-        angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
-        angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SMART_CURRENT);
-        angleMotor.setSecondaryCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SECONDARY_LIMIT);
-        angleMotor.setIdleMode(IdleMode.kBrake);
+    // private void configAngleMotor() {
+    //     angleMotor.restoreFactoryDefaults();
+    //     angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
+    //     angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SMART_CURRENT);
+    //     angleMotor.setSecondaryCurrentLimit(Constants.Swerve.ANGLE_MOTOR_SECONDARY_LIMIT);
+    //     angleMotor.setIdleMode(IdleMode.kBrake);
 
-    }
+    // }
 
-    private void configDriveMotor() {
-        driveMotor.restoreFactoryDefaults();
-        driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
-        // if (moduleNumber == 0) {
-        //     driveMotor.setInverted(true);
-        // }
-        driveMotor.setClosedLoopRampRate(Constants.Swerve.DRIVE_CLOSED_LOOP_RAMP);
-        driveMotor.setOpenLoopRampRate(Constants.Swerve.DRIVE_OPEN_LOOP_RAMP);
-        driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_MOTOR_SMART_CURRENT);
-        driveMotor.setSecondaryCurrentLimit(Constants.Swerve.DRIVE_MOTOR_SECONDARY_LIMIT);
-        driveMotor.setIdleMode(IdleMode.kBrake);
-    }
+    // private void configDriveMotor() {
+    //     driveMotor.restoreFactoryDefaults();
+    //     driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
+    //     // if (moduleNumber == 0) {
+    //     //     driveMotor.setInverted(true);
+    //     // }
+    //     driveMotor.setClosedLoopRampRate(Constants.Swerve.DRIVE_CLOSED_LOOP_RAMP);
+    //     driveMotor.setOpenLoopRampRate(Constants.Swerve.DRIVE_OPEN_LOOP_RAMP);
+    //     driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_MOTOR_SMART_CURRENT);
+    //     driveMotor.setSecondaryCurrentLimit(Constants.Swerve.DRIVE_MOTOR_SECONDARY_LIMIT);
+    //     driveMotor.setIdleMode(IdleMode.kBrake);
+    // }
 
-    private void configDriveEncoder() {
-        driveEncoder.setPosition(0);
-        driveEncoder.setPositionConversionFactor(Constants.Swerve.DRIVE_MOTOR_POSITION_CONVERSION);
-        driveEncoder.setVelocityConversionFactor(Constants.Swerve.DRIVE_MOTOR_VELOCITY_CONVERSION);
-    }
+    // private void configDriveEncoder() {
+    //     driveEncoder.setPosition(0);
+    //     driveEncoder.setPositionConversionFactor(Constants.Swerve.DRIVE_MOTOR_POSITION_CONVERSION);
+    //     driveEncoder.setVelocityConversionFactor(Constants.Swerve.DRIVE_MOTOR_VELOCITY_CONVERSION);
+    // }
 
-    private void configDriveController() {
-        driveController.setP(Constants.Swerve.DRIVE_MOTOR_KP);
-        driveController.setI(Constants.Swerve.DRIVE_MOTOR_KI);
-        driveController.setD(Constants.Swerve.DRIVE_MOTOR_KD);
-        driveController.setFF(Constants.Swerve.DRIVE_MOTOR_KF);
-        driveController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
-    }
+    // private void configDriveController() {
+    //     driveController.setP(Constants.Swerve.DRIVE_MOTOR_KP);
+    //     driveController.setI(Constants.Swerve.DRIVE_MOTOR_KI);
+    //     driveController.setD(Constants.Swerve.DRIVE_MOTOR_KD);
+    //     driveController.setFF(Constants.Swerve.DRIVE_MOTOR_KF);
+    //     driveController.setOutputRange(Constants.Swerve.DRIVE_MOTOR_MIN_OUTPUT, Constants.Swerve.DRIVE_MOTOR_MAX_OUTPUT);
+    // }
 
-    private void configAngleEncoder() {
-        cancoder.configFactoryDefault();
-        CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
-        canCoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-        canCoderConfiguration.sensorDirection = Constants.Swerve.CANCONDER_INVERT;
-        canCoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-        canCoderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
+    // private void configAngleEncoder() {
+    //     cancoder.configFactoryDefault();
+    //     CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
+    //     canCoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
+    //     canCoderConfiguration.sensorDirection = Constants.Swerve.CANCONDER_INVERT;
+    //     canCoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+    //     canCoderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
 
-        cancoder.configAllSettings(canCoderConfiguration);
-    }
+    //     cancoder.configAllSettings(canCoderConfiguration);
+    // }
 
     // private void configAngleController() {
     //     angleController.enableContinuousInput(0, 360);
     // }
 
     private void configureDevices() {
+        System.out.println(cancoder.getAbsolutePosition());
+        System.out.println(angleOffset);
         integratedAngleEncoder.setPosition(cancoder.getAbsolutePosition() - angleOffset);
 
     // Drive motor configuration.
     driveMotor.restoreFactoryDefaults();
     driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
+    if (moduleNumber == 0) {
+        driveMotor.setInverted(!Constants.Swerve.DRIVE_MOTOR_INVERT);
+    }
     driveMotor.setIdleMode(IdleMode.kBrake);
     driveMotor.setOpenLoopRampRate(Constants.Swerve.DRIVE_OPEN_LOOP_RAMP);
     driveMotor.setClosedLoopRampRate(Constants.Swerve.DRIVE_CLOSED_LOOP_RAMP);

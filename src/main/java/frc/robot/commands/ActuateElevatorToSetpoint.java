@@ -4,22 +4,24 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.LEDs.LEDState;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorState;
 
-public class DesiresCube extends CommandBase {
-  /** Creates a new DesiresCube. */
-  public DesiresCube() {
-    addRequirements(RobotContainer.leds);
+public class ActuateElevatorToSetpoint extends CommandBase {
+
+  double setpoint = 0;
+  public ActuateElevatorToSetpoint(double setpoint) {
+    addRequirements(RobotContainer.elevator);
+    this.setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.leds.setState(LEDState.CUBE);
+    Elevator.setSetpoint(setpoint);
+    RobotContainer.elevator.setState(ElevatorState.POSITION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -29,11 +31,12 @@ public class DesiresCube extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // RobotContainer.elevator.setState(ElevatorState.IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return RobotContainer.elevator.isAtSetpoint(false);
   }
 }

@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
 
-  public enum VisionState{
-    DRIVE, 
+  public enum VisionState {
+    DRIVE,
     TRACKING
   }
-  
+
   public VisionState visionState = VisionState.DRIVE;
 
   public PhotonCamera camera = new PhotonCamera("Arducam_OV9281_USB_Camera");
@@ -34,24 +34,26 @@ public class Vision extends SubsystemBase {
     return visionState;
   }
 
-  public void setState(VisionState state){
+  public void setState(VisionState state) {
     visionState = state;
   }
 
-  /**  Set variable "target" to the latest and best fitting target tracked by the camera.   */
+  /**
+   * Set variable "target" to the latest and best fitting target tracked by the
+   * camera.
+   */
   public void recieveTarget() {
     if (result.hasTargets()) {
-        target = result.getBestTarget();
-        
-      }
+      target = result.getBestTarget();
+
+    }
   }
-  
 
   @Override
   public void periodic() {
-   result = camera.getLatestResult();
-   
-   recieveTarget();
+    result = camera.getLatestResult();
+
+    recieveTarget();
 
   }
 }

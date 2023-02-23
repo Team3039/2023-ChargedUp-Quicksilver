@@ -4,23 +4,20 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.LEDs.LEDState;
+import frc.robot.subsystems.Claw.ClawState;
 
-public class DesiresCone extends CommandBase {
-  /** Creates a new DesiresCone. */
-  public DesiresCone() {
-    addRequirements(RobotContainer.leds);
+public class ClawRelease extends CommandBase {
+  /** Creates a new ClawRelease. */
+  public ClawRelease() {
+   addRequirements(RobotContainer.claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.leds.setState(LEDState.CONE);
+    RobotContainer.claw.setState(ClawState.RELEASE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,11 +27,12 @@ public class DesiresCone extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.claw.setState(ClawState.IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

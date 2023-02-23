@@ -11,15 +11,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ActuateClaw;
+import frc.robot.commands.ActuateToSetpoint;
 import frc.robot.commands.ClawIntake;
-import frc.robot.commands.DesiresCone;
-import frc.robot.commands.DesiresCube;
-import frc.robot.commands.GridTagTrack;
-import frc.robot.commands.SetElevatorPercent;
-import frc.robot.commands.SetWristPercent;
+import frc.robot.commands.ClawRelease;
+import frc.robot.commands.SetLEDS;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TrackingMode;
-import frc.robot.commands.TurnLEDsOff;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.BuddyClimb;
 import frc.robot.subsystems.Claw;
@@ -28,7 +24,6 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.LEDs.LEDState;
 
 
 /**
@@ -100,12 +95,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    drive.setDefaultCommand(
-      new TeleopSwerve(drive, 
-      driverPad, 
-      true, 
-      true)
-    );
     // Configure the trigger bindings
     configureBindings();
   }
@@ -120,32 +109,33 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    operatorX.whileTrue(new ClawIntake());
+    drive.setDefaultCommand(
+      new TeleopSwerve(drive, 
+      driverPad, 
+      true, 
+      true)
+    );
+    operatorL1.whileTrue(new ClawIntake());
+    operatorL2.whileTrue(new ClawRelease());
     operatorCircle.toggleOnTrue(new ActuateClaw());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
-    operatorL1.whileTrue(new SetElevatorPercent(.3));
-    operatorR1.whileTrue(new SetElevatorPercent(-.3));
-    operatorL2.whileTrue(new SetWristPercent(0.4));
-    operatorR2.whileTrue(new SetWristPercent(-0.2));
+    // operatorSquare.whileTrue(new SetElevatorPercent(.20));
+    // operatorTriangle.whileTrue(new SetElevatorPercent(-.10));
+    // operatorL2.whileTrue(new SetWristPercent(0.2));
+    // operatorR2.whileTrue(new SetWristPercent(-0.1));
+
+    operatorSquare.toggleOnTrue(new ActuateToSetpoint(75, 20));
+    operatorX.toggleOnTrue(new ActuateToSetpoint(45, 55));
+    operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
     
-    driverShare.toggleOnTrue(new TrackingMode());
-    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
-    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
-    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
 
-    if (leds.getState().equals(LEDState.IDLE)){
-      driverL1.onTrue(new DesiresCone());
-    } 
-    else if (leds.getState().equals(LEDState.CONE)){
-      driverL1.onTrue(new DesiresCube());
-    }
-    else {
-      driverL1.onTrue(new TurnLEDsOff());
-    }
+    // driverShare.toggleOnTrue(new TrackingMode());
+    // driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
+    // driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
+    // driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
 
-
+    driverL1.onTrue(new SetLEDS());
   }
 
   public Command getAutonomousCommand() {

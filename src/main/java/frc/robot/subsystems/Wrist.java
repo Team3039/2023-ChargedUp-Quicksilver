@@ -4,18 +4,20 @@
 
 package frc.robot.subsystems;
 
-import java.util.ResourceBundle.Control;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Wrist extends SubsystemBase {
 
@@ -30,17 +32,22 @@ public class Wrist extends SubsystemBase {
   public TalonSRX wrist = new TalonSRX(Constants.Ports.WRIST);
 
   public ArmFeedforward feedForward = new ArmFeedforward(
-            Constants.Wrist.WRIST_KS, 
-            Constants.Wrist.WRIST_KG, 
-            Constants.Wrist.WRIST_KV);
-     
-  private ProfiledPIDController controller = new ProfiledPIDController(
-            Constants.Wrist.WRIST_KP, 
-            Constants.Wrist.WRIST_KI, 
-            Constants.Wrist.WRIST_KD, 
-            new TrapezoidProfile.Constraints(
-                Constants.Wrist.WRIST_MAX_VEL, 
-                Constants.Wrist.WRIST_MAX_ACCEL));
+      Constants.Wrist.WRIST_KS,
+      Constants.Wrist.WRIST_KG,
+      Constants.Wrist.WRIST_KV);
+
+  public ProfiledPIDController profiledController = new ProfiledPIDController(
+      Constants.Wrist.WRIST_KP,
+      Constants.Wrist.WRIST_KI,
+      Constants.Wrist.WRIST_KD,
+      new TrapezoidProfile.Constraints(
+          Constants.Wrist.WRIST_MAX_VEL,
+          Constants.Wrist.WRIST_MAX_ACCEL));
+
+  public PIDController controller = new PIDController(
+      Constants.Wrist.WRIST_KP,
+      Constants.Wrist.WRIST_KI,
+      Constants.Wrist.WRIST_KD);
 
   public static double setpointWrist = 0;
 
@@ -51,71 +58,102 @@ public class Wrist extends SubsystemBase {
     // wrist.config_kP(0, Constants.Wrist.KI);
     // wrist.config_kP(0, Constants.Wrist.KD);
 
-    wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+    // Wrist must start in the vertical position in order to be legal. DONT FORGET
+    // TO DO THIS PLS
+    wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    wrist.setSelectedSensorPosition(degreesToTicks(-90));
 
+    wrist.configForwardSoftLimitEnable(true);
+    wrist.configReverseSoftLimitEnable(true);
+    wrist.configForwardSoftLimitThreshold(degreesToTicks(90));
+    wrist.configReverseSoftLimitThreshold(degreesToTicks(-20));
 
-    wrist.configForwardSoftLimitEnable(false);
-    wrist.configReverseSoftLimitEnable(false);
-    wrist.configForwardSoftLimitThreshold(0);
-    wrist.configReverseSoftLimitThreshold(0);
+    wrist.setInverted(true);
 
-    wrist.setInverted(false);
+    controller.setTolerance(3);
+    profiledController.setTolerance(3);
   }
 
-  public WristState getState(){
+  public WristState getState() {
     return wristState;
   }
 
-  public void setState(WristState state){
+  public void setState(WristState state) {
     wristState = state;
   }
 
   public double degreesToTicks(double degrees) {
     double armRotations = degrees / 360;
-    double motorRotations = armRotations * Constants.Wrist.WRIST_GEAR_RATIO;
-    double motorTicks = motorRotations * 4096;
-    return motorTicks;
+    double ticks = armRotations * 4096;
+    return ticks;
   }
 
   // give the encoder value to get degrees
   public double ticksToDegrees(double ticks) {
-    double motorRotations = ticks / 4096;
-    double armRotations = motorRotations / Constants.Wrist.WRIST_GEAR_RATIO;
+    double armRotations = ticks / 4096;
     double armDegrees = armRotations * 360;
-    return armDegrees; 
-  }
-  
-  public void setWristPosition() {
-    controller.setGoal(setpointWrist);
-    // wrist.set(ControlMode.Position, degreesToTicks(degrees));
-    wrist.set(ControlMode.PercentOutput, controller.calculate(wrist.getSelectedSensorPosition()) + 
-                                   feedForward.calculate(Math.toRadians(controller.getSetpoint().position), 
-                                                              controller.getSetpoint().velocity));
+    return armDegrees;
   }
 
-  public void setWristPercent(double percent){
-    wrist.set(ControlMode.PercentOutput, percent);
+  public void setWristPosition(boolean isProfiled) {
+    if (isProfiled) {
+      profiledController.setGoal(setpointWrist);
+      // wrist.set(ControlMode.Position, degreesToTicks(degrees));
+      wrist.set(ControlMode.PercentOutput, profiledController.calculate(wrist.getSelectedSensorPosition()) +
+          feedForward.calculate(Math.toRadians(profiledController.getSetpoint().position),
+              profiledController.getSetpoint().velocity));
+    } else {
+      wrist.set(ControlMode.PercentOutput, MathUtil.clamp(controller.calculate(
+          ticksToDegrees(wrist.getSelectedSensorPosition()),
+          setpointWrist), -.2, .2),
+          DemandType.ArbitraryFeedForward,
+          Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
+              Constants.Wrist.WRIST_KS);
+    }
   }
 
-  public static double getSetpoint(){
+  public void setWristPercent(double percent) {
+    wrist.set(ControlMode.PercentOutput, percent +
+        Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
+        Constants.Wrist.WRIST_KS);
+  }
+
+  public static double getSetpoint() {
     return setpointWrist;
   }
-  
-  public static void setSetpoint(double setpoint){
+
+  public static void setSetpoint(double setpoint) {
     setpointWrist = setpoint;
   }
-  
+
+  public boolean isAtSetpoint(boolean isProfiled) {
+    return isProfiled ? profiledController.atSetpoint() : controller.atSetpoint();
+  }
+
   @Override
   public void periodic() {
-    switch(wristState) {
+    // SmartDashboard.putNumber("Wrist Absolute Encoder",
+    // wrist.getSelectedSensorPosition());
+    // System.out.println(ticksToDegrees(wrist.getSelectedSensorPosition()));
+    // System.out.println(wrist.getMotorOutputPercent());
+    // SmartDashboard.putNumber("Wrist Currnent Input", wrist.getSupplyCurrent());
+    // SmartDashboard.putNumber("Wrist Current Output", wrist.getStatorCurrent());
+    // System.out.println(setpointWrist);
+
+    switch (wristState) {
       case IDLE:
-        // setWristPosition();
+        // System.out.println(setpointWrist);
+        if (RobotContainer.claw.isIntakeDeactivated()) {
+          setSetpoint(20);
+        } else {
+          setSetpoint(0);
+        }
+        setWristPosition(false);
         break;
       case MANUAL:
-        System.out.println("lol no");
         break;
       case POSITION:
-        setWristPosition();
+        setWristPosition(false);
         break;
     }
   }

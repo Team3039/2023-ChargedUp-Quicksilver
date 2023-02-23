@@ -13,8 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,26 +20,16 @@ import frc.robot.SwerveModule;
 
 public class Drive extends SubsystemBase {
 
-    // public static Drive INSTANCE = new Drive();
-
-    public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] swerveMods;
-    public Pigeon2 gyro;
-    // private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2>
-    // latencyCompensationMap = new InterpolatingTreeMap<>();
-
-    public static Trajectory trajectory = new Trajectory();
-    public static TrapezoidProfile.Constraints thetaController;
+    public Pigeon2 gyro = new Pigeon2(4);
+    public SwerveDriveOdometry swerveOdometry;
 
     public boolean isHighGear = false;
 
     public double[] previousPose = new double[2];
 
     public Drive() {
-        gyro = new Pigeon2(4);
-        gyro.configFactoryDefault();
         setGyro(0);
-
 
         swerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -51,10 +39,6 @@ public class Drive extends SubsystemBase {
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions());
-
-        thetaController = new TrapezoidProfile.Constraints(
-                Constants.AutoConstants.K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND,
-                Constants.AutoConstants.K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
         isHighGear = false;
     }
