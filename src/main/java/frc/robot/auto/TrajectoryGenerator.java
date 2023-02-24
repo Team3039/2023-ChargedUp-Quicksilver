@@ -30,10 +30,10 @@ public class TrajectoryGenerator {
         public static Trajectory getstartToGamePiece() {
                 return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
                         List.of(
-                                new Pose2d(),
-                                new Pose2d(new Translation2d(Units.inchesToMeters(-200), Units.inchesToMeters(0)),
+                                new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
+                                new Pose2d(new Translation2d(Units.inchesToMeters(39.37), Units.inchesToMeters(0)),
                                         Rotation2d.fromDegrees(0))),
-                        configSlow);
+                        configFast);
 
                         
         }
@@ -41,9 +41,9 @@ public class TrajectoryGenerator {
         public static Trajectory getGamePieceToStart() {
                 return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
                         List.of(
-                                new Pose2d(new Translation2d(Units.inchesToMeters(-200), Units.inchesToMeters(0)),
+                                new Pose2d(new Translation2d(Units.inchesToMeters(200), Units.inchesToMeters(0)),
                                         Rotation2d.fromDegrees(0)),
                                 new Pose2d()),
-                        configSlow);
+                        configFast);
         }
 }

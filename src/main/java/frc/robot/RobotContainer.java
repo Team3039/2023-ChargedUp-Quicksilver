@@ -40,7 +40,8 @@ public class RobotContainer {
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final BuddyClimb buddyClimb = new BuddyClimb();
-  public static final LEDs leds = new LEDs();
+  public static final LEDs ledsLeft = new LEDs();
+
 
   private static final AutoCommands auto = new AutoCommands(drive);
 
@@ -126,7 +127,7 @@ public class RobotContainer {
     // operatorR2.whileTrue(new SetWristPercent(-0.1));
 
     operatorSquare.toggleOnTrue(new ActuateToSetpoint(75, 20));
-    operatorX.toggleOnTrue(new ActuateToSetpoint(45, 55));
+    operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
     operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
     
 

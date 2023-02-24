@@ -4,14 +4,10 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class LEDs extends SubsystemBase {
 
@@ -25,15 +21,16 @@ public class LEDs extends SubsystemBase {
 
 	public final int LEDcount = 50;
 
-	private int rainbowStart = 0;
+	// private int rainbowStart = 0;
 
-	public AddressableLED leds = new AddressableLED(9);
-	public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
+	public AddressableLED ledsLeft = new AddressableLED(9);
+	public AddressableLEDBuffer bufferLeft = new AddressableLEDBuffer(LEDcount);
+
 
 	public LEDs() {
-		leds.setLength(LEDcount);
-		leds.setData(buffer);
-		leds.start();
+		ledsLeft.setLength(LEDcount);
+		ledsLeft.setData(bufferLeft);
+		ledsLeft.start();
 	}
 
 	public LEDState getState() {
@@ -45,26 +42,29 @@ public class LEDs extends SubsystemBase {
 	}
 
 	public void setColorRGB(int r, int g, int b) {
-		for (var i = 0; i < buffer.getLength(); i++) {
-			buffer.setRGB(i, r, g, b);
+		for (var i = 0; i < bufferLeft.getLength(); i++) {
+			bufferLeft.setRGB(i, r, g, b);
+
 		}
-		leds.setData(buffer);
+		ledsLeft.setData(bufferLeft);
 	}
 
-	private void rainbow() {
-		// For every pixel
-		for (var i = 0; i < buffer.getLength(); i++) {
-		  // Calculate the hue - hue is easier for rainbows because the color
-		  // shape is a circle so only one value needs to precess
-		  final var hue = (rainbowStart + (i * 180 / buffer.getLength())) % 180;
-		  // Set the value
-		  buffer.setHSV(i, hue, 255, 128);
-		}
-		// Increase by to make the rainbow "move"
-		rainbowStart += 3;
-		// Check bounds
-		rainbowStart %= 180;
-	  }
+	// private void rainbow() {
+	// 	// For every pixel
+	// 	for (var i = 0; i < bufferLeft.getLength(); i++) {
+	// 	  // Calculate the hue - hue is easier for rainbows because the color
+	// 	  // shape is a circle so only one value needs to precess
+	// 	  final var hue = (rainbowStart + (i * 180 / bufferLeft.getLength())) % 180;
+	// 	  // Set the value
+	// 	  bufferLeft.setHSV(i, hue, 255, 128);
+	// 	  bufferRight.setHSV(i, hue, 255, 128);
+
+	// 	}
+	// 	// Increase by to make the rainbow "move"
+	// 	rainbowStart += 3;
+	// 	// Check bounds
+	// 	rainbowStart %= 180;
+	//   }
 
 	@Override
 	public void periodic() {

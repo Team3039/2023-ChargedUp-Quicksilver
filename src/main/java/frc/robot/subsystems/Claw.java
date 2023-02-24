@@ -64,11 +64,9 @@ public class Claw extends SubsystemBase {
 	}
 
 	public void setWheelSpeeds(double speed) {
-		// if (leftWheels.getOutputCurrent() < 1.8) {
 		leftWheels.set(speed);
 		rightWheels.set(speed);
 		claw.set(ControlMode.PercentOutput, speed);
-		// }
 	}
 
 	public void setSnapper(boolean isReleased) {
@@ -82,13 +80,13 @@ public class Claw extends SubsystemBase {
 	public boolean isIntakeDeactivated() {
 		return deactivateIntake;
 	}
+
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Claw Current", leftWheels.getOutputCurrent());
 
 		// System.out.println(getState());
 		// System.out.println(isIntakeDeactivated());
-		System.out.println(leftWheels.getOutputCurrent());
 
 		switch (clawState) {
 			case IDLE:
@@ -102,16 +100,15 @@ public class Claw extends SubsystemBase {
 				setWheelSpeeds(0.05);
 				break;
 			case INTAKE:
-				
+
 				timer.start();
 				if (timer.get() > 0.3 && leftWheels.getOutputCurrent() >= 10 && !deactivateIntake) {
 					deactivateIntake = true;
 					timer.stop();
 					timer.reset();
 					timer.start();
-				}
-				else if (!deactivateIntake) {
-				setWheelSpeeds(0.2);
+				} else if (!deactivateIntake) {
+					setWheelSpeeds(0.2);
 				}
 				if (deactivateIntake && timer.get() > 0.2) {
 					setWheelSpeeds(0);

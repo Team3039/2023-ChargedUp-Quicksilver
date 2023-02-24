@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.subsystems.Drive;
 
 /**
@@ -38,7 +39,7 @@ public class AutoCommands {
 
     dropDown = new SendableChooser<>();
     dropDown.addOption("Example", run(() -> {
-      getCommand("Bottom 3 Piece YYP", true);
+      getCommand("Forward Path", true);
     }));
 
     SmartDashboard.putData("Auto Selection", dropDown);
@@ -67,13 +68,14 @@ public class AutoCommands {
         traj,
         swerve::getPose,
         Constants.Swerve.SWERVE_KINEMATICS,
-        xController,
-        yController,
-        thetaController,
+        new PIDController(1, 0, 0),
+        new PIDController(1, 0, 0),
+        new PIDController(1, 0.0, 0.0),
         swerve::setModuleStates,
         swerve),
 
-      new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))
+      new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+      new PrintCommand("LOLOLOLOLOL AUTO BE DONE BITCH GET LLLLLLLLLLLLLLLLLLLLLLLL'ED")
     );
   }
 }

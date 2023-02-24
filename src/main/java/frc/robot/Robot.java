@@ -4,15 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.routines.ChargeStationAuto;
 import frc.robot.auto.routines.DoNothing;
+import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.Test2023Auto;
 
 /**
@@ -22,7 +21,7 @@ import frc.robot.auto.routines.Test2023Auto;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private Command autoCommand;
 
   private RobotContainer robotContainer;
   
@@ -43,6 +42,7 @@ public class Robot extends TimedRobot {
     // autoChooser.addOption("Drive Straight", new DriveStraight());
     autoChooser.addOption("Mid Start Charge Station", new ChargeStationAuto(RobotContainer.drive));
     autoChooser.addOption("Test Auto", new Test2023Auto(RobotContainer.drive));
+    autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
   }
 
   /**
@@ -71,12 +71,11 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = new ChargeStationAuto(RobotContainer.drive);
-    // m_autonomousCommand = new DriveStraight(RobotContainer.drive);
-    m_autonomousCommand = robotContainer.getAutonomousCommand();
+    autoCommand = autoChooser.getSelected();
+    // autoCommand = robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    if (autoCommand != null) {
+      autoCommand.schedule();
     }
   }
 

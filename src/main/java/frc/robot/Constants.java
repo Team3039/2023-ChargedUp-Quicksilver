@@ -132,11 +132,12 @@ public final class Constants {
             public static final double MAX_ANGULAR_VELOCITY = 11.5;
             public static final double MAX_SPEED = 4.5;
 
+            // BEVEL GEARS FACE RADIO FOR OFFSETS
             public static final class Mod0 {
-                  public static final int driveMotorID = 2;
-                  public static final int angleMotorID = 1;
+                  public static final int driveMotorID = 1;
+                  public static final int angleMotorID = 2;
                   public static final int canCoderID = 0;
-                  public static final double angleOffset = 5.097;
+                  public static final double angleOffset = 5.537109375 + 180;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -147,7 +148,7 @@ public final class Constants {
                   public static final int driveMotorID = 3;
                   public static final int angleMotorID = 4;
                   public static final int canCoderID = 1;
-                  public static final double angleOffset = 20.830 + 180;
+                  public static final double angleOffset = 21.181640625 + 180;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -158,7 +159,7 @@ public final class Constants {
                   public static final int driveMotorID = 5;
                   public static final int angleMotorID = 6;
                   public static final int canCoderID = 2;
-                  public static final double angleOffset = 249.082 + 180;
+                  public static final double angleOffset = 248.73046875 + 180;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -169,7 +170,7 @@ public final class Constants {
                   public static final int driveMotorID = 7;
                   public static final int angleMotorID = 8;
                   public static final int canCoderID = 3;
-                  public static final double angleOffset = 45.439 + 180;
+                  public static final double angleOffset = 45.966796875 + 180;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -177,8 +178,8 @@ public final class Constants {
       }
 
       public static final class AutoConstants {
-            public static final double K_MAX_SPEED_METERS_PER_SECOND = 3;
-            public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4.25;
+            public static final double K_MAX_SPEED_METERS_PER_SECOND = 12;
+            public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 9.5;
             public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
             public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
 

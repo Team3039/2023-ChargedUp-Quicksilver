@@ -60,6 +60,8 @@ public class SwerveModule extends SubsystemBase{
         angleMotor.burnFlash();
         driveMotor.burnFlash();
 
+        
+
         };    
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -161,16 +163,14 @@ public class SwerveModule extends SubsystemBase{
     // }
 
     private void configureDevices() {
-        System.out.println(cancoder.getAbsolutePosition());
-        System.out.println(angleOffset);
         integratedAngleEncoder.setPosition(cancoder.getAbsolutePosition() - angleOffset);
 
     // Drive motor configuration.
     driveMotor.restoreFactoryDefaults();
     driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
-    if (moduleNumber == 0) {
-        driveMotor.setInverted(!Constants.Swerve.DRIVE_MOTOR_INVERT);
-    }
+    // if (moduleNumber == 0) {
+    //     driveMotor.setInverted(!Constants.Swerve.DRIVE_MOTOR_INVERT);
+    // }
     driveMotor.setIdleMode(IdleMode.kBrake);
     driveMotor.setOpenLoopRampRate(Constants.Swerve.DRIVE_OPEN_LOOP_RAMP);
     driveMotor.setClosedLoopRampRate(Constants.Swerve.DRIVE_CLOSED_LOOP_RAMP);
@@ -244,6 +244,5 @@ public class SwerveModule extends SubsystemBase{
     @Override
     public void periodic() {
 
-    
   }
 }

@@ -61,7 +61,7 @@ public class Wrist extends SubsystemBase {
     // Wrist must start in the vertical position in order to be legal. DONT FORGET
     // TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    wrist.setSelectedSensorPosition(degreesToTicks(-90));
+    wrist.setSelectedSensorPosition(degreesToTicks(20));
 
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
