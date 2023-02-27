@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
@@ -26,11 +25,11 @@ public class GridTagTrack extends CommandBase {
     private Vision vision;
     private InterpolatedPS4Gamepad controller;
 
-    private PIDController rotController = new PIDController(0.04, 0.08, 0.00);
+    private PIDController rotController = new PIDController(0.04, 0.6, 0.00);
 
     private PIDController yController = new PIDController(0.25, 0.0, 0);
 
-    private PIDController xController = new PIDController(0.55, 0.0, 0.0);
+    private PIDController xController = new PIDController(0.7, 0.0, 0.0);
 
     // 1.27 m	-0.59 m	 178.24°	
 
@@ -48,11 +47,11 @@ public class GridTagTrack extends CommandBase {
         this.ySetPoint = ySetPoint;
 
         rotController.reset();
-        rotController.setIntegratorRange(-0.4, 0.4);
-        yController.reset();
-        yController.setIntegratorRange(-0.2, 0.2);
+        rotController.setIntegratorRange(-0.2, 0.2);
+        // yController.reset();
+        // yController.setIntegratorRange(-0.2, 0.2);
         xController.reset();
-        xController.setIntegratorRange(-0.1, 0.1);
+        xController.setIntegratorRange(-0.2, 0.2);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class GridTagTrack extends CommandBase {
         if (drive.getAngle() < 0) {
             rotation *= -1;
         }
-        rotation = MathUtil.clamp(rotation, -2.8, 2.8);
+        rotation = MathUtil.clamp(rotation, -3.2, 3.2);
 
         if (vision.result.hasTargets()) {
             yAxis = xController.calculate(vision.result.getBestTarget().getBestCameraToTarget().getY(), ySetPoint);

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Claw extends SubsystemBase {
 
@@ -50,7 +51,7 @@ public class Claw extends SubsystemBase {
 
 		leftWheels.setInverted(false);
 		rightWheels.setInverted(true);
-		claw.setInverted(false);
+		claw.setInverted(true);
 
 		timer.reset();
 	}
@@ -83,10 +84,17 @@ public class Claw extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		SmartDashboard.putNumber("Claw Current", leftWheels.getOutputCurrent());
+		SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
 
 		// System.out.println(getState());
 		// System.out.println(isIntakeDeactivated());
+
+		if (RobotContainer.wrist.getWristPosition() > 70) {
+			setSnapper(false);
+		}
+		else {
+			setSnapper(true);
+		}
 
 		switch (clawState) {
 			case IDLE:
@@ -100,15 +108,14 @@ public class Claw extends SubsystemBase {
 				setWheelSpeeds(0.05);
 				break;
 			case INTAKE:
-
 				timer.start();
-				if (timer.get() > 0.3 && leftWheels.getOutputCurrent() >= 10 && !deactivateIntake) {
+				if (timer.get() > 0.3 && claw.getStatorCurrent() >= 25 && !deactivateIntake) {
 					deactivateIntake = true;
 					timer.stop();
 					timer.reset();
 					timer.start();
 				} else if (!deactivateIntake) {
-					setWheelSpeeds(0.2);
+					setWheelSpeeds(0.4);
 				}
 				if (deactivateIntake && timer.get() > 0.2) {
 					setWheelSpeeds(0);
@@ -119,7 +126,7 @@ public class Claw extends SubsystemBase {
 				break;
 			case RELEASE:
 				deactivateIntake = false;
-				setWheelSpeeds(-0.1);
+				setWheelSpeeds(-0.2);
 		}
 	}
 }

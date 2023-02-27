@@ -10,12 +10,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ActuateClaw;
 import frc.robot.commands.ActuateToSetpoint;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
+import frc.robot.commands.GridTagTrack;
 import frc.robot.commands.SetLEDS;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TrackingMode;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToSingleStation;
+import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.BuddyClimb;
 import frc.robot.subsystems.Claw;
@@ -41,9 +46,6 @@ public class RobotContainer {
   public static final Wrist wrist = new Wrist();
   public static final BuddyClimb buddyClimb = new BuddyClimb();
   public static final LEDs ledsLeft = new LEDs();
-
-
-  private static final AutoCommands auto = new AutoCommands(drive);
 
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
@@ -116,32 +118,35 @@ public class RobotContainer {
       true, 
       true)
     );
-    operatorL1.whileTrue(new ClawIntake());
-    operatorL2.whileTrue(new ClawRelease());
-    operatorCircle.toggleOnTrue(new ActuateClaw());
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
+
+    driverShare.toggleOnTrue(new TrackingMode());
+    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
+    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
+    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
+
+    driverL1.onTrue(new SetLEDS());
 
     // operatorSquare.whileTrue(new SetElevatorPercent(.20));
     // operatorTriangle.whileTrue(new SetElevatorPercent(-.10));
-    // operatorL2.whileTrue(new SetWristPercent(0.2));
+    // operatorR1.whileTrue(new SetWristPercent(0.1));
     // operatorR2.whileTrue(new SetWristPercent(-0.1));
 
-    operatorSquare.toggleOnTrue(new ActuateToSetpoint(75, 20));
-    operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
-    operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
-    
+    // operatorSquare.toggleOnTrue(new ActuateToSetpoint(75, 20));
+    // operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
+    // operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
 
-    // driverShare.toggleOnTrue(new TrackingMode());
-    // driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
-    // driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
-    // driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
+    operatorCircle.onTrue(new ActuateLowToSingleStation());
+    operatorSquare.onTrue(new ActuateLowToMidGrid());
+    operatorTriangle.onTrue(new ActuateLowToHighGrid());
+    operatorX.onTrue(new ActuateToIdle());
 
-    driverL1.onTrue(new SetLEDS());
+    operatorL1.whileTrue(new ClawIntake());
+    operatorL2.whileTrue(new ClawRelease());
   }
 
   public Command getAutonomousCommand() {
-    return auto.getSelectedCommand();
+    return null;
   }
 
 }
-

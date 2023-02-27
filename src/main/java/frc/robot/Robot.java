@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auto.routines.BottomTwoPieceYP;
 import frc.robot.auto.routines.ChargeStationAuto;
 import frc.robot.auto.routines.DoNothing;
 import frc.robot.auto.routines.DriveStraight;
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Mid Start Charge Station", new ChargeStationAuto(RobotContainer.drive));
     autoChooser.addOption("Test Auto", new Test2023Auto(RobotContainer.drive));
     autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
+    autoChooser.addOption("Bottom Two Piece YP", new BottomTwoPieceYP(RobotContainer.drive));
   }
 
   /**
@@ -72,8 +74,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autoCommand = autoChooser.getSelected();
-    // autoCommand = robotContainer.getAutonomousCommand();
-    // schedule the autonomous command (example)
     if (autoCommand != null) {
       autoCommand.schedule();
     }

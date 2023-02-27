@@ -8,7 +8,6 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
@@ -23,8 +22,6 @@ public class Vision extends SubsystemBase {
   public PhotonCamera camera = new PhotonCamera("Arducam_OV9281_USB_Camera");
   public PhotonPipelineResult result;
   public PhotonTrackedTarget target;
-
-  public static Transform3d cameraToTarget;
 
   public Vision() {
     camera.setDriverMode(false);
@@ -45,15 +42,19 @@ public class Vision extends SubsystemBase {
   public void recieveTarget() {
     if (result.hasTargets()) {
       target = result.getBestTarget();
-
     }
   }
 
   @Override
   public void periodic() {
-    result = camera.getLatestResult();
-
-    recieveTarget();
-
+    switch(visionState) {
+      case DRIVE:
+      camera.setDriverMode(true);
+      break;
+      case TRACKING:
+      camera.setDriverMode(false);
+      result = camera.getLatestResult();
+      recieveTarget();
+    }
   }
 }

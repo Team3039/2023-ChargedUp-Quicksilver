@@ -65,8 +65,7 @@ public class SwerveModule extends SubsystemBase{
         };    
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        // System.out.println(desiredState.angle.getDegrees() + "     e     " + moduleNumber );
-        // desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
+        System.out.println(desiredState.speedMetersPerSecond);
         desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
 
         if (isOpenLoop) {
@@ -74,7 +73,7 @@ public class SwerveModule extends SubsystemBase{
             driveMotor.set(percentOutput);
         } else {
             double velocity = desiredState.speedMetersPerSecond;
-            driveController.setReference(velocity, CANSparkMax.ControlType.kVelocity, 0, feedforward.calculate(velocity));
+            driveController.setReference(velocity * 2.8, CANSparkMax.ControlType.kVelocity, 0, feedforward.calculate(velocity));
         }
 
         double angle = Math.abs(desiredState.speedMetersPerSecond) <= Constants.Swerve.MAX_SPEED * 0.01
@@ -228,6 +227,19 @@ public class SwerveModule extends SubsystemBase{
         return new SwerveModulePosition(position, angle);
     }
 
+    public double neoRotationsToWheelMeters(double neoRot) {
+            double wheelRot = neoRot / Constants.Swerve.DRIVE_GEAR_RATIO;
+            double wheelMeters = wheelRot * Constants.Swerve.WHEEL_CIRCUMFERENCE;
+            return wheelMeters;
+    }
+
+    public double neoRPMToWheelMPS(double neoRPM) {
+        double wheelRPM = neoRPM / Constants.Swerve.DRIVE_GEAR_RATIO;
+        double wheelMPM = wheelRPM * Constants.Swerve.WHEEL_CIRCUMFERENCE;
+        double wheelMPS = wheelMPM / 60;
+        return wheelMPS;
+    }
+
     public double neoToWheelDegrees(double neoTicks) {
         return neoTicks * 360 / Constants.Swerve.ANGLE_GEAR_RATIO;
     }
@@ -243,6 +255,8 @@ public class SwerveModule extends SubsystemBase{
 
     @Override
     public void periodic() {
-
+			// if (moduleNumber == 0) {
+			// System.out.println(getPosition());
+			// }
   }
 }

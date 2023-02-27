@@ -4,22 +4,21 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Wrist.WristState;
 
-public class ClawRelease extends CommandBase {
-  /** Creates a new ClawRelease. */
-  public ClawRelease() {
-   addRequirements(RobotContainer.claw, RobotContainer.wrist);
+public class ActuateWristIdle extends CommandBase {
+  /** Creates a new ActuateWristIdle. */
+  public ActuateWristIdle() {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.wrist);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.claw.setState(ClawState.RELEASE);
+    RobotContainer.wrist.setState(WristState.IDLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -28,14 +27,11 @@ public class ClawRelease extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    RobotContainer.claw.setState(ClawState.IDLE);
-    RobotContainer.wrist.setState(WristState.IDLE);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

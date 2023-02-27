@@ -5,11 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.WristState;
 
 public class ActuateToSetpoint extends CommandBase {

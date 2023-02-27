@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class Wrist extends SubsystemBase {
 
@@ -58,15 +59,14 @@ public class Wrist extends SubsystemBase {
     // wrist.config_kP(0, Constants.Wrist.KI);
     // wrist.config_kP(0, Constants.Wrist.KD);
 
-    // Wrist must start in the vertical position in order to be legal. DONT FORGET
-    // TO DO THIS PLS
+    // Wrist must start in the vertical position in order to be legal. DONT FORGET TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    wrist.setSelectedSensorPosition(degreesToTicks(20));
+    wrist.setSelectedSensorPosition(degreesToTicks(-90));
 
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
-    wrist.configForwardSoftLimitThreshold(degreesToTicks(90));
-    wrist.configReverseSoftLimitThreshold(degreesToTicks(-20));
+    wrist.configForwardSoftLimitThreshold(degreesToTicks(120));
+    wrist.configReverseSoftLimitThreshold(degreesToTicks(-30));
 
     wrist.setInverted(true);
 
@@ -95,6 +95,7 @@ public class Wrist extends SubsystemBase {
     return armDegrees;
   }
 
+  //TODO: if ever doing trapizoid profiling, dont forget to add the feedforward to the output
   public void setWristPosition(boolean isProfiled) {
     if (isProfiled) {
       profiledController.setGoal(setpointWrist);
@@ -126,8 +127,12 @@ public class Wrist extends SubsystemBase {
     setpointWrist = setpoint;
   }
 
+  public double getWristPosition() {
+    return ticksToDegrees(wrist.getSelectedSensorPosition());
+  }
+
   public boolean isAtSetpoint(boolean isProfiled) {
-    return isProfiled ? profiledController.atSetpoint() : controller.atSetpoint();
+    return setpointWrist - Math.abs(ticksToDegrees(wrist.getSelectedSensorPosition())) <= 5;
   }
 
   @Override
@@ -139,16 +144,20 @@ public class Wrist extends SubsystemBase {
     // SmartDashboard.putNumber("Wrist Currnent Input", wrist.getSupplyCurrent());
     // SmartDashboard.putNumber("Wrist Current Output", wrist.getStatorCurrent());
     // System.out.println(setpointWrist);
+    
 
     switch (wristState) {
       case IDLE:
         // System.out.println(setpointWrist);
-        if (RobotContainer.claw.isIntakeDeactivated()) {
-          setSetpoint(20);
-        } else {
-          setSetpoint(0);
-        }
+        // if (RobotContainer.claw.isIntakeDeactivated()) {
+        //   setSetpoint(20);
+        // } else {
+          // setSetpoint(30);
+        // }
+        if (!RobotContainer.claw.isIntakeDeactivated() && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
+        setSetpoint(90);
         setWristPosition(false);
+        }
         break;
       case MANUAL:
         break;

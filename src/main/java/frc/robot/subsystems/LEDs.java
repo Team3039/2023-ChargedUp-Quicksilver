@@ -21,7 +21,7 @@ public class LEDs extends SubsystemBase {
 
 	public final int LEDcount = 50;
 
-	// private int rainbowStart = 0;
+	private int rainbowStart = 0;
 
 	public AddressableLED ledsLeft = new AddressableLED(9);
 	public AddressableLEDBuffer bufferLeft = new AddressableLEDBuffer(LEDcount);
@@ -49,29 +49,27 @@ public class LEDs extends SubsystemBase {
 		ledsLeft.setData(bufferLeft);
 	}
 
-	// private void rainbow() {
-	// 	// For every pixel
-	// 	for (var i = 0; i < bufferLeft.getLength(); i++) {
-	// 	  // Calculate the hue - hue is easier for rainbows because the color
-	// 	  // shape is a circle so only one value needs to precess
-	// 	  final var hue = (rainbowStart + (i * 180 / bufferLeft.getLength())) % 180;
-	// 	  // Set the value
-	// 	  bufferLeft.setHSV(i, hue, 255, 128);
-	// 	  bufferRight.setHSV(i, hue, 255, 128);
-
-	// 	}
-	// 	// Increase by to make the rainbow "move"
-	// 	rainbowStart += 3;
-	// 	// Check bounds
-	// 	rainbowStart %= 180;
-	//   }
+	private void rainbow() {
+		// For every pixel
+		for (var i = 0; i < bufferLeft.getLength(); i++) {
+		  // Calculate the hue - hue is easier for rainbows because the color
+		  // shape is a circle so only one value needs to precess
+		  final var hue = (rainbowStart + (i * 180 / bufferLeft.getLength())) % 180;
+		  // Set the value
+		  bufferLeft.setHSV(i, hue, 255, 128);
+		}
+		// Increase by to make the rainbow "move"
+		rainbowStart += 3;
+		// Check bounds
+		rainbowStart %= 180;
+	  }
 
 	@Override
 	public void periodic() {
 		switch (ledState) {
 			case IDLE:
 				if (DriverStation.isDisabled()) {
-					// Fire goes here
+					// rainbow();
 				} else {
 					setColorRGB(0, 0, 0);
 				}

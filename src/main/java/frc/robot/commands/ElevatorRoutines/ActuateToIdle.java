@@ -5,21 +5,22 @@
 package frc.robot.commands.ElevatorRoutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.ActuateElevatorToSetpoint;
+import frc.robot.commands.ActuateElevatorIdle;
+import frc.robot.commands.ActuateWristIdle;
 import frc.robot.commands.ActuateWristToSetpoint;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ActuateToLowGrid extends SequentialCommandGroup {
+public class ActuateToIdle extends SequentialCommandGroup {
   /** Creates a new ActuateLowToHighGrid. */
-  public ActuateToLowGrid() {
+  public ActuateToIdle() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ActuateWristToSetpoint(60),
-      new ActuateElevatorToSetpoint(0),
-      new ActuateWristToSetpoint(110)
+      new ActuateElevatorIdle(),
+      new ActuateWristIdle()
     );
   }
 }

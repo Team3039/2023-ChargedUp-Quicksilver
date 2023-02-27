@@ -17,9 +17,10 @@ public class ActuateLowToHighGrid extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(60),
+      new ActuateWristToSetpoint(40),
       new ActuateElevatorToSetpoint(85),
-      new ActuateWristToSetpoint(40)
+      new ActuateWristToSetpoint(10)
+
     );
   }
 }

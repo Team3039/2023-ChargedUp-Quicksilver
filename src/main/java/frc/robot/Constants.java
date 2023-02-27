@@ -50,7 +50,7 @@ public final class Constants {
 
             public static final int PH_CAN_ID = 10;
 
-            public static final int CLAW = 0;
+            public static final int CLAW = 12;
       }
 
       public static final class Elevator {
@@ -70,11 +70,11 @@ public final class Constants {
       }
 
       public static final class Wrist {
-            public static final double WRIST_KP = 0.02;
+            public static final double WRIST_KP = 0.012;
             public static final double WRIST_KI = 0;
             public static final double WRIST_KD = 0;
-            public static final double WRIST_KS = 0.04;
-            public static final double WRIST_KG = 0.05;
+            public static final double WRIST_KS = 0.025;
+            public static final double WRIST_KG = 0.03;
             public static final double WRIST_KV = 0;
 
             public static final double WRIST_GEAR_RATIO = 127.27272727;
@@ -107,7 +107,7 @@ public final class Constants {
             public static final double ANGLE_MOTOR_KP = 0.005;
             public static final double ANGLE_MOTOR_KI = 0;
             public static final double ANGLE_MOTOR_KD = 0.0000;
-            public static final double DRIVE_MOTOR_KP = 0.01;
+            public static final double DRIVE_MOTOR_KP = 0.1;
             public static final double DRIVE_MOTOR_KI = 0;
             public static final double DRIVE_MOTOR_KD = 0;
             public static final double DRIVE_MOTOR_KF = 0;
@@ -115,6 +115,9 @@ public final class Constants {
             public static final double DRIVE_MOTOR_MAX_OUTPUT = 1;
             public static final double DRIVE_MOTOR_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO;
             public static final double DRIVE_MOTOR_VELOCITY_CONVERSION = (WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO) / 60;
+            public static final double ANGLE_MOTOR_POSITION_CONVERSION = 360 / ANGLE_GEAR_RATIO;
+            public static final double ANGLE_MOTOR_VELOCITY_CONVERSION = (360 / ANGLE_GEAR_RATIO) / 60;
+
             public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
                         new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
                         new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
@@ -131,6 +134,8 @@ public final class Constants {
             public static final boolean INVERT_GYRO = false;
             public static final double MAX_ANGULAR_VELOCITY = 11.5;
             public static final double MAX_SPEED = 4.5;
+            public static final double AUTO_MAX_SPEED = 29.53;
+            public static final double AUTO_MAX_ANGULAR_VELOCITY = 75.46;
 
             // BEVEL GEARS FACE RADIO FOR OFFSETS
             public static final class Mod0 {
@@ -178,8 +183,8 @@ public final class Constants {
       }
 
       public static final class AutoConstants {
-            public static final double K_MAX_SPEED_METERS_PER_SECOND = 12;
-            public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 9.5;
+            public static final double K_MAX_SPEED_METERS_PER_SECOND = 4;
+            public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 5;
             public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
             public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
 

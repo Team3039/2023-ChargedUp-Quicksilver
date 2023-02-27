@@ -78,7 +78,7 @@ public class Elevator extends SubsystemBase {
 		// elevatorA.setSoftLimit(SoftLimitDirection.kReverse, -1000);
 		elevator.enableSoftLimit(SoftLimitDirection.kForward, true);
 		elevator.enableSoftLimit(SoftLimitDirection.kReverse, true);
-		elevator.setSoftLimit(SoftLimitDirection.kForward, 85);
+		elevator.setSoftLimit(SoftLimitDirection.kForward, 87);
 		elevator.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
 		// elevatorA.burnFlash();
@@ -112,7 +112,7 @@ public class Elevator extends SubsystemBase {
 			elevator.set(output);
 		} else {
 			output = controller.calculate(encoder.getPosition(), setpointElevator) + Constants.Elevator.ELEVATOR_KS;
-			elevator.set(MathUtil.clamp(output, -.150, .3));
+			elevator.set(MathUtil.clamp(output, -.15, .3));
 		}
 	}
 
@@ -129,8 +129,8 @@ public class Elevator extends SubsystemBase {
 	}
 
 	public boolean isAtSetpoint(boolean isProfiled) {
-		return isProfiled ? profiledController.atSetpoint() : controller.atSetpoint();
-	}
+		return  Math.abs((setpointElevator - encoder.getPosition())) <= 3;
+	  }
 
 	@Override
 	public void periodic() {
@@ -138,6 +138,7 @@ public class Elevator extends SubsystemBase {
 		SmartDashboard.putNumber("Elevator Output", elevator.get());
 		// System.out.println(encoder.getPosition());
 		// System.out.println(elevator.get());
+		// System.out.println(isAtSetpoint(false));
 		switch (elevatorState) {
 			case IDLE:
 				setSetpoint(0);

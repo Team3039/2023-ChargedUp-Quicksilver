@@ -7,18 +7,25 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw.ClawState;
+import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Wrist.WristState;
 
 public class ClawIntake extends CommandBase {
   /** Creates a new ClawIntake. */
 
   public ClawIntake() {
-    addRequirements(RobotContainer.claw);
+    addRequirements(RobotContainer.claw, RobotContainer.wrist);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     RobotContainer.claw.setState(ClawState.INTAKE);
+    if (RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
+    Wrist.setSetpoint(30);
+    RobotContainer.wrist.setState(WristState.POSITION);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,6 +38,7 @@ public class ClawIntake extends CommandBase {
   public void end(boolean interrupted) {
     if (!RobotContainer.claw.isIntakeDeactivated()) {
       RobotContainer.claw.setState(ClawState.IDLE);
+      RobotContainer.wrist.setState(WristState.IDLE);
     } else {
       RobotContainer.claw.setState(ClawState.PASSIVE);
     }
