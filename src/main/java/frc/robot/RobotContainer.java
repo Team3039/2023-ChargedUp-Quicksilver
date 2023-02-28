@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ActuateToSetpoint;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
 import frc.robot.commands.GridTagTrack;
@@ -45,7 +44,7 @@ public class RobotContainer {
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final BuddyClimb buddyClimb = new BuddyClimb();
-  public static final LEDs ledsLeft = new LEDs();
+  public static final LEDs leds = new LEDs();
 
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
@@ -114,16 +113,17 @@ public class RobotContainer {
   private void configureBindings() {
     drive.setDefaultCommand(
       new TeleopSwerve(drive, 
-      driverPad, 
+      operatorPad, 
       true, 
       true)
     );
-    driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
+    operatorOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
     driverShare.toggleOnTrue(new TrackingMode());
     driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
     driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
     driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
+
 
     driverL1.onTrue(new SetLEDS());
 
@@ -141,8 +141,10 @@ public class RobotContainer {
     operatorTriangle.onTrue(new ActuateLowToHighGrid());
     operatorX.onTrue(new ActuateToIdle());
 
-    operatorL1.whileTrue(new ClawIntake());
+    operatorL1.whileTrue(new ClawIntake(0, 7.5, false));
+    operatorR1.whileTrue(new ClawIntake(20, -4.3, true));
     operatorL2.whileTrue(new ClawRelease());
+
   }
 
   public Command getAutonomousCommand() {

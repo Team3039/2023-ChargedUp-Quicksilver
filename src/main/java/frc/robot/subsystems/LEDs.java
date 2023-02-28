@@ -23,14 +23,14 @@ public class LEDs extends SubsystemBase {
 
 	private int rainbowStart = 0;
 
-	public AddressableLED ledsLeft = new AddressableLED(9);
-	public AddressableLEDBuffer bufferLeft = new AddressableLEDBuffer(LEDcount);
+	public AddressableLED leds = new AddressableLED(8);
+	public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
 
 
 	public LEDs() {
-		ledsLeft.setLength(LEDcount);
-		ledsLeft.setData(bufferLeft);
-		ledsLeft.start();
+		leds.setLength(LEDcount);
+		leds.setData(buffer);
+		leds.start();
 	}
 
 	public LEDState getState() {
@@ -42,21 +42,21 @@ public class LEDs extends SubsystemBase {
 	}
 
 	public void setColorRGB(int r, int g, int b) {
-		for (var i = 0; i < bufferLeft.getLength(); i++) {
-			bufferLeft.setRGB(i, r, g, b);
+		for (var i = 0; i < buffer.getLength(); i++) {
+			buffer.setRGB(i, r, g, b);
 
 		}
-		ledsLeft.setData(bufferLeft);
+		leds.setData(buffer);
 	}
 
 	private void rainbow() {
 		// For every pixel
-		for (var i = 0; i < bufferLeft.getLength(); i++) {
+		for (var i = 0; i < buffer.getLength(); i++) {
 		  // Calculate the hue - hue is easier for rainbows because the color
 		  // shape is a circle so only one value needs to precess
-		  final var hue = (rainbowStart + (i * 180 / bufferLeft.getLength())) % 180;
+		  final var hue = (rainbowStart + (i * 180 / buffer.getLength())) % 180;
 		  // Set the value
-		  bufferLeft.setHSV(i, hue, 255, 128);
+		  buffer.setHSV(i, hue, 255, 128);
 		}
 		// Increase by to make the rainbow "move"
 		rainbowStart += 3;

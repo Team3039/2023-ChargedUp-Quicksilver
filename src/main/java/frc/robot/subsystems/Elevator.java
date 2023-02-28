@@ -131,6 +131,10 @@ public class Elevator extends SubsystemBase {
 	public boolean isAtSetpoint(boolean isProfiled) {
 		return  Math.abs((setpointElevator - encoder.getPosition())) <= 3;
 	  }
+	
+	public double getPosition(){
+		return encoder.getPosition();
+	}
 
 	@Override
 	public void periodic() {

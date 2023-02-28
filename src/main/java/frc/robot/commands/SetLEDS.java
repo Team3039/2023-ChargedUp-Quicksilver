@@ -11,22 +11,22 @@ import frc.robot.subsystems.LEDs.LEDState;
 public class SetLEDS extends CommandBase {
   /** Creates a new DesiresCone. */
   public SetLEDS() {
-    addRequirements(RobotContainer.ledsLeft);
+    addRequirements(RobotContainer.leds);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.ledsLeft.getState().equals(LEDState.IDLE)) {
-    RobotContainer.ledsLeft.setState(LEDState.CONE);
+    if (RobotContainer.leds.getState().equals(LEDState.IDLE)) {
+    RobotContainer.leds.setState(LEDState.CONE);
 
     }
-    else if (RobotContainer.ledsLeft.getState().equals(LEDState.CONE)) {
-      RobotContainer.ledsLeft.setState(LEDState.CUBE);
+    else if (RobotContainer.leds.getState().equals(LEDState.CONE)) {
+      RobotContainer.leds.setState(LEDState.CUBE);
 
     }
     else {
-      RobotContainer.ledsLeft.setState(LEDState.IDLE);
+      RobotContainer.leds.setState(LEDState.IDLE);
     }
   }
 

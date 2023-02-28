@@ -39,7 +39,7 @@ public class BottomTwoPieceYP extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(180),
+                Drive.getSwerveHeadingSupplier(0),
                 swerve::setModuleStates,
                 swerve);
 
@@ -50,7 +50,7 @@ public class BottomTwoPieceYP extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(0),
+                Drive.getSwerveHeadingSupplier(180),
                 swerve::setModuleStates,
                 swerve);
 
@@ -58,23 +58,24 @@ public class BottomTwoPieceYP extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(frc.robot.auto.TrajectoryGenerator.getGamePieceToStart().getInitialPose())),
-                new ActuateLowToHighGrid(),
-                new SetClawReleaseMode(),
-                new WaitCommand(1),
-                new SetClawIdleMode(),
-                new ActuateToIdle(),
-                new SetClawIntakeMode(),
+                new InstantCommand(() -> swerve.resetOdometry(frc.robot.auto.TrajectoryGenerator.getBottomStartToBottomPiece().getInitialPose())),
+                new InstantCommand(() -> swerve.setGyro(180)),
+                // new ActuateLowToHighGrid(),
+                // new SetClawReleaseMode(),
+                // new WaitCommand(1),
+                // new SetClawIdleMode(),
+                // new ActuateToIdle(),
+                // new SetClawIntakeMode(),
                 startToGamePiece,
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true)),
                 new WaitCommand(1),
                 gamePieceToBottomShelf,
-                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true)),
-                new ActuateLowToHighGrid(),
-                new SetClawReleaseMode(),
-                new WaitCommand(1),
-                new SetClawIdleMode(),
-                new ActuateToIdle()
+                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true))
+                // new ActuateLowToHighGrid(),
+                // new SetClawReleaseMode(),
+                // new WaitCommand(1),
+                // new SetClawIdleMode(),
+                // new ActuateToIdle()
                 );
 
     }

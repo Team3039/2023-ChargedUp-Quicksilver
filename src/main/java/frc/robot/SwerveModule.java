@@ -65,7 +65,6 @@ public class SwerveModule extends SubsystemBase{
         };    
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        System.out.println(desiredState.speedMetersPerSecond);
         desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
 
         if (isOpenLoop) {

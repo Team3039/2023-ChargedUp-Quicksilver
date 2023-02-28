@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
@@ -43,8 +44,11 @@ public class Claw extends SubsystemBase {
 
 	public boolean deactivateIntake = false;
 
+	public boolean allowSnapping = false;
+
 	public Claw() {
 		pH.enableCompressorAnalog(100, 120);
+		// pH.disableCompressor();
 		leftWheels.setIdleMode(IdleMode.kBrake);
 		rightWheels.setIdleMode(IdleMode.kBrake);
 		claw.setNeutralMode(NeutralMode.Brake);
@@ -82,18 +86,25 @@ public class Claw extends SubsystemBase {
 		return deactivateIntake;
 	}
 
+	public void isSnappingAllowed(boolean isAllowed) {
+		allowSnapping = isAllowed;
+	}
+
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
+		System.out.println(claw.getStatorCurrent());
 
 		// System.out.println(getState());
 		// System.out.println(isIntakeDeactivated());
 
-		if (RobotContainer.wrist.getWristPosition() > 70) {
-			setSnapper(false);
-		}
-		else {
+		if (!allowSnapping) {
+			if (RobotContainer.wrist.getWristPosition() > 70) {
+				setSnapper(false);
+			}
+			else {
 			setSnapper(true);
+			}
 		}
 
 		switch (clawState) {
@@ -109,13 +120,18 @@ public class Claw extends SubsystemBase {
 				break;
 			case INTAKE:
 				timer.start();
-				if (timer.get() > 0.3 && claw.getStatorCurrent() >= 25 && !deactivateIntake) {
+				if (timer.get() > 0.3 && claw.getStatorCurrent() > 6.5 && allowSnapping) {
+					setSnapper(false);
+					new WaitCommand(0.5);
+					Wrist.setSetpoint(9.3);
+				}
+				if (timer.get() > 0.3 && claw.getStatorCurrent() >= 50 && !deactivateIntake) {
 					deactivateIntake = true;
 					timer.stop();
 					timer.reset();
 					timer.start();
 				} else if (!deactivateIntake) {
-					setWheelSpeeds(0.4);
+					setWheelSpeeds(0.6);
 				}
 				if (deactivateIntake && timer.get() > 0.2) {
 					setWheelSpeeds(0);

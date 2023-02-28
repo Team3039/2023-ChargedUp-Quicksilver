@@ -111,16 +111,18 @@ public class Test2023Auto extends SequentialCommandGroup {
 
         Command bottomThreePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathThreePiece());
         Command topThreePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getTopPathThreePiece());
+        Command bottomTwoPieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathTwoPiece());
         
 
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathThreePiece().getInitialHolonomicPose())),  
+                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),  
                 // new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
                 // forwardTestCommandOne,
                 // reverseTestCommandOne,
-                bottomThreePieceTest,
+                // bottomThreePieceTest,
+                bottomTwoPieceTest,
                 // topThreePieceTest,
                 // testCommandOne,
                 // testCommandTwo,

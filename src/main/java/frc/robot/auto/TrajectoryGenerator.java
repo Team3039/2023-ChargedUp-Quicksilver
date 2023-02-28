@@ -31,7 +31,7 @@ public class TrajectoryGenerator {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
 				List.of(
 						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
-						new Pose2d(new Translation2d(2, Units.inchesToMeters(40)),
+						new Pose2d(new Translation2d(2, 0.5),
 								Rotation2d.fromDegrees(0))),
 				configFast);
 
@@ -40,30 +40,30 @@ public class TrajectoryGenerator {
 	public static Trajectory getGamePieceToStart() {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
 				List.of(
-						new Pose2d(new Translation2d(Units.inchesToMeters(100), Units.inchesToMeters(0)),
-								Rotation2d.fromDegrees(0)),
-						new Pose2d()),
+						new Pose2d(new Translation2d(2, 0.5),
+								Rotation2d.fromDegrees(180)),
+						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180))),
 				configFast);
 	}
 
 	public static Trajectory getBottomStartToBottomPiece() {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
 			List.of(
-				new Pose2d(new Translation2d(Units.inchesToMeters(72.04724), Units.inchesToMeters(19.2913)),
-				Rotation2d.fromDegrees(10)),
-				new Pose2d(new Translation2d(Units.inchesToMeters(252.3622), Units.inchesToMeters(36.61417)),
-				Rotation2d.fromDegrees(10))),
+				new Pose2d(new Translation2d(Units.inchesToMeters(72.04724), Units.inchesToMeters(-19.2913)),
+				Rotation2d.fromDegrees(-5.5)),
+				new Pose2d(new Translation2d(Units.inchesToMeters(252.3622), Units.inchesToMeters(-36.61417)),
+				Rotation2d.fromDegrees(-5.5))),
 			configSlow);
 	}
 
 	public static Trajectory getBottomPieceToBottomShelf() {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
 			List.of(
-				new Pose2d(new Translation2d(Units.inchesToMeters(252.3622), Units.inchesToMeters(36.61417)),
-				Rotation2d.fromDegrees(-10)),
-				new Pose2d(new Translation2d(Units.inchesToMeters(72.04724), Units.inchesToMeters(42.12598)),
-				Rotation2d.fromDegrees(-10))),
-			configFast);
+				new Pose2d(new Translation2d(Units.inchesToMeters(252.3622), Units.inchesToMeters(-36.61417)),
+				Rotation2d.fromDegrees(175)),
+				new Pose2d(new Translation2d(Units.inchesToMeters(72.04724), Units.inchesToMeters(-42.12598)),
+				Rotation2d.fromDegrees(175))),
+			configSlow);
 	}
 
 }

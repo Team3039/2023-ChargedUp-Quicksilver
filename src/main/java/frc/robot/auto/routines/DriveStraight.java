@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
@@ -54,11 +55,12 @@ public class DriveStraight extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
+                new InstantCommand(() -> swerve.resetOdometry(frc.robot.auto.TrajectoryGenerator.getstartToGamePiece().getInitialPose())),
                 driveStraight,
-                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))
-                // driveReverse,
-                // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))
+                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true)),
+                new WaitCommand(0.2),
+                driveReverse,
+                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true))
                 );
 
     }

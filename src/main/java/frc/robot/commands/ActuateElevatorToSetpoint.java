@@ -12,7 +12,8 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 public class ActuateElevatorToSetpoint extends CommandBase {
 
   double setpoint = 0;
-  public ActuateElevatorToSetpoint(double setpoint) {
+  public 
+  ActuateElevatorToSetpoint(double setpoint) {
     addRequirements(RobotContainer.elevator);
     this.setpoint = setpoint;
   }

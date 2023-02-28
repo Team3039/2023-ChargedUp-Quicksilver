@@ -7,24 +7,34 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw.ClawState;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.WristState;
 
 public class ClawIntake extends CommandBase {
   /** Creates a new ClawIntake. */
-
-  public ClawIntake() {
+  double setpointE;
+  double setpointW;
+  boolean isSnappingAllowed;
+  public ClawIntake(double setpointE, double setpointW, boolean isSnappingAllowed) {
     addRequirements(RobotContainer.claw, RobotContainer.wrist);
+    this.setpointE = setpointE;
+    this.setpointW = setpointW;
+    this.isSnappingAllowed = isSnappingAllowed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.claw.setSnapper(true);
     RobotContainer.claw.setState(ClawState.INTAKE);
-    if (RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
-    Wrist.setSetpoint(30);
+    if (RobotContainer.elevator.getPosition() < 30) {
+    Wrist.setSetpoint(setpointW);
     RobotContainer.wrist.setState(WristState.POSITION);
+    Elevator.setSetpoint(setpointE);
+    RobotContainer.elevator.setState(ElevatorState.POSITION);
+    RobotContainer.claw.isSnappingAllowed(isSnappingAllowed);
     }
   }
 
@@ -42,6 +52,7 @@ public class ClawIntake extends CommandBase {
     } else {
       RobotContainer.claw.setState(ClawState.PASSIVE);
     }
+    RobotContainer.claw.isSnappingAllowed(false);
   }
 
   // Returns true when the command should end.
