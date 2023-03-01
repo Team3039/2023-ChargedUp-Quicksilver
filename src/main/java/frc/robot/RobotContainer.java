@@ -12,10 +12,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
-import frc.robot.commands.GridTagTrack;
+import frc.robot.commands.RotateTo180;
 import frc.robot.commands.SetLEDS;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TrackingMode;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToSingleStation;
@@ -118,11 +117,12 @@ public class RobotContainer {
     );
     operatorOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
-    driverShare.toggleOnTrue(new TrackingMode());
-    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
-    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.33));
-    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
+    // driverShare.toggleOnTrue(new TrackingMode());
+    // driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
+    // driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.33));
+    // driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
 
+    driverSquare.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
 
     driverL2.onTrue(new SetLEDS());
 

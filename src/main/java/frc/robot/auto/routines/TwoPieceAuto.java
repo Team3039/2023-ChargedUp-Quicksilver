@@ -8,29 +8,30 @@ import java.util.HashMap;
 
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.PPTrajectoryGenerator;
 import frc.robot.auto.commands.RotateRobotToSetpoint;
+import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
+import frc.robot.auto.commands.SetClawReleaseMode;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Test2023Auto extends SequentialCommandGroup {
+public class TwoPieceAuto extends SequentialCommandGroup {
     
-    public Test2023Auto(Drive swerve) {
+    public TwoPieceAuto(Drive swerve) {
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
@@ -74,63 +75,24 @@ public class Test2023Auto extends SequentialCommandGroup {
         swerve
         );
 
-        PPSwerveControllerCommand testCommandOne = new PPSwerveControllerCommand(
-            PPTrajectoryGenerator.getForwardTestPath(),
-            swerve::getPose,
-            Constants.Swerve.SWERVE_KINEMATICS,
-            new PIDController(1, 0, 0),
-            new PIDController(1, 0, 0),
-            new PIDController(1, 0, 0),
-            swerve::setModuleStates,
-            true,
-            swerve);
-
-        PPSwerveControllerCommand testCommandTwo = new PPSwerveControllerCommand(
-            PPTrajectoryGenerator.getReverseTestPath(),
-            swerve::getPose,
-            Constants.Swerve.SWERVE_KINEMATICS,
-            new PIDController(1, 0, 0),
-            new PIDController(1, 0, 0),
-            new PIDController(1, 0, 0),
-            swerve::setModuleStates,
-            true,
-            swerve);
-
-        SwerveControllerCommand testCommandThree = new SwerveControllerCommand(
-            frc.robot.auto.TrajectoryGenerator.getstartToGamePiece(),
-            swerve::getPose,
-            Constants.Swerve.SWERVE_KINEMATICS,
-            new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-            new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-            thetaController,
-            Drive.getSwerveHeadingSupplier(0),
-            swerve::setModuleStates,
-            swerve);
-
-        
-        Command forwardTestCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getForwardTestPath());
-        Command reverseTestCommandOne = autoBuilder.fullAuto(PPTrajectoryGenerator.getReverseTestPath());
-
-        Command bottomThreePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathThreePiece());
-        Command topThreePieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getTopPathThreePiece());
         Command bottomTwoPieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathTwoPiece());
         
 
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),  
-                // new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
-                // forwardTestCommandOne,
-                // reverseTestCommandOne,
-                // bottomThreePieceTest,
-                // new SetClawIntakeMode(),
+                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),        new ActuateLowToHighGridAuto(),
+                new SetClawReleaseMode(),
+                new WaitCommand(0.5),
+                new SetClawIdleMode(),
+                new ActuateToIdle(),
+                new SetClawIntakeMode(),
                 bottomTwoPieceTest,
                 new RotateRobotToSetpoint(swerve, 0),
-                // topThreePieceTest,
-                // testCommandOne,
-                // testCommandTwo,
-                // testCommandThree,
+                new SetClawReleaseMode(),
+                new WaitCommand(0.5),
+                new SetClawIdleMode(),
+                new ActuateToIdle(),
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
                 new PrintCommand("hello this is the auto speaking, LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
                 
