@@ -112,7 +112,7 @@ public class Elevator extends SubsystemBase {
 			elevator.set(output);
 		} else {
 			output = controller.calculate(encoder.getPosition(), setpointElevator) + Constants.Elevator.ELEVATOR_KS;
-			elevator.set(MathUtil.clamp(output, -.15, .3));
+			elevator.set(MathUtil.clamp(output, -.4, .65));
 		}
 	}
 

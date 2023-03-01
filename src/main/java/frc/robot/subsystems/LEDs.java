@@ -23,7 +23,7 @@ public class LEDs extends SubsystemBase {
 
 	private int rainbowStart = 0;
 
-	public AddressableLED leds = new AddressableLED(8);
+	public AddressableLED leds = new AddressableLED(9);
 	public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
 
 

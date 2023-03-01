@@ -60,7 +60,7 @@ public class PPTrajectoryGenerator {
 
     public static PathPlannerTrajectory getBottomPathTwoPiece() {
         return PathPlanner.loadPath("Bottom 2 Piece YP", 
-            new PathConstraints(3.0, 2.0));
+            new PathConstraints(3.0, 4.0));
     }
 
     public PPTrajectoryGenerator() {
@@ -78,7 +78,7 @@ public class PPTrajectoryGenerator {
             swerve::resetOdometry,
             Constants.Swerve.SWERVE_KINEMATICS,
             new PIDConstants(1.0, 0.0, 0.0),
-            new PIDConstants(0.4, 0.0, 0.0),
+            new PIDConstants(1, 0.0, 0.0),
             swerve::setModuleStates,
             eventMap,
             true,

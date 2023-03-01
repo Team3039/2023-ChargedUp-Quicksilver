@@ -30,6 +30,7 @@ public class Drive extends SubsystemBase {
 
     public Drive() {
         setGyro(0);
+        gyro.configMountPoseRoll(-3.4);
 
         swerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -141,7 +142,11 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         // System.out.println(getStates()[0]);
         // System.out.println(swerveOdometry.getPoseMeters());
-        
+        // System.out.println(getAngle());
+        // System.out.println(getRoll() + " Roll");
+        // System.out.println(getPitch() + " Pitch");
+
+
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getPositions());

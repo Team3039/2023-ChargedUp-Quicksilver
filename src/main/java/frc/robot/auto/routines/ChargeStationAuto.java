@@ -13,7 +13,7 @@ import frc.robot.auto.commands.DriveOntoChargeStation;
 import frc.robot.auto.commands.LockWheels;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGridAuto;
 import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.subsystems.Drive;
 
@@ -27,9 +27,9 @@ public class ChargeStationAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-      new ActuateLowToHighGrid(),
+      new ActuateLowToHighGridAuto(),
       new SetClawReleaseMode(),
-      new WaitCommand(0.7),
+      new WaitCommand(0.5),
       new SetClawIdleMode(),
       new ActuateToIdle(),
       new DriveOntoChargeStation(s_Swerve),

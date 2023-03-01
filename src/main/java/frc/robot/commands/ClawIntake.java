@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Elevator;
@@ -32,6 +33,7 @@ public class ClawIntake extends CommandBase {
     if (RobotContainer.elevator.getPosition() < 30) {
     Wrist.setSetpoint(setpointW);
     RobotContainer.wrist.setState(WristState.POSITION);
+    new WaitCommand(0.5);
     Elevator.setSetpoint(setpointE);
     RobotContainer.elevator.setState(ElevatorState.POSITION);
     RobotContainer.claw.isSnappingAllowed(isSnappingAllowed);

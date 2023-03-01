@@ -21,7 +21,6 @@ import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToSingleStation;
 import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
-import frc.robot.subsystems.BuddyClimb;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -43,7 +42,7 @@ public class RobotContainer {
   public static final Claw claw = new Claw();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
-  public static final BuddyClimb buddyClimb = new BuddyClimb();
+  // public static final BuddyClimb buddyClimb = new BuddyClimb();
   public static final LEDs leds = new LEDs();
 
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
@@ -120,12 +119,12 @@ public class RobotContainer {
     operatorOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
     driverShare.toggleOnTrue(new TrackingMode());
-    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.4));
-    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.4));
-    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.0));
+    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
+    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.33));
+    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
 
 
-    driverL1.onTrue(new SetLEDS());
+    driverL2.onTrue(new SetLEDS());
 
     // operatorSquare.whileTrue(new SetElevatorPercent(.20));
     // operatorTriangle.whileTrue(new SetElevatorPercent(-.10));
@@ -141,8 +140,8 @@ public class RobotContainer {
     operatorTriangle.onTrue(new ActuateLowToHighGrid());
     operatorX.onTrue(new ActuateToIdle());
 
-    operatorL1.whileTrue(new ClawIntake(0, 7.5, false));
-    operatorR1.whileTrue(new ClawIntake(20, -4.3, true));
+    operatorL1.whileTrue(new ClawIntake(0, 9.5, false));
+    operatorR1.whileTrue(new ClawIntake(20.5, -10, true));
     operatorL2.whileTrue(new ClawRelease());
 
   }

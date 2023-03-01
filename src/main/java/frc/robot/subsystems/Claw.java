@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class Claw extends SubsystemBase {
 
@@ -34,8 +35,8 @@ public class Claw extends SubsystemBase {
 
 	public ClawState clawState = ClawState.IDLE;
 
-	public CANSparkMax leftWheels = new CANSparkMax(Constants.Ports.CLAW_LEFT_WHEELS, MotorType.kBrushless);
-	public CANSparkMax rightWheels = new CANSparkMax(Constants.Ports.CLAW_RIGHT_WHEELS, MotorType.kBrushless);
+	// public CANSparkMax leftWheels = new CANSparkMax(Constants.Ports.CLAW_LEFT_WHEELS, MotorType.kBrushless);
+	// public CANSparkMax rightWheels = new CANSparkMax(Constants.Ports.CLAW_RIGHT_WHEELS, MotorType.kBrushless);
 	public TalonFX claw = new TalonFX(Constants.Ports.CLAW);
 	public PneumaticHub pH = new PneumaticHub(Constants.Ports.PH_CAN_ID);
 	public Solenoid snapper = pH.makeSolenoid(Constants.Ports.CLAW_SOLENOID);
@@ -49,12 +50,12 @@ public class Claw extends SubsystemBase {
 	public Claw() {
 		pH.enableCompressorAnalog(100, 120);
 		// pH.disableCompressor();
-		leftWheels.setIdleMode(IdleMode.kBrake);
-		rightWheels.setIdleMode(IdleMode.kBrake);
+		// leftWheels.setIdleMode(IdleMode.kBrake);
+		// rightWheels.setIdleMode(IdleMode.kBrake);
 		claw.setNeutralMode(NeutralMode.Brake);
 
-		leftWheels.setInverted(false);
-		rightWheels.setInverted(true);
+		// leftWheels.setInverted(false);
+		// rightWheels.setInverted(true);
 		claw.setInverted(true);
 
 		timer.reset();
@@ -68,9 +69,7 @@ public class Claw extends SubsystemBase {
 		return clawState;
 	}
 
-	public void setWheelSpeeds(double speed) {
-		leftWheels.set(speed);
-		rightWheels.set(speed);
+	public void setWheelSpeed(double speed) {
 		claw.set(ControlMode.PercentOutput, speed);
 	}
 
@@ -99,7 +98,7 @@ public class Claw extends SubsystemBase {
 		// System.out.println(isIntakeDeactivated());
 
 		if (!allowSnapping) {
-			if (RobotContainer.wrist.getWristPosition() > 70) {
+			if (RobotContainer.wrist.getWristPosition() > 70 && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
 				setSnapper(false);
 			}
 			else {
@@ -111,18 +110,18 @@ public class Claw extends SubsystemBase {
 			case IDLE:
 				timer.stop();
 				timer.reset();
-				setWheelSpeeds(0);
+				setWheelSpeed(0);
 				deactivateIntake = false;
 				break;
 			case PASSIVE:
 				deactivateIntake = true;
-				setWheelSpeeds(0.05);
+				setWheelSpeed(0.06);
 				break;
 			case INTAKE:
 				timer.start();
 				if (timer.get() > 0.3 && claw.getStatorCurrent() > 6.5 && allowSnapping) {
 					setSnapper(false);
-					new WaitCommand(0.5);
+					new WaitCommand(0.3);
 					Wrist.setSetpoint(9.3);
 				}
 				if (timer.get() > 0.3 && claw.getStatorCurrent() >= 50 && !deactivateIntake) {
@@ -131,10 +130,11 @@ public class Claw extends SubsystemBase {
 					timer.reset();
 					timer.start();
 				} else if (!deactivateIntake) {
-					setWheelSpeeds(0.6);
+					setWheelSpeed(0.6);
 				}
-				if (deactivateIntake && timer.get() > 0.2) {
-					setWheelSpeeds(0);
+				if (deactivateIntake && timer.get() > 0.1) {
+					setWheelSpeed(0);
+					Wrist.setSetpoint(20);
 					timer.stop();
 					timer.reset();
 					setState(ClawState.PASSIVE);
@@ -142,7 +142,7 @@ public class Claw extends SubsystemBase {
 				break;
 			case RELEASE:
 				deactivateIntake = false;
-				setWheelSpeeds(-0.2);
+				setWheelSpeed(-0.3);
 		}
 	}
 }

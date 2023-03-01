@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.auto.PPTrajectoryGenerator;
+import frc.robot.auto.commands.RotateRobotToSetpoint;
+import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -122,7 +124,9 @@ public class Test2023Auto extends SequentialCommandGroup {
                 // forwardTestCommandOne,
                 // reverseTestCommandOne,
                 // bottomThreePieceTest,
+                // new SetClawIntakeMode(),
                 bottomTwoPieceTest,
+                new RotateRobotToSetpoint(swerve, 0),
                 // topThreePieceTest,
                 // testCommandOne,
                 // testCommandTwo,

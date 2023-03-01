@@ -16,7 +16,7 @@ public class RotateRobotToSetpoint extends CommandBase {
   double setpoint;
   double rotation;
 
-  private PIDController rotController = new PIDController(0.04, 0.6, 0.00);
+  private PIDController rotController = new PIDController(0.05, 0.6, 0.00);
 
   public RotateRobotToSetpoint(Drive drive, double setpoint) {
     addRequirements(drive);
@@ -25,6 +25,8 @@ public class RotateRobotToSetpoint extends CommandBase {
 
     rotController.reset();
     rotController.setIntegratorRange(-0.2, 0.2);
+
+    rotController.enableContinuousInput(-180, 180);
   }
 
   // Called when the command is initially scheduled.
@@ -50,6 +52,6 @@ public class RotateRobotToSetpoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(setpoint - drive.getYaw().getDegrees()) < 2.0;
+    return Math.abs(setpoint - drive.getYaw().getDegrees()) < 0.5;
   }
 }
