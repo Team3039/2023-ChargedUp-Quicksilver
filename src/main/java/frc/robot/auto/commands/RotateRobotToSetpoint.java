@@ -7,6 +7,7 @@ package frc.robot.auto.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
@@ -18,10 +19,15 @@ public class RotateRobotToSetpoint extends CommandBase {
 
   private PIDController rotController = new PIDController(0.05, 0.6, 0.00);
 
+  private Timer timer = new Timer();
+
   public RotateRobotToSetpoint(Drive drive, double setpoint) {
     addRequirements(drive);
     this.drive = drive;
     this.setpoint = setpoint;
+
+    timer.reset();
+    timer.start();
 
     rotController.reset();
     rotController.setIntegratorRange(-0.2, 0.2);
@@ -52,6 +58,6 @@ public class RotateRobotToSetpoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > .5;
   }
 }

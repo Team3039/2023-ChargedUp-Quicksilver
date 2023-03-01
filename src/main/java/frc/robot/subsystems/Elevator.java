@@ -78,7 +78,7 @@ public class Elevator extends SubsystemBase {
 		// elevatorA.setSoftLimit(SoftLimitDirection.kReverse, -1000);
 		elevator.enableSoftLimit(SoftLimitDirection.kForward, true);
 		elevator.enableSoftLimit(SoftLimitDirection.kReverse, true);
-		elevator.setSoftLimit(SoftLimitDirection.kForward, 87);
+		elevator.setSoftLimit(SoftLimitDirection.kForward, 86);
 		elevator.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
 		// elevatorA.burnFlash();
@@ -132,7 +132,7 @@ public class Elevator extends SubsystemBase {
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Elevator Encoder", encoder.getPosition());
-		SmartDashboard.putNumber("Elevator Output", elevator.get());
+		// SmartDashboard.putNumber("Elevator Output", elevator.get());
 		// System.out.println(encoder.getPosition());
 		// System.out.println(elevator.get());
 		// System.out.println(isAtSetpoint(false));

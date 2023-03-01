@@ -141,11 +141,11 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         // System.out.println(getStates()[0]);
-        // System.out.println(swerveOdometry.getPoseMeters());
         // System.out.println(getAngle());
         // System.out.println(getRoll() + " Roll");
         // System.out.println(getPitch() + " Pitch");
 
+        System.out.println(swerveOdometry.getPoseMeters());         
 
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();

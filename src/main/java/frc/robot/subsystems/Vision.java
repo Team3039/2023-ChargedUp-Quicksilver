@@ -8,6 +8,8 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.vision.VisionPipeline;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
@@ -44,9 +46,26 @@ public class Vision extends SubsystemBase {
       target = result.getBestTarget();
     }
   }
+  /** @return The X (forward/back) distance from the target */
+  public double getX() {
+    if (result.hasTargets()) {
+      return target.getBestCameraToTarget().getX();
+    }
+    return 0;
+  }
+
+  /** @return The X (left/right) distance from the target */
+  public double getY() {
+    if (result.hasTargets()) {
+      return target.getBestCameraToTarget().getY();
+    }
+    return 0;
+  }
 
   @Override
   public void periodic() {
+    SmartDashboard.putString("Vision State", String.valueOf(getState()));
+    
     switch(visionState) {
       case DRIVE:
       camera.setDriverMode(true);

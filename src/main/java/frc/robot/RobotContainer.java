@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -12,9 +13,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
+import frc.robot.commands.GridTagTrack;
 import frc.robot.commands.RotateTo180;
 import frc.robot.commands.SetLEDS;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TrackingMode;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToSingleStation;
@@ -46,7 +49,9 @@ public class RobotContainer {
 
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
-  
+
+
+  /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driverPad, PS4Controller.Button.kCross.value);
   private final JoystickButton driverSquare = new JoystickButton(driverPad, PS4Controller.Button.kSquare.value);
   private final JoystickButton driverTriangle = new JoystickButton(driverPad, PS4Controller.Button.kTriangle.value);
@@ -59,9 +64,11 @@ public class RobotContainer {
 
   private final JoystickButton driverL1 = new JoystickButton(driverPad, PS4Controller.Button.kL1.value);
   private final JoystickButton driverR1 = new JoystickButton(driverPad, PS4Controller.Button.kR1.value);
-
   private final JoystickButton driverL2 = new JoystickButton(driverPad, PS4Controller.Button.kL2.value);
   private final JoystickButton driverR2 = new JoystickButton(driverPad, PS4Controller.Button.kR2.value);
+  private final JoystickButton driverL3 = new JoystickButton(driverPad, PS4Controller.Button.kL3.value);
+  private final JoystickButton driverR3 = new JoystickButton(driverPad, PS4Controller.Button.kR3.value);
+
 
   private final JoystickButton driverPadButton = new JoystickButton(driverPad, PS4Controller.Button.kTouchpad.value);
   private final JoystickButton driverStart = new JoystickButton(driverPad, PS4Controller.Button.kPS.value);
@@ -75,7 +82,6 @@ public class RobotContainer {
   private final JoystickButton operatorTriangle = new JoystickButton(operatorPad, PS4Controller.Button.kTriangle.value);
   private final JoystickButton operatorCircle = new JoystickButton(operatorPad, PS4Controller.Button.kCircle.value);
 
-  // private final JoystickButton operatorDPadUp = new JoystickButton(operatorPad, );
   // private final JoystickButton operatorDPadDown = new JoystickButton(operatorPad, PS4Controller.Button.DPAD_DOWN);
   // private final JoystickButton operatorDPadLeft = new JoystickButton(operatorPad, PS4Controller.Button.DPAD_LEFT);
   // private final JoystickButton operatorDPadRight = new JoystickButton(operatorPad, PS4Controller.Button.DPAD_RIGHT);
@@ -117,12 +123,12 @@ public class RobotContainer {
     );
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
-    // driverShare.toggleOnTrue(new TrackingMode());
-    // driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
-    // driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.33));
-    // driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
+    driverL3.toggleOnTrue(new TrackingMode());
+    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
+    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.33));
+    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
 
-    driverSquare.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
+    driverR3.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
 
     driverL2.onTrue(new SetLEDS());
 
@@ -144,6 +150,7 @@ public class RobotContainer {
     driverR1.whileTrue(new ClawIntake(20.5, -10, true));
     driverL2.whileTrue(new ClawRelease());
 
+    driverStart.onTrue(new InstantCommand(() -> drive.resetOdometry(new Pose2d())));
   }
 
   public Command getAutonomousCommand() {

@@ -94,8 +94,6 @@ public class Claw extends SubsystemBase {
 		SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
 		SmartDashboard.putBoolean("Is Intake Deactivated", isIntakeDeactivated());
 
-		// System.out.println(getState());
-		// System.out.println(isIntakeDeactivated());
 
 		if (!allowSnapping) {
 			if (RobotContainer.wrist.getWristPosition() > 75 && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
