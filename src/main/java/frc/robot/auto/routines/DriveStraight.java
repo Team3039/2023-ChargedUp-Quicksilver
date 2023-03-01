@@ -57,10 +57,10 @@ public class DriveStraight extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> swerve.resetOdometry(frc.robot.auto.TrajectoryGenerator.getstartToGamePiece().getInitialPose())),
                 driveStraight,
-                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true)),
-                new WaitCommand(0.2),
-                driveReverse,
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true))
+                // new WaitCommand(0.2),
+                // driveReverse,
+                // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true))
                 );
 
     }

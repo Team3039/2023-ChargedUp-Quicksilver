@@ -111,11 +111,11 @@ public class RobotContainer {
   private void configureBindings() {
     drive.setDefaultCommand(
       new TeleopSwerve(drive, 
-      operatorPad, 
+      driverPad, 
       true, 
       true)
     );
-    operatorOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
+    driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
     // driverShare.toggleOnTrue(new TrackingMode());
     // driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
@@ -140,9 +140,9 @@ public class RobotContainer {
     operatorTriangle.onTrue(new ActuateLowToHighGrid());
     operatorX.onTrue(new ActuateToIdle());
 
-    operatorL1.whileTrue(new ClawIntake(0, 9.5, false));
-    operatorR1.whileTrue(new ClawIntake(20.5, -10, true));
-    operatorL2.whileTrue(new ClawRelease());
+    driverL1.whileTrue(new ClawIntake(0, 9.5, false));
+    driverR1.whileTrue(new ClawIntake(20.5, -10, true));
+    driverL2.whileTrue(new ClawRelease());
 
   }
 

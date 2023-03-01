@@ -39,9 +39,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(autoChooser);
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothing());
-    // autoChooser.addOption("Drive Straight", new DriveStraight());
     autoChooser.addOption("Mid Start Charge Station", new ChargeStationAuto(RobotContainer.drive));
-    autoChooser.addOption("Test Auto", new TwoPieceAuto(RobotContainer.drive));
+    // autoChooser.addOption("Two Piece", new TwoPieceAuto(RobotContainer.drive));
     autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
     autoChooser.addOption("Bottom Two Piece YP", new TwoPieceAuto(RobotContainer.drive));
   }

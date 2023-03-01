@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -61,7 +62,7 @@ public class Wrist extends SubsystemBase {
 
     // Wrist must start in the vertical position in order to be legal. DONT FORGET TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    wrist.setSelectedSensorPosition(degreesToTicks(-113.5));
+    wrist.setSelectedSensorPosition(degreesToTicks(-116.5));
 
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
@@ -141,6 +142,7 @@ public class Wrist extends SubsystemBase {
     // SmartDashboard.putNumber("Wrist Currnent Input", wrist.getSupplyCurrent());
     // SmartDashboard.putNumber("Wrist Current Output", wrist.getStatorCurrent());
     // System.out.println(setpointWrist);
+    SmartDashboard.putNumber("Wrist Angle", getWristPosition());
     
 
     switch (wristState) {

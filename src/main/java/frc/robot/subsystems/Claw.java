@@ -92,13 +92,13 @@ public class Claw extends SubsystemBase {
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
-		System.out.println(claw.getStatorCurrent());
+		SmartDashboard.putBoolean("Is Intake Deactivated", isIntakeDeactivated());
 
 		// System.out.println(getState());
 		// System.out.println(isIntakeDeactivated());
 
 		if (!allowSnapping) {
-			if (RobotContainer.wrist.getWristPosition() > 70 && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
+			if (RobotContainer.wrist.getWristPosition() > 75 && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
 				setSnapper(false);
 			}
 			else {
@@ -142,7 +142,7 @@ public class Claw extends SubsystemBase {
 				break;
 			case RELEASE:
 				deactivateIntake = false;
-				setWheelSpeed(-0.3);
+				setWheelSpeed(-0.5);
 		}
 	}
 }

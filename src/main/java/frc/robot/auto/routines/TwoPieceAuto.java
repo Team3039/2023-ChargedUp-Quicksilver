@@ -13,17 +13,22 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.auto.PPTrajectoryGenerator;
 import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGridAuto;
 import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
+import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -68,7 +73,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         swerve::resetOdometry,
         Constants.Swerve.SWERVE_KINEMATICS,
         new PIDConstants(1.0, 0.0, 0.0),
-        new PIDConstants(0.4, 0.0, 0.0),
+        new PIDConstants(0.5, 0.0, 0.0),
         swerve::setModuleStates,
         eventMap,
         true,
@@ -81,21 +86,22 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),        new ActuateLowToHighGridAuto(),
+                new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),       
+                new ActuateLowToHighGridAuto(),
                 new SetClawReleaseMode(),
-                new WaitCommand(0.5),
-                new SetClawIdleMode(),
+                new WaitCommand(0.7),
                 new ActuateToIdle(),
                 new SetClawIntakeMode(),
                 bottomTwoPieceTest,
-                new RotateRobotToSetpoint(swerve, 0),
+                // new ParallelDeadlineGroup(new WaitUntilCommand(0.3),
+                    //  new RotateRobotToSetpoint(swerve, 0)),
+                new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+                new ActuateLowToHighGrid(),
                 new SetClawReleaseMode(),
                 new WaitCommand(0.5),
                 new SetClawIdleMode(),
                 new ActuateToIdle(),
-                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-                new PrintCommand("hello this is the auto speaking, LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-                
+                new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))         
               );
 
     }

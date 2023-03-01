@@ -97,10 +97,7 @@ public class Elevator extends SubsystemBase {
 	}
 
 	public void setElevatorOpenLoop(double percent) {
-		// if (!isAt;Limit(percent)) {
 		elevator.set(percent);
-		// elevator.set(percent + Constants.Elevator.ELEVATOR_KS);
-		// }
 	}
 
 	public void setElevatorClosedLoop(boolean isProfiled) {
@@ -112,13 +109,9 @@ public class Elevator extends SubsystemBase {
 			elevator.set(output);
 		} else {
 			output = controller.calculate(encoder.getPosition(), setpointElevator) + Constants.Elevator.ELEVATOR_KS;
-			elevator.set(MathUtil.clamp(output, -.4, .65));
+			elevator.set(MathUtil.clamp(output, -.5, .7));
 		}
 	}
-
-	// public boolean isAtHardLimit(double output) {
-	// return (getLimitSwitch() && output > 0);
-	// }
 
 	public static double getSetpoint() {
 		return setpointElevator;

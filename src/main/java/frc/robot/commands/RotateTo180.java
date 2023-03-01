@@ -23,9 +23,8 @@ public class RotateTo180 extends CommandBase {
     private Drive drive;
     private InterpolatedPS4Gamepad controller;
 
-    private PIDController rotController = new PIDController(0.02, 0.5, 0.00);
+    private PIDController rotController = new PIDController(0.03, 0.5, 0.00);
 
-    // 1.27 m	-0.59 m	 178.24°	
 
     /**
      * Driver control
@@ -40,15 +39,12 @@ public class RotateTo180 extends CommandBase {
 
         rotController.reset();
         rotController.setIntegratorRange(-0.2, 0.2);
-        // yController.reset();
-        // yController.setIntegratorRange(-0.2, 0.2);
       }
 
     @Override
     public void execute() {
-        double xAxis = -controller.interpolatedLeftYAxis();
-        double yAxis = -controller.interpolatedLeftXAxis();
-        // if (vision.getState().equals(VisionState.TRACKING)) {
+        double xAxis = -controller.interpolatedLeftYAxis() * 0.7;
+        double yAxis = -controller.interpolatedLeftXAxis() * 0.7;
         rotation = rotController.calculate(Math.abs(drive.getAngle()), rotSetPoint);
         rotation += yAxis;
         if (drive.getAngle() < 0) {
@@ -58,32 +54,13 @@ public class RotateTo180 extends CommandBase {
         if (Math.abs(rotation) < 0.1) {
             rotation = 0;
         }
-
-        // if (vision.result.hasTargets()) {
-        //     yAxis = xController.calculate(vision.result.getBestTarget().getBestCameraToTarget().getY(), ySetPoint);
-        //     yAxis = MathUtil.clamp(yAxis, -.2, .2);
-        //     System.out.println(yAxis);
-        //     if (Math.abs(yAxis) < 0.04) {
-        //         yAxis = 0;
-        //     }
-        // }
-        // else {
-        //     yAxis = -.7 * controller.interpolatedLeftXAxis();
-        // }
         
-        // (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
-        // translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
         translation = new Translation2d(yAxis, xAxis);
         drive.drive(translation, rotation, fieldRelative, openLoop);
-        // }
     }
 
     @Override
     public boolean isFinished() {
-        // if(vision.getState().equals(VisionState.DRIVE)) {
-        //     return true;
-        // }
-        // return false;
         return false;
     }
 }    

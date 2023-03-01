@@ -75,6 +75,9 @@ public class GridTagTrack extends CommandBase {
             if (Math.abs(yAxis) < 0.04) {
                 yAxis = 0;
             }
+            if (Math.abs(ySetPoint - vision.result.getBestTarget().getBestCameraToTarget().getY()) < 0.03) {
+                yAxis = 0;
+            }
         }
         else {
             yAxis = -.7 * controller.interpolatedLeftXAxis();
