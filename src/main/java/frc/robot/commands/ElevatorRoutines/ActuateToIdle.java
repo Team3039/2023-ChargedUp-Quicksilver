@@ -5,9 +5,11 @@
 package frc.robot.commands.ElevatorRoutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.commands.ActuateElevatorIdle;
 import frc.robot.commands.ActuateWristIdle;
 import frc.robot.commands.ActuateWristToSetpoint;
+import frc.robot.subsystems.Elevator.ElevatorState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

@@ -13,11 +13,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.auto.PPTrajectoryGenerator;
@@ -30,13 +28,14 @@ import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGridAuto;
 import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Vision;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TwoPieceAuto extends SequentialCommandGroup {
     
-    public TwoPieceAuto(Drive swerve) {
+    public TwoPieceAuto(Drive swerve, Vision vision) {
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
@@ -96,6 +95,9 @@ public class TwoPieceAuto extends SequentialCommandGroup {
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
                 new RotateRobotToSetpoint(swerve, 0),
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+                // new SetVisionTrackingMode(),
+                // new GridTagTrackAuto(swerve, vision, true, true, -0.15),
+                // new SetVisionDriverMode(),
                 new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
                 new ActuateLowToHighGrid(),
                 new SetClawReleaseMode(),

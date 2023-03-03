@@ -13,12 +13,14 @@ import frc.robot.commands.ActuateWristToSetpoint;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ActuateLowToHighGridAuto extends SequentialCommandGroup {
-  /** Creates a new ActuateLowToHighGrid. */
+  /** DONT USE THIS COMMAND!!!! */
+
   public ActuateLowToHighGridAuto() {
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(80),
+      new ActuateWristToSetpoint(90),
       new ActuateElevatorToSetpoint(70),
       new ParallelCommandGroup(
         new ActuateWristToSetpoint(0),

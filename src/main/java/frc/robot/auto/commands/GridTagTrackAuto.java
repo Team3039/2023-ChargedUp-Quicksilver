@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.auto.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Vision.VisionState;
 
-public class GridTagTrack extends CommandBase {
+public class GridTagTrackAuto extends CommandBase {
 
     private double xAxis = 0; 
     private double yAxis = 0;
@@ -24,17 +24,15 @@ public class GridTagTrack extends CommandBase {
 
     private Drive drive;
     private Vision vision;
-    private InterpolatedPS4Gamepad controller;
 
     private PIDController yController = new PIDController(0.3, 0.0, 0);
     private PIDController xController = new PIDController(0.6, 0.1, 0.0);
 
-    public GridTagTrack(Drive drive, Vision vision, InterpolatedPS4Gamepad controller, boolean fieldRelative, boolean openLoop, double ySetPoint) {
+    public GridTagTrackAuto(Drive drive, Vision vision, boolean fieldRelative, boolean openLoop, double ySetPoint) {
         this.drive = drive;
         this.vision = vision;
         addRequirements(drive, vision);
         
-        this.controller = controller;
         this.fieldRelative = fieldRelative;
         this.openLoop = openLoop;
         this.ySetPoint = ySetPoint;
@@ -52,7 +50,6 @@ public class GridTagTrack extends CommandBase {
     @Override
     public void execute() {
         if (vision.getState().equals(VisionState.TRACKING)) {
-        xAxis = -0.7 * controller.interpolatedLeftYAxis();
         // rotation = rotController.calculate(Math.abs(drive.getAngle()), rotSetPoint);
         // rotation += yAxis;
         // if (drive.getAngle() < 0) {
@@ -70,23 +67,20 @@ public class GridTagTrack extends CommandBase {
             if (Math.abs(yAxis) < 0.04) {
                 yAxis = 0;
             }
-            if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.03) {
+            if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.02) {
                 yAxis = 0;
             }
         }
-        else {
-            yAxis = -.7 * controller.interpolatedLeftXAxis();
-        }
         
         // (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
-        translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
+        translation = new Translation2d(xAxis, -1 * yAxis).times(Constants.Swerve.MAX_SPEED);
         drive.drive(translation, rotation, fieldRelative, openLoop);
         }
     }
 
     @Override
     public boolean isFinished() {
-        if(vision.getState().equals(VisionState.DRIVE)) {
+        if(vision.getState().equals(VisionState.DRIVE) || Math.abs(drive.getPose().getY() - ySetPoint) < 0.02) {
             return true;
         }
         return false;

@@ -66,7 +66,7 @@ public class PPTrajectoryGenerator {
     public PPTrajectoryGenerator() {
         eventMap = new HashMap<>();
         // eventMap.put("Claw Idle", new SetClawIdleMode());
-        eventMap.put("Intake", new SetClawIntakeMode());
+        // eventMap.put("Intake", new SetClawIntakeMode());
         // eventMap.put("Elevator Idle", new SetElevatorIdleMode());
         // eventMap.put("Elevator Mid Grid", new SetElevatorPositionMode(Constants.Elevator.MID_GRID_SETPOINT));
         // eventMap.put("Elevator High Grid", new SetElevatorPositionMode(Constants.Elevator.HIGH_GRID_SETPOINT));

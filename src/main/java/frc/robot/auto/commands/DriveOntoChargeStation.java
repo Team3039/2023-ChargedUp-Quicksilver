@@ -28,7 +28,7 @@ double highestRoll = 0;
   @Override
   public void execute() {
     if (highestRoll > -10) {
-      translation = new Translation2d(-0.5, 0).times(Constants.Swerve.MAX_SPEED);
+      translation = new Translation2d(-0.3, 0).times(Constants.Swerve.MAX_SPEED);
     }
     else {
       translation = new Translation2d(-0.2, 0).times(Constants.Swerve.MAX_SPEED);

@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
+import frc.robot.commands.ForceIdle;
 import frc.robot.commands.GridTagTrack;
 import frc.robot.commands.RotateTo180;
 import frc.robot.commands.SetLEDS;
@@ -124,8 +127,8 @@ public class RobotContainer {
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
     driverL3.toggleOnTrue(new TrackingMode());
-    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.73));
-    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.33));
+    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.72));
+    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.40));
     driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
 
     driverR3.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
@@ -146,11 +149,12 @@ public class RobotContainer {
     operatorTriangle.onTrue(new ActuateLowToHighGrid());
     operatorX.onTrue(new ActuateToIdle());
 
-    driverL1.whileTrue(new ClawIntake(0, 9.5, false));
-    driverR1.whileTrue(new ClawIntake(20.5, -10, true));
-    driverL2.whileTrue(new ClawRelease());
+    operatorStart.whileTrue(new ForceIdle());
+    driverStart.whileTrue(new ForceIdle());
 
-    driverStart.onTrue(new InstantCommand(() -> drive.resetOdometry(new Pose2d())));
+    operatorL1.whileTrue(new ClawIntake(0, wrist.getLowIntakeSetpoint(), false));
+    operatorR1.whileTrue(new ClawIntake(20.5, -10, true));
+    operatorR2.whileTrue(new ClawRelease());
   }
 
   public Command getAutonomousCommand() {

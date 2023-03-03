@@ -7,13 +7,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -48,7 +46,6 @@ public class Claw extends SubsystemBase {
 	public boolean allowSnapping = false;
 
 	public Claw() {
-		pH.enableCompressorAnalog(100, 120);
 		// pH.disableCompressor();
 		// leftWheels.setIdleMode(IdleMode.kBrake);
 		// rightWheels.setIdleMode(IdleMode.kBrake);
@@ -91,8 +88,16 @@ public class Claw extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		if (pH.getPressureSwitch()) {
+			pH.disableCompressor();
+		}
+		else {
+			pH.enableCompressorAnalog(100, 120);
+		}
 		SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
 		SmartDashboard.putBoolean("Is Intake Deactivated", isIntakeDeactivated());
+		SmartDashboard.putString("Claw State", String.valueOf(getState()));
+
 
 
 		if (!allowSnapping) {
@@ -113,7 +118,7 @@ public class Claw extends SubsystemBase {
 				break;
 			case PASSIVE:
 				deactivateIntake = true;
-				setWheelSpeed(0.06);
+				setWheelSpeed(0.08);
 				break;
 			case INTAKE:
 				timer.start();
@@ -135,7 +140,6 @@ public class Claw extends SubsystemBase {
 					Wrist.setSetpoint(20);
 					timer.stop();
 					timer.reset();
-					setState(ClawState.PASSIVE);
 				}
 				break;
 			case RELEASE:

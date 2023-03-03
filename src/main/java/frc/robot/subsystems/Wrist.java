@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -53,16 +54,15 @@ public class Wrist extends SubsystemBase {
 
   public static double setpointWrist = 0;
 
+  public SendableChooser<Double> intakeSetpointChooser = new SendableChooser<>();
+  double lowIntakeSetpoint = 10.5;
+
   public Wrist() {
     wrist.setNeutralMode(NeutralMode.Brake);
 
-    // wrist.config_kP(0, Constants.Wrist.KP);
-    // wrist.config_kP(0, Constants.Wrist.KI);
-    // wrist.config_kP(0, Constants.Wrist.KD);
-
     // Wrist must start in the vertical position in order to be legal. DONT FORGET TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    wrist.setSelectedSensorPosition(degreesToTicks(-116.5));
+    wrist.setSelectedSensorPosition(degreesToTicks(-117.25));
 
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
@@ -70,6 +70,13 @@ public class Wrist extends SubsystemBase {
     wrist.configReverseSoftLimitThreshold(degreesToTicks(-30));
 
     wrist.setInverted(true);
+
+		intakeSetpointChooser.addOption("12", 12.0);
+		intakeSetpointChooser.addOption("11", 11.0);
+    intakeSetpointChooser.setDefaultOption("10.5", 10.5);
+		intakeSetpointChooser.addOption("10", 10.0);
+		intakeSetpointChooser.addOption("9", 9.0);
+		intakeSetpointChooser.addOption("8", 8.0);
   }
 
   public WristState getState() {
@@ -133,8 +140,12 @@ public class Wrist extends SubsystemBase {
     return Math.abs(setpointWrist - ticksToDegrees(wrist.getSelectedSensorPosition())) <= 5;
   }
 
+  public double getLowIntakeSetpoint() {
+    return lowIntakeSetpoint;
+  }
   @Override
   public void periodic() {
+    
     // SmartDashboard.putNumber("Wrist Absolute Encoder",
     // wrist.getSelectedSensorPosition());
     // System.out.println(ticksToDegrees(wrist.getSelectedSensorPosition()));
@@ -143,6 +154,8 @@ public class Wrist extends SubsystemBase {
     // SmartDashboard.putNumber("Wrist Current Output", wrist.getStatorCurrent());
     // System.out.println(setpointWrist);
     SmartDashboard.putNumber("Wrist Angle", getWristPosition());
+    SmartDashboard.putString("Wrist State", String.valueOf(getState()));
+
     
 
     switch (wristState) {
@@ -154,7 +167,7 @@ public class Wrist extends SubsystemBase {
           // setSetpoint(30);
         // }
         if (!RobotContainer.claw.isIntakeDeactivated() && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
-        setSetpoint(110);
+        setSetpoint(90);
         setWristPosition(false);
         }
         break;

@@ -48,16 +48,21 @@ public class Vision extends SubsystemBase {
   }
   /** @return The X (forward/back) distance from the target */
   public double getX() {
-    if (result.hasTargets()) {
-      return target.getBestCameraToTarget().getX();
+    if (visionState.equals(VisionState.TRACKING)) {
+      if (result.hasTargets()) {
+        return target.getBestCameraToTarget().getX();
+      }
     }
     return 0;
   }
 
+
   /** @return The X (left/right) distance from the target */
   public double getY() {
-    if (result.hasTargets()) {
-      return target.getBestCameraToTarget().getY();
+    if (visionState.equals(VisionState.TRACKING)) {
+      if (result.hasTargets()) {
+        return target.getBestCameraToTarget().getY();
+      }
     }
     return 0;
   }

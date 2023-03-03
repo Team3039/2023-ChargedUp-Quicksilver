@@ -109,7 +109,7 @@ public class Elevator extends SubsystemBase {
 			elevator.set(output);
 		} else {
 			output = controller.calculate(encoder.getPosition(), setpointElevator) + Constants.Elevator.ELEVATOR_KS;
-			elevator.set(MathUtil.clamp(output, -.5, .7));
+			elevator.set(MathUtil.clamp(output, -.4, .6));
 		}
 	}
 
@@ -132,6 +132,8 @@ public class Elevator extends SubsystemBase {
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Elevator Encoder", encoder.getPosition());
+		SmartDashboard.putString("Elevator State", String.valueOf(getState()));
+
 		// SmartDashboard.putNumber("Elevator Output", elevator.get());
 		// System.out.println(encoder.getPosition());
 		// System.out.println(elevator.get());
