@@ -70,7 +70,7 @@ public final class Constants {
       }
 
       public static final class Wrist {
-            public static final double WRIST_KP = 0.012;
+            public static final double WRIST_KP = 0.010;
             public static final double WRIST_KI = 0;
             public static final double WRIST_KD = 0;
             public static final double WRIST_KS = 0.025;

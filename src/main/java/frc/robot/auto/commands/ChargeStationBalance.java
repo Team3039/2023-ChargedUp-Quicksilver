@@ -30,7 +30,7 @@ public class ChargeStationBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    translation = new Translation2d(drive.getRoll() * .009, 0).times(Constants.Swerve.MAX_SPEED);
+    translation = new Translation2d(drive.getRoll() * .0087, 0).times(Constants.Swerve.MAX_SPEED);
     drive.drive(translation, 0, true, true);
     if (Math.abs(drive.getRoll()) < 5) {
       timer.start();

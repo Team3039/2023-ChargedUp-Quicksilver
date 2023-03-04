@@ -54,8 +54,7 @@ public class Wrist extends SubsystemBase {
 
   public static double setpointWrist = 0;
 
-  public SendableChooser<Double> intakeSetpointChooser = new SendableChooser<>();
-  double lowIntakeSetpoint = 10.5;
+  double wristSetpointOffset = 0;
 
   public Wrist() {
     wrist.setNeutralMode(NeutralMode.Brake);
@@ -70,13 +69,6 @@ public class Wrist extends SubsystemBase {
     wrist.configReverseSoftLimitThreshold(degreesToTicks(-30));
 
     wrist.setInverted(true);
-
-		intakeSetpointChooser.addOption("12", 12.0);
-		intakeSetpointChooser.addOption("11", 11.0);
-    intakeSetpointChooser.setDefaultOption("10.5", 10.5);
-		intakeSetpointChooser.addOption("10", 10.0);
-		intakeSetpointChooser.addOption("9", 9.0);
-		intakeSetpointChooser.addOption("8", 8.0);
   }
 
   public WristState getState() {
@@ -111,7 +103,7 @@ public class Wrist extends SubsystemBase {
     } else {
       wrist.set(ControlMode.PercentOutput, MathUtil.clamp(controller.calculate(
           ticksToDegrees(wrist.getSelectedSensorPosition()),
-          setpointWrist), -.2, .2),
+          setpointWrist), -.15, .2),
           DemandType.ArbitraryFeedForward,
           Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
               Constants.Wrist.WRIST_KS);
@@ -140,12 +132,16 @@ public class Wrist extends SubsystemBase {
     return Math.abs(setpointWrist - ticksToDegrees(wrist.getSelectedSensorPosition())) <= 5;
   }
 
-  public double getLowIntakeSetpoint() {
-    return lowIntakeSetpoint;
+  public double getWristOffset() {
+    return wristSetpointOffset;
   }
+
+  public void changeWristOffset(double offset) {
+    wristSetpointOffset += offset;
+  }
+
   @Override
   public void periodic() {
-    
     // SmartDashboard.putNumber("Wrist Absolute Encoder",
     // wrist.getSelectedSensorPosition());
     // System.out.println(ticksToDegrees(wrist.getSelectedSensorPosition()));
@@ -155,7 +151,8 @@ public class Wrist extends SubsystemBase {
     // System.out.println(setpointWrist);
     SmartDashboard.putNumber("Wrist Angle", getWristPosition());
     SmartDashboard.putString("Wrist State", String.valueOf(getState()));
-
+    // SmartDashboard.putNumber("Wrist Offset", getWristOffset());
+    SmartDashboard.putNumber("Wrist Setpoint", getSetpoint());
     
 
     switch (wristState) {

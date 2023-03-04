@@ -20,9 +20,9 @@ import frc.robot.subsystems.Drive;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ChargeStationAuto extends SequentialCommandGroup {
+public class SingleHighAuto extends SequentialCommandGroup {
   /** Creates a new ChargeStationAuto. */
-  public ChargeStationAuto(Drive s_Swerve) {
+  public SingleHighAuto(Drive s_Swerve) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -33,10 +33,10 @@ public class ChargeStationAuto extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new SetClawIdleMode(),
       new ActuateToIdle(),
-      new DriveOntoChargeStation(s_Swerve),
-      new ChargeStationBalance(s_Swerve),
-      new LockWheels(s_Swerve),
       new InstantCommand(() -> s_Swerve.setGyro(180))
+      // new DriveOntoChargeStation(s_Swerve),
+      // new ChargeStationBalance(s_Swerve),
+      // new LockWheels(s_Swerve)
     );
   }
 }

@@ -9,14 +9,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Wrist;
 import frc.robot.auto.routines.ChargeStationAuto;
 import frc.robot.auto.routines.DoNothing;
 import frc.robot.auto.routines.DriveStraight;
+import frc.robot.auto.routines.SingleHighAuto;
+import frc.robot.auto.routines.SingleHighTaxiAuto;
+import frc.robot.auto.routines.SingleLowAuto;
 import frc.robot.auto.routines.TwoPieceAuto;
 import frc.robot.subsystems.Claw.ClawState;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.WristState;
 
 /**
@@ -47,6 +50,9 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Mid Start Charge Station", new ChargeStationAuto(RobotContainer.drive));
     // autoChooser.addOption("Two Piece", new TwoPieceAuto(RobotContainer.drive));
     autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
+    autoChooser.addOption("Single High", new SingleHighAuto(RobotContainer.drive));
+    autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
+    autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));
     autoChooser.addOption("Bottom Two Piece YP", new TwoPieceAuto(RobotContainer.drive, RobotContainer.vision));
   }
 

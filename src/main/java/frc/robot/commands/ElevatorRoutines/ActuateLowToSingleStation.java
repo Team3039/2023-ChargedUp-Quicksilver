@@ -19,8 +19,8 @@ public class ActuateLowToSingleStation extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(55),
-      new ActuateElevatorToSetpoint(45)
+      new ActuateWristToSetpoint(65),
+      new ActuateElevatorToSetpoint(30)
     );
   }
 }

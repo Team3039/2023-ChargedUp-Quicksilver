@@ -152,9 +152,15 @@ public class RobotContainer {
     operatorStart.whileTrue(new ForceIdle());
     driverStart.whileTrue(new ForceIdle());
 
-    operatorL1.whileTrue(new ClawIntake(0, wrist.getLowIntakeSetpoint(), false));
-    operatorR1.whileTrue(new ClawIntake(20.5, -10, true));
+    operatorL1.whileTrue(new ClawIntake(0, 10.5 + wrist.getWristOffset(), false));
+    operatorL2.whileTrue(new ClawIntake(30, 65 + wrist.getWristOffset(), false));
+
+    operatorR1.whileTrue(new ClawIntake(20.5, -10 + wrist.getWristOffset(), true));
     operatorR2.whileTrue(new ClawRelease());
+
+    driverL1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(1)));
+    driverR1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(-1)));
+
   }
 
   public Command getAutonomousCommand() {
