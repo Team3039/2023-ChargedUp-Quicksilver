@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
+import frc.robot.auto.commands.SetWristIdleMode;
 import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Drive;
 
@@ -28,6 +29,7 @@ public class SingleLowAuto extends SequentialCommandGroup {
       new SetClawReleaseMode(),
       new WaitCommand(0.5),
       new SetClawIdleMode(),
+      new SetWristIdleMode(),
       new InstantCommand(() -> s_Swerve.setGyro(180))
       // new DriveOntoChargeStation(s_Swerve),
       // new ChargeStationBalance(s_Swerve),

@@ -62,6 +62,7 @@ public class Wrist extends SubsystemBase {
     // Wrist must start in the vertical position in order to be legal. DONT FORGET TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     wrist.setSelectedSensorPosition(degreesToTicks(-117.25));
+    // wrist.setSelectedSensorPosition(-90);
 
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
@@ -103,7 +104,7 @@ public class Wrist extends SubsystemBase {
     } else {
       wrist.set(ControlMode.PercentOutput, MathUtil.clamp(controller.calculate(
           ticksToDegrees(wrist.getSelectedSensorPosition()),
-          setpointWrist), -.15, .2),
+          setpointWrist), -.18, .2),
           DemandType.ArbitraryFeedForward,
           Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
               Constants.Wrist.WRIST_KS);
@@ -164,7 +165,7 @@ public class Wrist extends SubsystemBase {
           // setSetpoint(30);
         // }
         if (!RobotContainer.claw.isIntakeDeactivated() && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
-        setSetpoint(90);
+        setSetpoint(115);
         setWristPosition(false);
         }
         break;

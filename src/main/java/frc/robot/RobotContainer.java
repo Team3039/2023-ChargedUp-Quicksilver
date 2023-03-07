@@ -23,7 +23,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TrackingMode;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToSingleStation;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToPreScore;
 import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Claw;
@@ -127,9 +127,9 @@ public class RobotContainer {
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
     driverL3.toggleOnTrue(new TrackingMode());
-    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.72));
-    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.40));
-    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.15));
+    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.72));
+    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.40));
+    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.15));
 
     driverR3.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
 
@@ -144,7 +144,7 @@ public class RobotContainer {
     // operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
     // operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
 
-    operatorCircle.onTrue(new ActuateLowToSingleStation());
+    operatorCircle.onTrue(new ActuateLowToPreScore());
     operatorSquare.onTrue(new ActuateLowToMidGrid());
     operatorTriangle.onTrue(new ActuateLowToHighGrid());
     operatorX.onTrue(new ActuateToIdle());
@@ -152,10 +152,9 @@ public class RobotContainer {
     operatorStart.whileTrue(new ForceIdle());
     driverStart.whileTrue(new ForceIdle());
 
-    operatorL1.whileTrue(new ClawIntake(0, 10.5 + wrist.getWristOffset(), false));
+    operatorL1.whileTrue(new ClawIntake(0, 10 + wrist.getWristOffset(), false));
     operatorL2.whileTrue(new ClawIntake(30, 65 + wrist.getWristOffset(), false));
-
-    operatorR1.whileTrue(new ClawIntake(20.5, -10 + wrist.getWristOffset(), true));
+    operatorR1.whileTrue(new ClawIntake(20.5, -9 + wrist.getWristOffset(), true));
     operatorR2.whileTrue(new ClawRelease());
 
     driverL1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(1)));

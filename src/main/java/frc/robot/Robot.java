@@ -15,6 +15,7 @@ import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.SingleHighAuto;
 import frc.robot.auto.routines.SingleHighTaxiAuto;
 import frc.robot.auto.routines.SingleLowAuto;
+import frc.robot.auto.routines.SingleLowTaxiAuto;
 import frc.robot.auto.routines.TwoPieceAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Elevator;
@@ -53,8 +54,10 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Single High", new SingleHighAuto(RobotContainer.drive));
     autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));
+    autoChooser.addOption("Single Low Taxi", new SingleLowTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Bottom Two Piece YP", new TwoPieceAuto(RobotContainer.drive, RobotContainer.vision));
   }
+
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics

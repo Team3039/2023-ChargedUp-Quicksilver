@@ -16,16 +16,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
+import frc.robot.auto.commands.SetWristIdleMode;
+import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class SingleHighTaxiAuto extends SequentialCommandGroup {
+public class SingleLowTaxiAuto extends SequentialCommandGroup {
   /** Creates a new ChargeStationAuto. */
-  public SingleHighTaxiAuto(Drive swerve) {
+  public SingleLowTaxiAuto(Drive swerve) {
 
     var thetaController = new ProfiledPIDController(
       Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
@@ -46,11 +46,11 @@ thetaController.enableContinuousInput(-Math.PI, Math.PI);
     addCommands(
       new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
       new InstantCommand(() -> swerve.setGyro(0)),
-      new ActuateLowToHighGrid(),
+      new ActuateWristToSetpoint(20),
       new SetClawReleaseMode(),
       new WaitCommand(0.5),
       new SetClawIdleMode(),
-      new ActuateToIdle(),
+      new SetWristIdleMode(),
       new ParallelRaceGroup(driveStraight, new WaitCommand(3.3)),
       new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
       new InstantCommand(() -> swerve.setGyro(180))

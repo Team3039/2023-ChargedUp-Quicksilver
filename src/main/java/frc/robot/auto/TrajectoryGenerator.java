@@ -31,7 +31,7 @@ public class TrajectoryGenerator {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
 				List.of(
 						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
-						new Pose2d(new Translation2d(-3, 0), Rotation2d.fromDegrees(0))),
+						new Pose2d(new Translation2d(-4, 0), Rotation2d.fromDegrees(0))),
 				configSlow);
 	}
 

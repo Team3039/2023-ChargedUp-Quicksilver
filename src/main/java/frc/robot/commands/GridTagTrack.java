@@ -21,14 +21,14 @@ public class GridTagTrack extends CommandBase {
     private boolean fieldRelative;
     private boolean openLoop;
     private double ySetPoint = 0.40;
-
+    private double xSetPoint = 0.70;
     private Drive drive;
     private Vision vision;
     private InterpolatedPS4Gamepad controller;
 
-    private PIDController yController = new PIDController(0.3, 0.0, 0);
+    private PIDController yController = new PIDController(0.6, 0.1, 0);
     private PIDController xController = new PIDController(0.6, 0.1, 0.0);
-
+    
     public GridTagTrack(Drive drive, Vision vision, InterpolatedPS4Gamepad controller, boolean fieldRelative, boolean openLoop, double ySetPoint) {
         this.drive = drive;
         this.vision = vision;
@@ -39,8 +39,6 @@ public class GridTagTrack extends CommandBase {
         this.openLoop = openLoop;
         this.ySetPoint = ySetPoint;
 
-        drive.resetOdometry(new Pose2d(new Translation2d(vision.getX(), vision.getY()), new Rotation2d()));
-                                                  
         // rotController.reset();
         // rotController.setIntegratorRange(-0.2, 0.2);
         // yController.reset();
@@ -50,9 +48,13 @@ public class GridTagTrack extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        drive.resetOdometry(new Pose2d(new Translation2d(vision.getX(), -vision.getY()), new Rotation2d()));
+    }
+
+    @Override
     public void execute() {
         if (vision.getState().equals(VisionState.TRACKING)) {
-        xAxis = -0.7 * controller.interpolatedLeftYAxis();
         // rotation = rotController.calculate(Math.abs(drive.getAngle()), rotSetPoint);
         // rotation += yAxis;
         // if (drive.getAngle() < 0) {
@@ -63,20 +65,28 @@ public class GridTagTrack extends CommandBase {
         //     rotation = 0;
         // }
 
-        if (vision.result.hasTargets()) {
-            yAxis = xController.calculate(drive.getPose().getY(), ySetPoint);
-            yAxis = MathUtil.clamp(yAxis, -.2, .2);
-            System.out.println(yAxis);
-            if (Math.abs(yAxis) < 0.04) {
-                yAxis = 0;
-            }
-            if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.03) {
-                yAxis = 0;
-            }
+
+        yAxis = -1 * xController.calculate(drive.getPose().getY(), ySetPoint);
+        yAxis = MathUtil.clamp(yAxis, -.2, .2);
+        System.out.println(yAxis);
+        if (Math.abs(yAxis) < 0.04) {
+            yAxis = 0;
         }
-        else {
-            yAxis = -.7 * controller.interpolatedLeftXAxis();
+        if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.03) {
+            yAxis = 0;
+        }       
+        
+        xAxis = -1 * xController.calculate(drive.getPose().getX(), xSetPoint);
+        xAxis = MathUtil.clamp(yAxis, -.2, .2);
+        System.out.println(xAxis);
+        if (Math.abs(xAxis) < 0.04) {
+            xAxis = 0;
         }
+        if (Math.abs(xSetPoint - drive.getPose().getX()) < 0.03) {
+            xAxis = 0;
+        }      
+        // yAxis = -0.7 * controller.interpolatedLeftXAxis();
+
         
         // (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
         translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
