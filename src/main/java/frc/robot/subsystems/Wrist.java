@@ -27,7 +27,8 @@ public class Wrist extends SubsystemBase {
   public enum WristState {
     IDLE,
     MANUAL,
-    POSITION
+    POSITION,
+    PASSIVE
   }
 
   public WristState wristState = WristState.IDLE;
@@ -93,7 +94,7 @@ public class Wrist extends SubsystemBase {
     return armDegrees;
   }
 
-  //TODO: if ever doing trapizoid profiling, dont forget to add the feedforward to the output
+  //*TODO: if ever doing trapizoid profiling, dont forget to add the feedforward to the output
   public void setWristPosition(boolean isProfiled) {
     if (isProfiled) {
       profiledController.setGoal(setpointWrist);
@@ -165,13 +166,18 @@ public class Wrist extends SubsystemBase {
           // setSetpoint(30);
         // }
         if (!RobotContainer.claw.isIntakeDeactivated() && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
-        setSetpoint(115);
+        setSetpoint(90);
         setWristPosition(false);
         }
         break;
       case MANUAL:
+        setWristPercent(RobotContainer.driverPad.getRightY() * .2);
         break;
       case POSITION:
+        setWristPosition(false);
+        break;
+      case PASSIVE:
+        setSetpoint(90);
         setWristPosition(false);
         break;
     }

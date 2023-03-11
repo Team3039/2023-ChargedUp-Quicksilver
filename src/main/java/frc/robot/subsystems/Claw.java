@@ -122,11 +122,14 @@ public class Claw extends SubsystemBase {
 				break;
 			case INTAKE:
 				timer.start();
-				if (timer.get() > 0.5 && claw.getStatorCurrent() > 7.0 && allowSnapping) {
+				if (timer.get() > 0.5 && claw.getStatorCurrent() > 9.0 && allowSnapping) {
 					setSnapper(false);
 					new WaitCommand(0.3);
 					Wrist.setSetpoint(9.3);
 				}
+				// if (allowSnapping) {
+				// 	setSnapper(false);
+				// }
 				if (timer.get() > 0.5 && claw.getStatorCurrent() >= 50 && !deactivateIntake) {
 					deactivateIntake = true;
 					timer.stop();

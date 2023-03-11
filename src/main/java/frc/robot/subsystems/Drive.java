@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
@@ -23,6 +26,7 @@ public class Drive extends SubsystemBase {
     public SwerveModule[] swerveMods;
     public Pigeon2 gyro = new Pigeon2(4);
     public SwerveDriveOdometry swerveOdometry;
+    public SwerveDrivePoseEstimator swervePoseEstimator;
 
     public boolean isHighGear = false;
 
@@ -41,6 +45,7 @@ public class Drive extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions());
 
+        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions(), new Pose2d());
         isHighGear = false;
     }
 
@@ -138,6 +143,90 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    // public Command moveToPose(Supplier<Pose2d> poseSupplier, Translation2d newOffset) {
+    //     PIDController yaxisPid = new PIDController(
+    //         Constants.Vision.Y_P, 
+    //         Constants.Vision.Y_I, 
+    //         Constants.Vision.Y_D
+    //     );
+
+    //     PIDController xaxisPid = new PIDController(
+    //         Constants.Vision.X_P, 
+    //         Constants.Vision.X_I, 
+    //         Constants.Vision.X_D
+    //     );
+
+    //     PIDController thetaPid = new PIDController(
+    //         Constants.Vision.THETA_P, 
+    //         Constants.Vision.THETA_I, 
+    //         Constants.Vision.THETA_D
+    //     );
+
+    //     thetaPid.enableContinuousInput(0, 2 * Math.PI);
+
+    //     xaxisPid.setTolerance(Constants.Vision.X_TOLLERENCE);
+    //     yaxisPid.setTolerance(Constants.Vision.Y_TOLLERENCE);
+    //     thetaPid.setTolerance(Constants.Vision.THETA_TOLLERENCE);
+
+    //     return runOnce(() -> {
+    //         xaxisPid.calculate(swervePoseEstimator.getEstimatedPosition().getX());
+    //         yaxisPid.calculate(swervePoseEstimator.getEstimatedPosition().getY());
+    //         thetaPid.calculate(
+    //                     swervePoseEstimator.getEstimatedPosition().getRotation().getRadians()
+    //         );
+
+    //         SmartDashboard.putNumber("In Auto Align", 1);
+    //         Translation2d offset = newOffset;
+    //         // Give offset a default value
+    //         if (offset == null) {
+    //             offset = 1;
+    //         }
+
+    //         // Get forward vector of pose and add it to offset
+    //         Pose2d pose = poseSupplier.get();
+    //         Rotation2d targetRot = pose.getRotation();
+    //         offset = offset.rotateBy(targetRot);
+    //         Translation2d targetTrans = pose.getTranslation();
+    //         Translation2d offsetTarget = targetTrans.plus(offset);
+    //         field.getObject("target").setPose(new Pose2d(offsetTarget, targetRot));
+
+    //         // Set pid setpoints
+    //         xaxisPid.setSetpoint(offsetTarget.getX());
+    //         yaxisPid.setSetpoint(offsetTarget.getY());
+
+    //         // Invert theta to ensure we're facing towards the target
+    //         thetaPid.setSetpoint(targetRot.minus(kAutoAlign.DEFAULT_ROTATION).getRadians());
+    //     }).andThen(run(
+    //         () -> {
+    //             SmartDashboard.putNumber("x tolerance", xaxisPid.getPositionError());
+    //             SmartDashboard.putNumber("y tolerance", yaxisPid.getPositionError());
+    //             SmartDashboard.putNumber("theta tolerance", thetaPid.getPositionError());
+
+    //             drive(
+    //                 new Translation2d(
+    //                     xaxisPid.calculate(swerveOdometry.getEstimatedPosition().getX()),
+    //                     yaxisPid.calculate(swerveOdometry.getEstimatedPosition().getY())
+    //                 ),
+    //                 thetaPid.calculate(
+    //                     swerveOdometry.getEstimatedPosition().getRotation().getRadians()
+    //                 ),
+    //                 true, 
+    //                 false
+    //             );
+    //         }
+    //     )).until(
+    //         () -> xaxisPid.atSetpoint() && yaxisPid.atSetpoint() && thetaPid.atSetpoint()
+    //     ).andThen(
+    //         () -> { 
+    //             SmartDashboard.putNumber("In Auto Align", 0);
+
+    //             xaxisPid.close(); 
+    //             yaxisPid.close(); 
+    //             thetaPid.close(); 
+    //         }
+    //     );
+    // }
+
     @Override
     public void periodic() {
         // System.out.println(getStates()[0]);
@@ -145,11 +234,15 @@ public class Drive extends SubsystemBase {
         // System.out.println(getRoll() + " Roll");
         // System.out.println(getPitch() + " Pitch");
 
-        System.out.println(swerveOdometry.getPoseMeters());         
+        // System.out.println(swerveOdometry.getPoseMeters());  
+        // System.out.println(getRoll());     
+        System.out.println(getAngle());  
 
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getPositions());
+        swervePoseEstimator.update(getYaw(), getPositions());
+        
 
         SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
         SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());

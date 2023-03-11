@@ -7,15 +7,17 @@ package frc.robot.auto.commands;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
-public class DriveOntoChargeStation extends CommandBase {
+public class DrivePastChargeStation extends CommandBase {
 Translation2d translation;
 Drive drive;
+double lowestRoll = 0;
 double highestRoll = 0;
   // must have back facing charge station when initialized
-  public DriveOntoChargeStation(Drive drive) {
+  public DrivePastChargeStation(Drive drive) {
    addRequirements(drive);
    this.drive = drive;
   }
@@ -27,18 +29,15 @@ double highestRoll = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (highestRoll > -10) {
-      translation = new Translation2d(-0.3, 0).times(Constants.Swerve.MAX_SPEED);
-    }
-    else {
-      translation = new Translation2d(-0.2, 0).times(Constants.Swerve.MAX_SPEED);
-    }
+      translation = new Translation2d(-0.5, 0).times(Constants.Swerve.MAX_SPEED);
     drive.drive(translation, 0, true, true);
-    System.out.println(highestRoll + "     AUTO    ");
-    if(highestRoll > drive.gyro.getRoll()){
+    System.out.println(lowestRoll + "     AUTO    ");
+    if(lowestRoll > drive.gyro.getRoll()){
+      lowestRoll = drive.gyro.getRoll();
+    }
+    if(highestRoll < drive.gyro.getRoll()){
       highestRoll = drive.gyro.getRoll();
     }
-
   }
 
   // Called once the command ends or is interrupted.
@@ -51,8 +50,8 @@ double highestRoll = 0;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   if(drive.gyro.getRoll() > -10  && highestRoll < -13) {
-    System.out.println("Finished Docking");
+   if(drive.gyro.getRoll() > -3 && drive.gyro.getRoll() < 3 && lowestRoll < -13 && highestRoll > 13) {
+    new WaitCommand(.5);
     return true;
    }
    else {

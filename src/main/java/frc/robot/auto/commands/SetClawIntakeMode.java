@@ -29,7 +29,12 @@ public class SetClawIntakeMode extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (RobotContainer.claw.isIntakeDeactivated()) {
+      RobotContainer.claw.setState(ClawState.PASSIVE);
+      RobotContainer.wrist.setState(WristState.PASSIVE);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -38,6 +43,6 @@ public class SetClawIntakeMode extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

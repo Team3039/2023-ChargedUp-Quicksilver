@@ -23,7 +23,7 @@ public class RotateTo180 extends CommandBase {
     private Drive drive;
     private InterpolatedPS4Gamepad controller;
 
-    private PIDController rotController = new PIDController(0.03, 0.5, 0.00);
+    private PIDController rotController = new PIDController(0.05, 0.5, 0.00);
 
 
     /**
@@ -43,19 +43,19 @@ public class RotateTo180 extends CommandBase {
 
     @Override
     public void execute() {
-        double xAxis = -controller.interpolatedLeftYAxis() * 0.7;
-        double yAxis = -controller.interpolatedLeftXAxis() * 0.7;
+        double xAxis = -controller.interpolatedLeftYAxis();
+        double yAxis = -controller.interpolatedLeftXAxis();
         rotation = rotController.calculate(Math.abs(drive.getAngle()), rotSetPoint);
         rotation += yAxis;
         if (drive.getAngle() < 0) {
             rotation *= -1;
         }
-        rotation = MathUtil.clamp(rotation, -3.2, 3.2);
+        rotation = MathUtil.clamp(rotation, -5, 5);
         if (Math.abs(rotation) < 0.1) {
             rotation = 0;
         }
         
-        translation = new Translation2d(yAxis, xAxis);
+        translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);;
         drive.drive(translation, rotation, fieldRelative, openLoop);
     }
 

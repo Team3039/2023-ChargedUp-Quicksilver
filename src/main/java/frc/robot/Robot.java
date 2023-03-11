@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auto.routines.BottomTwoPieceAuto;
 import frc.robot.auto.routines.ChargeStationAuto;
 import frc.robot.auto.routines.DoNothing;
 import frc.robot.auto.routines.DriveStraight;
@@ -16,7 +20,8 @@ import frc.robot.auto.routines.SingleHighAuto;
 import frc.robot.auto.routines.SingleHighTaxiAuto;
 import frc.robot.auto.routines.SingleLowAuto;
 import frc.robot.auto.routines.SingleLowTaxiAuto;
-import frc.robot.auto.routines.TwoPieceAuto;
+import frc.robot.auto.routines.TopTwoPieceAuto;
+import frc.robot.auto.routines.TopTwoPieceWithGrabAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -35,6 +40,10 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
+
+  UsbCamera usbCamera;
+  // usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 160, 90, 40);
+  CvSource outputStream;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -55,7 +64,13 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low Taxi", new SingleLowTaxiAuto(RobotContainer.drive));
-    autoChooser.addOption("Bottom Two Piece YP", new TwoPieceAuto(RobotContainer.drive, RobotContainer.vision));
+    autoChooser.addOption("Bottom Two Piece YP", new BottomTwoPieceAuto(RobotContainer.drive, RobotContainer.vision));
+    autoChooser.addOption("Top Two Piece Auto", new TopTwoPieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Two Piece With Grab Auto", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
+
+    usbCamera = CameraServer.startAutomaticCapture();
+    outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+
   }
 
 
@@ -73,6 +88,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+      // Get the UsbCamera from CameraServer
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

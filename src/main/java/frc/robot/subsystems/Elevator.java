@@ -109,8 +109,8 @@ public class Elevator extends SubsystemBase {
 			elevator.set(output);
 		} else {
 			output = controller.calculate(encoder.getPosition(), setpointElevator) + Constants.Elevator.ELEVATOR_KS;
-			// elevator.set(MathUtil.clamp(output, -.55, .7));
-			elevator.set(MathUtil.clamp(output, -.15, .2));
+			elevator.set(MathUtil.clamp(output, -.65, .75));
+			// elevator.set(MathUtil.clamp(output, -.15, .2));
 
 		}
 	}
@@ -123,8 +123,8 @@ public class Elevator extends SubsystemBase {
 		setpointElevator = setpoint;
 	}
 
-	public boolean isAtSetpoint(boolean isProfiled) {
-		return  Math.abs((setpointElevator - encoder.getPosition())) <= 3;
+	public boolean isAtSetpoint(boolean isProfiled, double tolerance) {
+		return  Math.abs((setpointElevator - encoder.getPosition())) <= tolerance;
 	  }
 	
 	public double getPosition(){

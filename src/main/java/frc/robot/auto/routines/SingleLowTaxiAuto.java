@@ -32,16 +32,16 @@ public class SingleLowTaxiAuto extends SequentialCommandGroup {
       Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    SwerveControllerCommand driveStraight = new SwerveControllerCommand(
-      frc.robot.auto.TrajectoryGenerator.getstartToGamePiece(),
-      swerve::getPose,
-      Constants.Swerve.SWERVE_KINEMATICS,
-      new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-      new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-      thetaController,
-      Drive.getSwerveHeadingSupplier(0),
-      swerve::setModuleStates,
-      swerve);
+    // SwerveControllerCommand driveStraight = new SwerveControllerCommand(
+    //   frc.robot.auto.TrajectoryGenerator.getstartToGamePiece(),
+    //   swerve::getPose,
+    //   Constants.Swerve.SWERVE_KINEMATICS,
+    //   new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
+    //   new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
+    //   thetaController,
+    //   Drive.getSwerveHeadingSupplier(0),
+    //   swerve::setModuleStates,
+    //   swerve);
 
     addCommands(
       new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
@@ -51,7 +51,7 @@ thetaController.enableContinuousInput(-Math.PI, Math.PI);
       new WaitCommand(0.5),
       new SetClawIdleMode(),
       new SetWristIdleMode(),
-      new ParallelRaceGroup(driveStraight, new WaitCommand(3.3)),
+      // new ParallelRaceGroup(driveStraight, new WaitCommand(3.3)),
       new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
       new InstantCommand(() -> swerve.setGyro(180))
     );

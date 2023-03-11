@@ -17,7 +17,7 @@ public class RotateRobotToSetpoint extends CommandBase {
   double setpoint;
   double rotation;
 
-  private PIDController rotController = new PIDController(0.05, 0.6, 0.00);
+  private PIDController rotController = new PIDController(0.04, 0.6, 0.00);
 
   private Timer timer = new Timer();
 
@@ -26,8 +26,7 @@ public class RotateRobotToSetpoint extends CommandBase {
     this.drive = drive;
     this.setpoint = setpoint;
 
-    timer.reset();
-    timer.start();
+ 
 
     rotController.reset();
     rotController.setIntegratorRange(-0.2, 0.2);
@@ -37,7 +36,10 @@ public class RotateRobotToSetpoint extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -46,7 +48,7 @@ public class RotateRobotToSetpoint extends CommandBase {
         if (drive.getAngle() < 0) {
             rotation *= -1;
         }
-        rotation = MathUtil.clamp(rotation, -3.2, 3.2);
+        rotation = MathUtil.clamp(rotation, -5, 5);
 
         drive.drive(new Translation2d(), rotation, true, true);
   }
@@ -58,6 +60,6 @@ public class RotateRobotToSetpoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > .5;
+    return timer.hasElapsed(0.5);
   }
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.ChargeStationBalance;
 import frc.robot.auto.commands.DriveOntoChargeStation;
+import frc.robot.auto.commands.DrivePastChargeStation;
 import frc.robot.auto.commands.LockWheels;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
@@ -33,6 +34,8 @@ public class ChargeStationAuto extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new SetClawIdleMode(),
       new ActuateToIdle(),
+      new DrivePastChargeStation(s_Swerve),
+      new WaitCommand(1),
       new DriveOntoChargeStation(s_Swerve),
       new ChargeStationBalance(s_Swerve),
       new LockWheels(s_Swerve),

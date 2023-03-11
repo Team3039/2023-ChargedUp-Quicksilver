@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -82,6 +85,26 @@ public final class Constants {
             public static final double WRIST_MAX_ACCEL = 0;
       }
 
+      public static final class Vision {
+            public static final Transform3d cameraToRobot = new Transform3d(new Translation3d(Units.inchesToMeters(13.25), 0, 0), new Rotation3d(0, Units.degreesToRadians(-20), 0));
+
+            public static final double X_P = 1.0;
+            public static final double X_I = 0.0;
+            public static final double X_D = 0;
+    
+            public static final double Y_P = 1.0;
+            public static final double Y_I = 0.0;
+            public static final double Y_D = 0;
+            
+            public static final double THETA_P = .8;
+            public static final double THETA_I = 0.0;
+            public static final double THETA_D = 0;
+
+            public static final double X_TOLLERENCE = 0.01;
+            public static final double Y_TOLLERENCE = 0.02;
+            public static final double THETA_TOLLERENCE = 0.02;
+      }
+
       public static final class Swerve {
 
             /* Drive Feedforward */
@@ -157,7 +180,7 @@ public final class Constants {
                   public static final int driveMotorID = 1;
                   public static final int angleMotorID = 2;
                   public static final int canCoderID = 0;
-                  public static final double angleOffset = 5.537109375 + 180;
+                  public static final double angleOffset = 185.09765625;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -168,7 +191,7 @@ public final class Constants {
                   public static final int driveMotorID = 3;
                   public static final int angleMotorID = 4;
                   public static final int canCoderID = 1;
-                  public static final double angleOffset = 21.181640625 + 180;
+                  public static final double angleOffset = 201.884765625;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -179,7 +202,7 @@ public final class Constants {
                   public static final int driveMotorID = 5;
                   public static final int angleMotorID = 6;
                   public static final int canCoderID = 2;
-                  public static final double angleOffset = 248.73046875 + 180;
+                  public static final double angleOffset = 69.78515625;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);
@@ -190,7 +213,7 @@ public final class Constants {
                   public static final int driveMotorID = 7;
                   public static final int angleMotorID = 8;
                   public static final int canCoderID = 3;
-                  public static final double angleOffset = 45.966796875 + 180;
+                  public static final double angleOffset = 225.263671875;
                   public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                               angleMotorID,
                               canCoderID, angleOffset);

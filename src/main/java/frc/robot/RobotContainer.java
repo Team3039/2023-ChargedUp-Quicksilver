@@ -18,7 +18,9 @@ import frc.robot.commands.ClawRelease;
 import frc.robot.commands.ForceIdle;
 import frc.robot.commands.GridTagTrack;
 import frc.robot.commands.RotateTo180;
+import frc.robot.commands.SetElevatorManualOverride;
 import frc.robot.commands.SetLEDS;
+import frc.robot.commands.SetWristManualOverride;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TrackingMode;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
@@ -126,12 +128,11 @@ public class RobotContainer {
     );
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
-    driverL3.toggleOnTrue(new TrackingMode());
-    driverCircle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.72));
-    driverSquare.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.40));
-    driverTriangle.onTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.15));
+    driverCircle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.62));
+    driverSquare.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.50));
+    driverTriangle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.05));
 
-    driverR3.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
+    driverX.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
 
     driverL2.onTrue(new SetLEDS());
 
@@ -149,17 +150,19 @@ public class RobotContainer {
     operatorTriangle.onTrue(new ActuateLowToHighGrid());
     operatorX.onTrue(new ActuateToIdle());
 
-    operatorStart.whileTrue(new ForceIdle());
-    driverStart.whileTrue(new ForceIdle());
+    operatorPadButton.whileTrue(new ForceIdle());
 
     operatorL1.whileTrue(new ClawIntake(0, 10 + wrist.getWristOffset(), false));
     operatorL2.whileTrue(new ClawIntake(30, 65 + wrist.getWristOffset(), false));
     operatorR1.whileTrue(new ClawIntake(20.5, -9 + wrist.getWristOffset(), true));
+    driverR2.whileTrue(new ClawRelease());
     operatorR2.whileTrue(new ClawRelease());
+
+    operatorStart.toggleOnTrue(new SetElevatorManualOverride());
+    operatorStart.toggleOnTrue(new SetWristManualOverride());
 
     driverL1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(1)));
     driverR1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(-1)));
-
   }
 
   public Command getAutonomousCommand() {

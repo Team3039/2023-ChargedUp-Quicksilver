@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,9 +24,8 @@ import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGridAuto;
-import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
@@ -33,9 +33,9 @@ import frc.robot.subsystems.Vision;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoPieceAuto extends SequentialCommandGroup {
+public class BottomTwoPieceAuto extends SequentialCommandGroup {
     
-    public TwoPieceAuto(Drive swerve, Vision vision) {
+    public BottomTwoPieceAuto(Drive swerve, Vision vision) {
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
@@ -72,7 +72,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         swerve::resetOdometry,
         Constants.Swerve.SWERVE_KINEMATICS,
         new PIDConstants(1.0, 0.0, 0.0),
-        new PIDConstants(0.5, 0.0, 0.0),
+        new PIDConstants(1.0, 0.0, 0.0),
         swerve::setModuleStates,
         eventMap,
         true,
@@ -89,21 +89,24 @@ public class TwoPieceAuto extends SequentialCommandGroup {
                 new ActuateLowToHighGridAuto(),
                 new SetClawReleaseMode(),
                 new WaitCommand(0.5),
-                new ActuateToIdle(),
-                new SetClawIntakeMode(),
-                bottomTwoPieceTest,
+                new ActuateToIdleAuto(),
+                new ParallelDeadlineGroup(
+                    bottomTwoPieceTest, 
+                    new SequentialCommandGroup(
+                        new WaitCommand(.8),
+                        new SetClawIntakeMode())),
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-                new RotateRobotToSetpoint(swerve, 0),
+                new RotateRobotToSetpoint(swerve, -360),
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
                 // new SetVisionTrackingMode(),
-                // new GridTagTrackAuto(swerve, vision, true, true, -0.15),
+                // new GridTagTrackAuto(swerve, vision, true, true, 0.05),
                 // new SetVisionDriverMode(),
                 new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-                new ActuateLowToHighGrid(),
+                new ActuateLowToHighGridAuto(),
                 new SetClawReleaseMode(),
                 new WaitCommand(0.5),
                 new SetClawIdleMode(),
-                new ActuateToIdle(),
+                new ActuateToIdleAuto(),
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))         
               );
 

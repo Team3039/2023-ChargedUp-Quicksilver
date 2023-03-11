@@ -4,13 +4,24 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.vision.VisionPipeline;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Vision extends SubsystemBase {
 
@@ -21,12 +32,21 @@ public class Vision extends SubsystemBase {
 
   public VisionState visionState = VisionState.DRIVE;
 
-  public PhotonCamera camera = new PhotonCamera("Arducam_OV9281_USB_Camera");
+  public PhotonCamera visionCamera = new PhotonCamera("Arducam_OV9281_USB_Camera");
+  // public PhotonCamera driverCamera = new
+  // PhotonCamera("Microsoft_LifeCam_HD-3000");
   public PhotonPipelineResult result;
   public PhotonTrackedTarget target;
 
+  public static final AprilTagFieldLayout aprilTagFieldLayout = createFieldLayout();
+
+  PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+      PoseStrategy.AVERAGE_BEST_TARGETS,
+      visionCamera,
+      Constants.Vision.cameraToRobot);
+
   public Vision() {
-    camera.setDriverMode(false);
+    visionCamera.setDriverMode(true);
   }
 
   public VisionState getState() {
@@ -35,6 +55,17 @@ public class Vision extends SubsystemBase {
 
   public void setState(VisionState state) {
     visionState = state;
+  }
+
+  private static AprilTagFieldLayout createFieldLayout() {
+    try {
+      return new AprilTagFieldLayout(Filesystem
+          .getDeployDirectory()
+          .toPath()
+          .resolve("April_Tag_Layout.json"));
+    } catch (IOException e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -46,6 +77,7 @@ public class Vision extends SubsystemBase {
       target = result.getBestTarget();
     }
   }
+
   /** @return The X (forward/back) distance from the target */
   public double getX() {
     if (visionState.equals(VisionState.TRACKING)) {
@@ -56,8 +88,7 @@ public class Vision extends SubsystemBase {
     return 0;
   }
 
-
-  /** @return The X (left/right) distance from the target */
+  /** @return The Y (left/right) distance from the target */
   public double getY() {
     if (visionState.equals(VisionState.TRACKING)) {
       if (result.hasTargets()) {
@@ -67,18 +98,64 @@ public class Vision extends SubsystemBase {
     return 0;
   }
 
+  /**
+   * @return The X (forward/back) distance from the target, corrected to be
+   *         field orientated forward/back instead of robot orientated
+   **/
+  public double getFieldOrientedX(double robotAngle) {
+    if (visionState.equals(VisionState.TRACKING)) {
+      if (result.hasTargets()) {
+        double hypotenuse = Math.hypot(getX() + Units.inchesToMeters(13.25), getY() + Units.inchesToMeters(13.25));
+        double fieldOrientedTheta = Math.acos((getX() + Units.inchesToMeters(13.25)) / hypotenuse) - robotAngle;
+        return (Math.cos(fieldOrientedTheta) * hypotenuse) - Units.inchesToMeters(13.25);
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * @return The Y (left/right) distance from the target, corrected to be
+   *         field orientated left/right instead of robot orientated
+   **/
+  public double getFieldOrientedY(double robotAngle) {
+    if (visionState.equals(VisionState.TRACKING)) {
+      if (result.hasTargets()) {
+        double hypotenuse = Math.hypot(getX(), getY());
+        double fieldOrientedTheta = Math.asin(getY() / hypotenuse) - robotAngle;
+        return Math.sin(fieldOrientedTheta) * hypotenuse;
+      }
+    }
+    return 0;
+  }
+
+  // public Pose3d getVisionMeasurement() {
+  // Transform3d camToTargetTrans =
+  // result.getBestTarget().getBestCameraToTarget();
+  // Pose3d camPose =
+  // Constants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
+  // return camPose.transformBy(Constants.Vision.cameraToRobot).toPose2d()
+  // }
+
   @Override
   public void periodic() {
     SmartDashboard.putString("Vision State", String.valueOf(getState()));
-    
-    switch(visionState) {
+    if (visionCamera.getDriverMode()) {
+      visionCamera.setDriverMode(false);
+    }
+    result = visionCamera.getLatestResult();
+    recieveTarget();
+
+    switch (visionState) {
       case DRIVE:
-      camera.setDriverMode(true);
-      break;
+        break;
       case TRACKING:
-      camera.setDriverMode(false);
-      result = camera.getLatestResult();
-      recieveTarget();
+        if (result.hasTargets()) {
+          // System.out.println(PhotonUtils.estimateFieldToRobotAprilTag(
+          // target.getBestCameraToTarget(),
+          // aprilTagFieldLayout.getTagPose(target.getFiducialId()).get(),
+          // Constants.Vision.cameraToRobot));
+
+        }
     }
   }
 }

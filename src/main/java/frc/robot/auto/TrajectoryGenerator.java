@@ -16,22 +16,22 @@ public class TrajectoryGenerator {
 	public static TrajectoryGenerator INSTANCE = new TrajectoryGenerator();
 
 	public static TrajectoryConfig configFast = new TrajectoryConfig(
-			Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND,
-			Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-			.setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
-	// .setReversed(true);
+		Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND,
+		Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+		.setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
 
 	public static TrajectoryConfig configSlow = new TrajectoryConfig(
-			Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 2,
-			Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED - 2.5)
-			.setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
-	// .setReversed(true);
+		Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 2,
+		Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED - 2.5)
+		.setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
+
+	public TrajectoryGenerator() {}
 
 	public static Trajectory getstartToGamePiece() {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
 				List.of(
 						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
-						new Pose2d(new Translation2d(-4, 0), Rotation2d.fromDegrees(0))),
+						new Pose2d(new Translation2d(-3, 0), Rotation2d.fromDegrees(0))),
 				configSlow);
 	}
 
@@ -44,24 +44,19 @@ public class TrajectoryGenerator {
 				configFast);
 	}
 
-	public static Trajectory getBottomStartToBottomPiece() {
+	public static Trajectory getTopTwoPieceStartToGamePiece() {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
-			List.of(
-				new Pose2d(new Translation2d(Units.inchesToMeters(72.04724), Units.inchesToMeters(-19.2913)),
-				Rotation2d.fromDegrees(-5.5)),
-				new Pose2d(new Translation2d(Units.inchesToMeters(252.3622), Units.inchesToMeters(-36.61417)),
-				Rotation2d.fromDegrees(-5.5))),
-			configSlow);
+				List.of(
+						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180)),
+						new Pose2d(new Translation2d(Units.inchesToMeters(225.0), Units.inchesToMeters(15)), Rotation2d.fromDegrees(180))),
+				configSlow);
 	}
 
-	public static Trajectory getBottomPieceToBottomShelf() {
+	public static Trajectory getTopTwoPieceGamePieceToShelf() {
 		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
-			List.of(
-				new Pose2d(new Translation2d(Units.inchesToMeters(252.3622), Units.inchesToMeters(-36.61417)),
-				Rotation2d.fromDegrees(175)),
-				new Pose2d(new Translation2d(Units.inchesToMeters(72.04724), Units.inchesToMeters(-42.12598)),
-				Rotation2d.fromDegrees(175))),
-			configSlow);
+				List.of(
+						new Pose2d(new Translation2d(Units.inchesToMeters(225), Units.inchesToMeters(15)), Rotation2d.fromDegrees(0)),
+						new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(20)), Rotation2d.fromDegrees(0))),
+				configSlow);
 	}
-
 }

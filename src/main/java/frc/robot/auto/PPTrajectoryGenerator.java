@@ -60,7 +60,17 @@ public class PPTrajectoryGenerator {
 
     public static PathPlannerTrajectory getBottomPathTwoPiece() {
         return PathPlanner.loadPath("Bottom 2 Piece YP", 
-            new PathConstraints(3.0, 4.0));
+            new PathConstraints(4.0, 4.0));
+    }
+    
+    public static PathPlannerTrajectory getTopPathTwoPiece() {
+        return PathPlanner.loadPath("Top 2 Piece YP", 
+            new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getTopPathDriveOut() {
+        return PathPlanner.loadPath("Top Path Drive Out", 
+            new PathConstraints(4.0, 4.0));
     }
 
     public PPTrajectoryGenerator() {

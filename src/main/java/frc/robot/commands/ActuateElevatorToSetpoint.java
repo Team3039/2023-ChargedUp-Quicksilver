@@ -12,10 +12,11 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 public class ActuateElevatorToSetpoint extends CommandBase {
 
   double setpoint = 0;
-  public 
-  ActuateElevatorToSetpoint(double setpoint) {
+  double tolerance = 0;
+  public ActuateElevatorToSetpoint(double setpoint, double tolerance) {
     addRequirements(RobotContainer.elevator);
     this.setpoint = setpoint;
+    this.tolerance = tolerance;
   }
 
   // Called when the command is initially scheduled.
@@ -38,6 +39,6 @@ public class ActuateElevatorToSetpoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.elevator.isAtSetpoint(false);
+    return RobotContainer.elevator.isAtSetpoint(false, tolerance);
   }
 }

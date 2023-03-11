@@ -20,7 +20,7 @@ public class ActuateLowToPreScore extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ActuateWristToSetpoint(65),
-      new ActuateElevatorToSetpoint(30)
+      new ActuateElevatorToSetpoint(40, 3)
     );
   }
 }

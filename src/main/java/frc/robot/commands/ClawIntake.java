@@ -53,6 +53,7 @@ public class ClawIntake extends CommandBase {
       RobotContainer.wrist.setState(WristState.IDLE);
     } else {
       RobotContainer.claw.setState(ClawState.PASSIVE);
+      RobotContainer.wrist.setState(WristState.PASSIVE);
     }
     RobotContainer.claw.isSnappingAllowed(false);
   }
