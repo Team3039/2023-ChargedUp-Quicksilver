@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Vision.VisionState;

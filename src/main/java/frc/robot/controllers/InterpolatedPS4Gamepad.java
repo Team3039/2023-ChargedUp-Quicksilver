@@ -1,6 +1,7 @@
 package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import frc.robot.RobotContainer;
 
 public class InterpolatedPS4Gamepad extends PS4Controller {
 
@@ -25,18 +26,18 @@ public class InterpolatedPS4Gamepad extends PS4Controller {
     public double interpolatedLeftYAxis() {
         if (Math.abs(this.getLeftY()) <= 0.05)
             return 0.0;
-        return ((Math.sin(this.getLeftY())) * 1);
+        return ((Math.sin(this.getLeftY())) * RobotContainer.elevator.getPosition() > 45 ? 0.4 : 1.0);
     }
 
     public double interpolatedLeftXAxis() {
         if (Math.abs(this.getLeftX()) <= 0.05)
             return 0.0;
-        return ((Math.sin(this.getLeftX())) * 1);
+        return ((Math.sin(this.getLeftX())) * RobotContainer.elevator.getPosition() > 45 ? 0.4 : 1.0);
     }
 
     public double interpolatedRightXAxis() {
         if (Math.abs(this.getRightX()) <= 0.05)
             return 0.0;
-        return -(Math.sin(this.getRightX()) * .9);
+        return -(Math.sin(this.getRightX()) * RobotContainer.elevator.getPosition() > 45 ? 0.3 : 0.9);
     }
 }

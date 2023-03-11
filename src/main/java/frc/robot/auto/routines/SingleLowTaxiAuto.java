@@ -4,16 +4,15 @@
 
 package frc.robot.auto.routines;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
+import frc.robot.auto.PPTrajectoryGenerator;
+import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.SetWristIdleMode;
@@ -27,33 +26,21 @@ public class SingleLowTaxiAuto extends SequentialCommandGroup {
   /** Creates a new ChargeStationAuto. */
   public SingleLowTaxiAuto(Drive swerve) {
 
-    var thetaController = new ProfiledPIDController(
-      Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
-      Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
-thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    SwerveAutoBuilder autoBuilder = PPTrajectoryGenerator.getAutoBuilder();
 
-    // SwerveControllerCommand driveStraight = new SwerveControllerCommand(
-    //   frc.robot.auto.TrajectoryGenerator.getstartToGamePiece(),
-    //   swerve::getPose,
-    //   Constants.Swerve.SWERVE_KINEMATICS,
-    //   new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-    //   new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-    //   thetaController,
-    //   Drive.getSwerveHeadingSupplier(0),
-    //   swerve::setModuleStates,
-    //   swerve);
+    Command driveOut = autoBuilder.fullAuto(PPTrajectoryGenerator.getDriveOut());
 
     addCommands(
-      new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
-      new InstantCommand(() -> swerve.setGyro(0)),
-      new ActuateWristToSetpoint(20),
-      new SetClawReleaseMode(),
-      new WaitCommand(0.5),
-      new SetClawIdleMode(),
-      new SetWristIdleMode(),
-      // new ParallelRaceGroup(driveStraight, new WaitCommand(3.3)),
-      new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-      new InstantCommand(() -> swerve.setGyro(180))
-    );
+        new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOut().getInitialHolonomicPose())),
+        new InstantCommand(() -> swerve.setGyro(0)),
+        new ActuateWristToSetpoint(20),
+        new SetClawReleaseMode(),
+        new WaitCommand(0.5),
+        new SetClawIdleMode(),
+        new SetWristIdleMode(),
+        driveOut,
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new RotateRobotToSetpoint(swerve, 180, 5.0),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)));
   }
 }

@@ -13,7 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.routines.BottomTwoPieceAuto;
+import frc.robot.auto.routines.BottomTwoPieceWithGrabAuto;
 import frc.robot.auto.routines.ChargeStationAuto;
+import frc.robot.auto.routines.ChargeStationBottomLPath;
+import frc.robot.auto.routines.ChargeStationTaxiAuto;
+import frc.robot.auto.routines.ChargeStationTopLPath;
 import frc.robot.auto.routines.DoNothing;
 import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.SingleHighAuto;
@@ -37,6 +41,7 @@ import frc.robot.subsystems.Wrist.WristState;
 public class Robot extends TimedRobot {
   private Command autoCommand;
 
+  @SuppressWarnings("unused")
   private RobotContainer robotContainer;
   
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -54,19 +59,22 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
 
-    SmartDashboard.putData(autoChooser);
+    SmartDashboard.putData("Auto Selector", autoChooser);
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothing());
-    autoChooser.addOption("Mid Start Charge Station", new ChargeStationAuto(RobotContainer.drive));
-    // autoChooser.addOption("Two Piece", new TwoPieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Taxi", new ChargeStationTaxiAuto(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Normal", new ChargeStationAuto(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Top L Path", new ChargeStationTopLPath(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Bottom L Path", new ChargeStationBottomLPath(RobotContainer.drive));
     autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
     autoChooser.addOption("Single High", new SingleHighAuto(RobotContainer.drive));
     autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low Taxi", new SingleLowTaxiAuto(RobotContainer.drive));
-    autoChooser.addOption("Bottom Two Piece YP", new BottomTwoPieceAuto(RobotContainer.drive, RobotContainer.vision));
-    autoChooser.addOption("Top Two Piece Auto", new TopTwoPieceAuto(RobotContainer.drive));
-    autoChooser.addOption("Top Two Piece With Grab Auto", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
+    autoChooser.addOption("Bottom Two Piece", new BottomTwoPieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Bottom Two Piece With Grab", new BottomTwoPieceWithGrabAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Two Piece", new TopTwoPieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Two Piece With Grab", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
 
     usbCamera = CameraServer.startAutomaticCapture();
     outputStream = CameraServer.putVideo("Rectangle", 640, 480);

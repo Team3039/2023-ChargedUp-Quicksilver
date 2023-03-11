@@ -19,6 +19,7 @@ import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToPreScoreAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
@@ -26,13 +27,14 @@ import frc.robot.subsystems.Drive;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BottomTwoPieceAuto extends SequentialCommandGroup {
+public class BottomTwoPieceWithGrabAuto extends SequentialCommandGroup {
 
-	public BottomTwoPieceAuto(Drive swerve) {
+	public BottomTwoPieceWithGrabAuto(Drive swerve) {
 
 		SwerveAutoBuilder autoBuilder = PPTrajectoryGenerator.getAutoBuilder();
 
-		Command bottomTwoPieceTest = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathTwoPiece());
+		Command bottomTwoPiece = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathTwoPiece());
+		Command bottomPathDriveOut = autoBuilder.fullAuto(PPTrajectoryGenerator.getBottomPathDriveOut());
 
 		addCommands(
 				new InstantCommand(
@@ -42,10 +44,13 @@ public class BottomTwoPieceAuto extends SequentialCommandGroup {
 				new WaitCommand(0.5),
 				new ActuateToIdleAuto(),
 				new ParallelDeadlineGroup(
-						bottomTwoPieceTest,
+						bottomTwoPiece,
 						new SequentialCommandGroup(
 								new WaitCommand(.8),
-								new SetClawIntakeMode())),
+								new SetClawIntakeMode()),
+						new SequentialCommandGroup(
+								new WaitCommand(4),
+								new ActuateLowToPreScoreAuto())),
 				new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
 				new RotateRobotToSetpoint(swerve, -360, 0.5),
 				new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
@@ -55,6 +60,11 @@ public class BottomTwoPieceAuto extends SequentialCommandGroup {
 				new WaitCommand(0.5),
 				new SetClawIdleMode(),
 				new ActuateToIdleAuto(),
+				new ParallelDeadlineGroup(
+						bottomPathDriveOut,
+						new SequentialCommandGroup(
+								new WaitCommand(.8),
+								new SetClawIntakeMode())),
 				new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)));
 
 	}

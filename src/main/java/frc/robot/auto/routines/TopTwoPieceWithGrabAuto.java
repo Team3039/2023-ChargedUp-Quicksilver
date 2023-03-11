@@ -4,19 +4,14 @@
 
 package frc.robot.auto.routines;
 
-import java.util.HashMap;
-
-import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.auto.PPTrajectoryGenerator;
 import frc.robot.auto.commands.RotateRobotToSetpoint;
@@ -26,7 +21,6 @@ import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToPreScoreAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToPreScore;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 
@@ -38,26 +32,15 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
   /** Creates a new TopTwoPieceAuto. */
   public TopTwoPieceWithGrabAuto(Drive swerve) {
 
-    HashMap<String, Command> eventMap = new HashMap<>();
-    eventMap.put("marker1", new PrintCommand("Passed marker 1"));
-
-    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-        swerve::getPose,
-        swerve::resetOdometry,
-        Constants.Swerve.SWERVE_KINEMATICS,
-        new PIDConstants(1.0, 0.0, 0.0),
-        new PIDConstants(1.0, 0.0, 0.0),
-        swerve::setModuleStates,
-        eventMap,
-        true,
-        swerve);
+    SwerveAutoBuilder autoBuilder = PPTrajectoryGenerator.getAutoBuilder();
 
     Command TopTwoPiece = autoBuilder.fullAuto(PPTrajectoryGenerator.getTopPathTwoPiece());
     Command TopDriveOut = autoBuilder.fullAuto(PPTrajectoryGenerator.getTopPathDriveOut());
 
     addCommands(
         new InstantCommand(
-            () -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+            () -> swerve
+                .resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
         new ActuateLowToHighGridAuto(),
         new SetClawReleaseMode(),
@@ -72,7 +55,7 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
                 new WaitCommand(4),
                 new ActuateLowToPreScoreAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        new RotateRobotToSetpoint(swerve, 0),
+        new RotateRobotToSetpoint(swerve, 0, 0.5),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
         new ActuateLowToHighGridAuto(),
@@ -80,7 +63,8 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
         new WaitCommand(0.5),
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
-        new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathDriveOut().getInitialHolonomicPose())),
+        new InstantCommand(() -> swerve
+            .resetOdometry(PPTrajectoryGenerator.getTopPathDriveOut().getInitialHolonomicPose())),
         new ParallelDeadlineGroup(
             TopDriveOut,
             new SequentialCommandGroup(

@@ -5,11 +5,8 @@
 package frc.robot.auto.commands.AutoElevatorRoutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.commands.ActuateElevatorIdle;
-import frc.robot.commands.ActuateWristIdle;
 import frc.robot.commands.ActuateWristToSetpoint;
-import frc.robot.subsystems.Elevator.ElevatorState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,7 +18,7 @@ public class ActuateToIdleAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ActuateWristToSetpoint(90),
-      new ActuateElevatorIdle(90)
+      new ActuateElevatorIdle(70)
     );
   }
 }

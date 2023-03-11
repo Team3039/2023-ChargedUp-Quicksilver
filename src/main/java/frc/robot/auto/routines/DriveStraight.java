@@ -6,12 +6,10 @@ package frc.robot.auto.routines;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
@@ -40,27 +38,10 @@ public class DriveStraight extends SequentialCommandGroup {
                 swerve::setModuleStates,
                 swerve);
 
-        SwerveControllerCommand driveReverse = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getGamePieceToStart(),
-                swerve::getPose,
-                Constants.Swerve.SWERVE_KINEMATICS,
-                new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-                new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-                thetaController,
-                Drive.getSwerveHeadingSupplier(0),
-                swerve::setModuleStates,
-                swerve);
-
-
-        // Add your commands in the addCommands() call, e.g.
-        // addCommands(new FooCommand(), new BarCommand());
         addCommands(
                 new InstantCommand(() -> swerve.resetOdometry(frc.robot.auto.TrajectoryGenerator.getstartToGamePiece().getInitialPose())),
                 driveStraight,
                 new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true))
-                // new WaitCommand(0.2),
-                // driveReverse,
-                // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, true))
                 );
 
     }

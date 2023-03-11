@@ -15,13 +15,6 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Swerve;
-import frc.robot.auto.commands.SetClawIdleMode;
-import frc.robot.auto.commands.SetClawIntakeMode;
-import frc.robot.auto.commands.SetElevatorIdleMode;
-import frc.robot.auto.commands.SetElevatorPositionMode;
-import frc.robot.auto.commands.SetWristIdleMode;
-import frc.robot.auto.commands.SetWristPositionMode;
 import frc.robot.subsystems.Drive;
 
 /** Add your docs here. */
@@ -33,33 +26,13 @@ public class PPTrajectoryGenerator {
 
     public static SwerveAutoBuilder autoBuilder;
 
-    public static PathPlannerTrajectory getTestPath() {
-        return PathPlanner.loadPath("Test Code", 
-                new PathConstraints(1.0, 3));
-    }
-    
-    public static PathPlannerTrajectory getForwardTestPath() {
-        return PathPlanner.loadPath("Forward Path", 
-                new PathConstraints(3.0, 3));
-    }
-    
-    public static PathPlannerTrajectory getReverseTestPath() {
-        return PathPlanner.loadPath("Reverse Path", 
-                new PathConstraints(3.0, 3));
-    }
-
-    public static PathPlannerTrajectory getBottomPathThreePiece() {
-        return PathPlanner.loadPath("Bottom 3 Piece YYP", 
-            new PathConstraints(3.0, 5));
-    }
-
-    public static PathPlannerTrajectory getTopPathThreePiece() {
-        return PathPlanner.loadPath("Top 3 Piece YYP", 
-            new PathConstraints(3.0, 5));
-    }
-
     public static PathPlannerTrajectory getBottomPathTwoPiece() {
         return PathPlanner.loadPath("Bottom 2 Piece YP", 
+            new PathConstraints(4.0, 4.0));
+    }
+    
+    public static PathPlannerTrajectory getBottomPathDriveOut() {
+        return PathPlanner.loadPath("Bottom Path Drive Out", 
             new PathConstraints(4.0, 4.0));
     }
     
@@ -70,6 +43,21 @@ public class PPTrajectoryGenerator {
 
     public static PathPlannerTrajectory getTopPathDriveOut() {
         return PathPlanner.loadPath("Top Path Drive Out", 
+            new PathConstraints(4.0, 4.0));      
+    }
+
+    public static PathPlannerTrajectory getDriveOut() {
+        return PathPlanner.loadPath("Drive Out", 
+            new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getChargeStationTopLPath() {
+        return PathPlanner.loadPath("Charge Station Top L Path", 
+            new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getChargeStationBottomLPath() {
+        return PathPlanner.loadPath("Charge Station Bottom L Path", 
             new PathConstraints(4.0, 4.0));
     }
 
@@ -88,7 +76,7 @@ public class PPTrajectoryGenerator {
             swerve::resetOdometry,
             Constants.Swerve.SWERVE_KINEMATICS,
             new PIDConstants(1.0, 0.0, 0.0),
-            new PIDConstants(1, 0.0, 0.0),
+            new PIDConstants(1.0, 0.0, 0.0),
             swerve::setModuleStates,
             eventMap,
             true,

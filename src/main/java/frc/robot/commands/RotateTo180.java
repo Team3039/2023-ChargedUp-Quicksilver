@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.Vision.VisionState;
 
 public class RotateTo180 extends CommandBase {
 
@@ -17,14 +15,11 @@ public class RotateTo180 extends CommandBase {
     private boolean fieldRelative;
     private boolean openLoop;
     private double rotSetPoint = 180;
-    private double xAxis = 0;
-    private double yAxis = 0;
 
     private Drive drive;
     private InterpolatedPS4Gamepad controller;
 
     private PIDController rotController = new PIDController(0.05, 0.5, 0.00);
-
 
     /**
      * Driver control

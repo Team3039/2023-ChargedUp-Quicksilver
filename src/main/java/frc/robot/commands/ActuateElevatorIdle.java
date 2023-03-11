@@ -4,11 +4,8 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class ActuateElevatorIdle extends CommandBase {

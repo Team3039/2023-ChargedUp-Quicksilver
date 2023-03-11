@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -22,7 +19,6 @@ import frc.robot.commands.SetElevatorManualOverride;
 import frc.robot.commands.SetLEDS;
 import frc.robot.commands.SetWristManualOverride;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TrackingMode;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
 import frc.robot.commands.ElevatorRoutines.ActuateLowToPreScore;
@@ -35,13 +31,13 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+@SuppressWarnings("unused")
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final Vision vision = new Vision();
@@ -55,17 +51,11 @@ public class RobotContainer {
   public static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   public static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
 
-
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driverPad, PS4Controller.Button.kCross.value);
   private final JoystickButton driverSquare = new JoystickButton(driverPad, PS4Controller.Button.kSquare.value);
   private final JoystickButton driverTriangle = new JoystickButton(driverPad, PS4Controller.Button.kTriangle.value);
   private final JoystickButton driverCircle = new JoystickButton(driverPad, PS4Controller.Button.kCircle.value);
-
-  // private final JoystickButton driverDPadUp = new JoystickButton(driverPad, );
-  // private final JoystickButton driverDPadDown = new JoystickButton(driverPad, PS4Controller.Button.DPAD_DOWN);
-  // private final JoystickButton driverDPadLeft = new JoystickButton(driverPad, PS4Controller.Button.DPAD_LEFT);
-  // private final JoystickButton driverDPadRight = new JoystickButton(driverPad, PS4Controller.Button.DPAD_RIGHT);
 
   private final JoystickButton driverL1 = new JoystickButton(driverPad, PS4Controller.Button.kL1.value);
   private final JoystickButton driverR1 = new JoystickButton(driverPad, PS4Controller.Button.kR1.value);

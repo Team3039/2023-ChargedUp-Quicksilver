@@ -14,92 +14,81 @@ import frc.robot.subsystems.Vision.VisionState;
 
 public class GridTagTrack extends CommandBase {
 
-    private double xAxis = 0; 
-    private double yAxis = 0;
-    private double rotation = 0;
-    private Translation2d translation;
-    private boolean fieldRelative;
-    private boolean openLoop;
-    private double ySetPoint = 0.0;
-    private double xSetPoint = -0.82;
-    private Drive drive;
-    private Vision vision;
-    private InterpolatedPS4Gamepad controller;
+	private double xAxis = 0;
+	private double yAxis = 0;
+	private double rotation = 0;
+	private Translation2d translation;
+	private boolean fieldRelative;
+	private boolean openLoop;
+	private double ySetPoint = 0.0;
+	private double xSetPoint = -0.82;
+	private Drive drive;
+	private Vision vision;
+	@SuppressWarnings("unused")
+	private InterpolatedPS4Gamepad controller;
 
-    private PIDController xController = new PIDController(0.5, 0.2, 0.0);
-    private PIDController yController = new PIDController(0.5, 0.2, 0.0);
-    
-    public GridTagTrack(Drive drive, Vision vision, InterpolatedPS4Gamepad controller, boolean fieldRelative, boolean openLoop, double ySetPoint) {
-        this.drive = drive;
-        this.vision = vision;
-        addRequirements(drive, vision);
-        
-        this.controller = controller;
-        this.fieldRelative = fieldRelative;
-        this.openLoop = openLoop;
-        this.ySetPoint = ySetPoint;
+	private PIDController xController = new PIDController(0.5, 0.2, 0.0);
+	private PIDController yController = new PIDController(0.5, 0.2, 0.0);
 
-        // rotController.reset();
-        // rotController.setIntegratorRange(-0.2, 0.2);
-        yController.reset();
-        yController.setIntegratorRange(-0.2, 0.2);
-        xController.reset();
-        xController.setIntegratorRange(-0.2, 0.2);
-    }
+	public GridTagTrack(Drive drive, Vision vision, InterpolatedPS4Gamepad controller, boolean fieldRelative,
+			boolean openLoop, double ySetPoint) {
+		this.drive = drive;
+		this.vision = vision;
+		addRequirements(drive, vision);
 
-    @Override
-    public void initialize() {
-        vision.setState(VisionState.TRACKING);
-        if (vision.result.hasTargets()) {
-        drive.resetOdometry(new Pose2d(new Translation2d(-vision.getX(), -vision.getY()),
-            new Rotation2d()));
-        }
-    }
+		this.controller = controller;
+		this.fieldRelative = fieldRelative;
+		this.openLoop = openLoop;
+		this.ySetPoint = ySetPoint;
 
-    @Override
-    public void execute() {
-        if (vision.getState().equals(VisionState.TRACKING)) {
-        // rotation = rotController.calculate(Math.abs(drive.getAngle()), rotSetPoint);
-        // rotation += yAxis;
-        // if (drive.getAngle() < 0) {
-        //     rotation *= -1;
-        // }
-        // rotation = MathUtil.clamp(rotation, -3.2, 3.2);
-        // if (Math.abs(rotation) < 0.1) {
-        //     rotation = 0;
-        // }
+		// rotController.reset();
+		// rotController.setIntegratorRange(-0.2, 0.2);
+		yController.reset();
+		yController.setIntegratorRange(-0.2, 0.2);
+		xController.reset();
+		xController.setIntegratorRange(-0.2, 0.2);
+	}
 
+	@Override
+	public void initialize() {
+		vision.setState(VisionState.TRACKING);
+		if (vision.result.hasTargets()) {
+			drive.resetOdometry(new Pose2d(new Translation2d(-vision.getX(), -vision.getY()),
+					new Rotation2d()));
+		}
+	}
 
-        yAxis = -1 * yController.calculate(drive.getPose().getY(), ySetPoint);
-        yAxis = MathUtil.clamp(yAxis, -.2, .2);
-        System.out.println(yAxis + " Y ");
-   
-        if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.03) {
-            yAxis = 0;
-        }       
-        // yAxis = -controller.interpolatedLeftXAxis();
-        
-        xAxis = -1 * xController.calculate(drive.getPose().getX(), xSetPoint);
-        xAxis = MathUtil.clamp(xAxis, -.2, .2);
-        System.out.println(xAxis + " X ");
-        if (Math.abs(xSetPoint - drive.getPose().getX()) < 0.03) {
-            xAxis = 0;
-        }      
-        // xAxis = -controller.interpolatedLeftYAxis();
+	@Override
+	public void execute() {
+		if (vision.getState().equals(VisionState.TRACKING)) {
+			yAxis = -1 * yController.calculate(drive.getPose().getY(), ySetPoint);
+			yAxis = MathUtil.clamp(yAxis, -.2, .2);
+			System.out.println(yAxis + " Y ");
 
-        
-        // (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
-        translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
-        drive.drive(translation, rotation, fieldRelative, openLoop);
-        }
-    }
+			if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.03) {
+				yAxis = 0;
+			}
+			// yAxis = -controller.interpolatedLeftXAxis();
 
-    @Override
-    public boolean isFinished() {
-        if(vision.getState().equals(VisionState.DRIVE)) {
-            return true;
-        }
-        return false;
-    }
-}    
+			xAxis = -1 * xController.calculate(drive.getPose().getX(), xSetPoint);
+			xAxis = MathUtil.clamp(xAxis, -.2, .2);
+			System.out.println(xAxis + " X ");
+			if (Math.abs(xSetPoint - drive.getPose().getX()) < 0.03) {
+				xAxis = 0;
+			}
+			// xAxis = -controller.interpolatedLeftYAxis();
 
+			// (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
+			translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
+			drive.drive(translation, rotation, fieldRelative, openLoop);
+		}
+	}
+
+	@Override
+	public boolean isFinished() {
+		if (vision.getState().equals(VisionState.DRIVE)) {
+			return true;
+		}
+		return false;
+	}
+}
