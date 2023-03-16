@@ -233,8 +233,8 @@ public class Drive extends SubsystemBase {
         // System.out.println(getPitch() + " Pitch");
 
         // System.out.println(swerveOdometry.getPoseMeters());  
-        // System.out.println(getRoll());     
-        System.out.println(getAngle());  
+        System.out.println(getRoll());     
+        // System.out.println(getAngle());  
 
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();

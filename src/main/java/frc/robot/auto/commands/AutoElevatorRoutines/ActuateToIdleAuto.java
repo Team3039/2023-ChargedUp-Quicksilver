@@ -18,7 +18,7 @@ public class ActuateToIdleAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ActuateWristToSetpoint(90),
-      new ActuateElevatorIdle(70)
+      new ActuateElevatorIdle(60)
     );
   }
 }

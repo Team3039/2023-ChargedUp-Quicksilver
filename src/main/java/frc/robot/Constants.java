@@ -60,7 +60,7 @@ public final class Constants {
 
       public static final class Elevator {
             // Elevator PID //
-            public static final double ELEVATOR_KP = 0.05;
+            public static final double ELEVATOR_KP = 0.04;
             public static final double ELEVATOR_KI = 0;
             public static final double ELEVATOR_KD = 0;
 
@@ -73,11 +73,11 @@ public final class Constants {
       }
 
       public static final class Wrist {
-            public static final double WRIST_KP = 0.010;
+            public static final double WRIST_KP = 0.008;
             public static final double WRIST_KI = 0;
             public static final double WRIST_KD = 0;
             public static final double WRIST_KS = 0.025;
-            public static final double WRIST_KG = 0.03;
+            public static final double WRIST_KG = 0.025;
             public static final double WRIST_KV = 0;
 
             public static final double WRIST_GEAR_RATIO = 127.27272727;

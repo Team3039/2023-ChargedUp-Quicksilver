@@ -2,14 +2,11 @@ package frc.robot.auto;
 
 import java.util.List;
 
-// import javax.management.MalformedObjectNameException;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class TrajectoryGenerator {
@@ -35,28 +32,28 @@ public class TrajectoryGenerator {
 				configSlow);
 	}
 
-	public static Trajectory getGamePieceToStart() {
-		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
-				List.of(
-						new Pose2d(new Translation2d(2, 0.5),
-								Rotation2d.fromDegrees(180)),
-						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180))),
-				configFast);
-	}
+	// public static Trajectory getGamePieceToStart() {
+	// 	return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+	// 			List.of(
+	// 					new Pose2d(new Translation2d(2, 0.5),
+	// 							Rotation2d.fromDegrees(180)),
+	// 					new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180))),
+	// 			configFast);
+	// }
 
-	public static Trajectory getTopTwoPieceStartToGamePiece() {
-		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
-				List.of(
-						new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180)),
-						new Pose2d(new Translation2d(Units.inchesToMeters(225.0), Units.inchesToMeters(15)), Rotation2d.fromDegrees(180))),
-				configSlow);
-	}
+	// public static Trajectory getTopTwoPieceStartToGamePiece() {
+	// 	return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+	// 			List.of(
+	// 					new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180)),
+	// 					new Pose2d(new Translation2d(Units.inchesToMeters(225.0), Units.inchesToMeters(15)), Rotation2d.fromDegrees(180))),
+	// 			configSlow);
+	// }
 
-	public static Trajectory getTopTwoPieceGamePieceToShelf() {
-		return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
-				List.of(
-						new Pose2d(new Translation2d(Units.inchesToMeters(225), Units.inchesToMeters(15)), Rotation2d.fromDegrees(0)),
-						new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(20)), Rotation2d.fromDegrees(0))),
-				configSlow);
-	}
+	// public static Trajectory getTopTwoPieceGamePieceToShelf() {
+	// 	return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+	// 			List.of(
+	// 					new Pose2d(new Translation2d(Units.inchesToMeters(225), Units.inchesToMeters(15)), Rotation2d.fromDegrees(0)),
+	// 					new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(20)), Rotation2d.fromDegrees(0))),
+	// 			configSlow);
+	// }
 }

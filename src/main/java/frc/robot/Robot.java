@@ -19,7 +19,6 @@ import frc.robot.auto.routines.ChargeStationBottomLPath;
 import frc.robot.auto.routines.ChargeStationTaxiAuto;
 import frc.robot.auto.routines.ChargeStationTopLPath;
 import frc.robot.auto.routines.DoNothing;
-import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.SingleHighAuto;
 import frc.robot.auto.routines.SingleHighTaxiAuto;
 import frc.robot.auto.routines.SingleLowAuto;
@@ -66,7 +65,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Charge Station Normal", new ChargeStationAuto(RobotContainer.drive));
     autoChooser.addOption("Charge Station Top L Path", new ChargeStationTopLPath(RobotContainer.drive));
     autoChooser.addOption("Charge Station Bottom L Path", new ChargeStationBottomLPath(RobotContainer.drive));
-    autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
+    // autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
     autoChooser.addOption("Single High", new SingleHighAuto(RobotContainer.drive));
     autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));

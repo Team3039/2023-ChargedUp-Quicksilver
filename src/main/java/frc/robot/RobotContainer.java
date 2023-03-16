@@ -142,9 +142,9 @@ public class RobotContainer {
 
     operatorPadButton.whileTrue(new ForceIdle());
 
-    operatorL1.whileTrue(new ClawIntake(0, 10 + wrist.getWristOffset(), false));
+    operatorL1.whileTrue(new ClawIntake(0, 6 + wrist.getWristOffset(), false));
     operatorL2.whileTrue(new ClawIntake(30, 65 + wrist.getWristOffset(), false));
-    operatorR1.whileTrue(new ClawIntake(20.5, -9 + wrist.getWristOffset(), true));
+    operatorR1.whileTrue(new ClawIntake(19.5, -5 + wrist.getWristOffset(), true));
     driverR2.whileTrue(new ClawRelease());
     operatorR2.whileTrue(new ClawRelease());
 

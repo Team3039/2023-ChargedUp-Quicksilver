@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.LockWheels;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.normal.ChargeStationBalance;
 import frc.robot.auto.commands.chargestation.normal.DriveOntoChargeStation;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,18 +20,18 @@ import frc.robot.subsystems.Drive;
 public class ChargeStationAuto extends SequentialCommandGroup {
 
   /** Creates a new ChargeStationAuto. */
-  public ChargeStationAuto(Drive s_Swerve) {
+  public ChargeStationAuto(Drive swerve) {
     addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-        new InstantCommand(() -> s_Swerve.setGyro(0)),
-        new ActuateLowToHighGrid(),
+        new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
+        new InstantCommand(() -> swerve.setGyro(0)),
+        new ActuateLowToHighGridAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),
         new SetClawIdleMode(),
-        new ActuateToIdle(),
-        new DriveOntoChargeStation(s_Swerve),
-        new ChargeStationBalance(s_Swerve),
-        new LockWheels(s_Swerve),
-        new InstantCommand(() -> s_Swerve.setGyro(180)));
+        new ActuateToIdleAuto(),
+        new DriveOntoChargeStation(swerve),
+        new ChargeStationBalance(swerve),
+        new LockWheels(swerve),
+        new InstantCommand(() -> swerve.setGyro(180)));
   }
 }

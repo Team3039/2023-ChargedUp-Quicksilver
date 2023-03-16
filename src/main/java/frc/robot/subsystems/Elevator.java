@@ -31,13 +31,9 @@ public class Elevator extends SubsystemBase {
 
 	public ElevatorState elevatorState = ElevatorState.IDLE;
 
-	// public CANSparkMax elevatorA = new CANSparkMax(Constants.Ports.ELEVATOR_A,
-	// MotorType.kBrushless);
 	public CANSparkMax elevator = new CANSparkMax(Constants.Ports.ELEVATOR_B, MotorType.kBrushless);
 
 	public RelativeEncoder encoder = elevator.getEncoder();
-
-	// public SparkMaxPIDController controller = elevator.getPIDController();
 
 	public ElevatorFeedforward feedForward = new ElevatorFeedforward(
 			Constants.Elevator.ELEVATOR_KS,
@@ -60,30 +56,25 @@ public class Elevator extends SubsystemBase {
 	SparkMaxLimitSwitch forwardLimit = elevator.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
 	SparkMaxLimitSwitch ReverseLimit = elevator.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
 
-	// rotations
+	// neo rotations
 	public static double setpointElevator = 0;
 
 	public Elevator() {
 		forwardLimit.enableLimitSwitch(false);
 		ReverseLimit.enableLimitSwitch(false);
-		// elevatorB.follow(elevatorA, true);
 
-		// elevatorA.setIdleMode(IdleMode.kBrake);
 		elevator.setIdleMode(IdleMode.kBrake);
 
-		// elevatorA.setInverted(false);
 		elevator.setInverted(false);
 
-		// elevatorA.setSoftLimit(SoftLimitDirection.kForward, 10000);
-		// elevatorA.setSoftLimit(SoftLimitDirection.kReverse, -1000);
 		elevator.enableSoftLimit(SoftLimitDirection.kForward, true);
 		elevator.enableSoftLimit(SoftLimitDirection.kReverse, true);
-		elevator.setSoftLimit(SoftLimitDirection.kForward, 86);
+		elevator.setSoftLimit(SoftLimitDirection.kForward, 88);
 		elevator.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
 		// elevatorA.burnFlash();
 		elevator.burnFlash();
-		
+
 		controller.setTolerance(3);
 		profiledController.setTolerance(3);
 	}
@@ -110,7 +101,7 @@ public class Elevator extends SubsystemBase {
 		} else {
 			output = controller.calculate(encoder.getPosition(), setpointElevator) + Constants.Elevator.ELEVATOR_KS;
 			elevator.set(MathUtil.clamp(output, -.65, .75));
-			// elevator.set(MathUtil.clamp(output, -.15, .2));
+			// elevator.set(MathUtil.clamp(output, -.2, .3));
 
 		}
 	}
@@ -124,10 +115,10 @@ public class Elevator extends SubsystemBase {
 	}
 
 	public boolean isAtSetpoint(boolean isProfiled, double tolerance) {
-		return  Math.abs((setpointElevator - encoder.getPosition())) <= tolerance;
-	  }
-	
-	public double getPosition(){
+		return Math.abs((setpointElevator - encoder.getPosition())) <= tolerance;
+	}
+
+	public double getPosition() {
 		return encoder.getPosition();
 	}
 

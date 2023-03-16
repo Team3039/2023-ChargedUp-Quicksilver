@@ -50,7 +50,7 @@ double highestRoll = 0;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   if(drive.gyro.getRoll() > -10  && highestRoll < -13) {
+   if(drive.gyro.getRoll() > -10  && highestRoll < -12) {
     System.out.println("Finished Docking");
     return true;
    }

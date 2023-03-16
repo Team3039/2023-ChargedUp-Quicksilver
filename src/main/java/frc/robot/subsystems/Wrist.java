@@ -53,6 +53,7 @@ public class Wrist extends SubsystemBase {
       Constants.Wrist.WRIST_KD);
 
   public static double setpointWrist = 0;
+  public static double idleSetpoint = 0;
 
   double wristSetpointOffset = 0;
 
@@ -61,15 +62,15 @@ public class Wrist extends SubsystemBase {
 
     // Wrist must start in the vertical position in order to be legal. DONT FORGET TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    wrist.setSelectedSensorPosition(degreesToTicks(-117.25));
-    // wrist.setSelectedSensorPosition(-90);
-
+    wrist.setInverted(true);
+    wrist.setSensorPhase(true);
+    
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
-    wrist.configForwardSoftLimitThreshold(degreesToTicks(120));
-    wrist.configReverseSoftLimitThreshold(degreesToTicks(-30));
+    wrist.configForwardSoftLimitThreshold(degreesToTicks(121));
+    wrist.configReverseSoftLimitThreshold(degreesToTicks(-15));
 
-    wrist.setInverted(true);
+    wrist.setSelectedSensorPosition(degreesToTicks(120.9));
   }
 
   public WristState getState() {
@@ -102,12 +103,12 @@ public class Wrist extends SubsystemBase {
           feedForward.calculate(Math.toRadians(profiledController.getSetpoint().position),
               profiledController.getSetpoint().velocity));
     } else {
-      wrist.set(ControlMode.PercentOutput, MathUtil.clamp(controller.calculate(
+      wrist.set(ControlMode.PercentOutput, -1 * MathUtil.clamp(controller.calculate(
           ticksToDegrees(wrist.getSelectedSensorPosition()),
           setpointWrist), -.18, .2),
           DemandType.ArbitraryFeedForward,
-          Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
-              Constants.Wrist.WRIST_KS);
+          -1 * (Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
+              Constants.Wrist.WRIST_KS));
     }
   }
 
@@ -154,6 +155,7 @@ public class Wrist extends SubsystemBase {
     SmartDashboard.putString("Wrist State", String.valueOf(getState()));
     // SmartDashboard.putNumber("Wrist Offset", getWristOffset());
     SmartDashboard.putNumber("Wrist Setpoint", getSetpoint());
+    idleSetpoint = getState().equals(WristState.IDLE) ? idleSetpoint : setpointWrist;
     
 
     switch (wristState) {
@@ -164,8 +166,12 @@ public class Wrist extends SubsystemBase {
         // } else {
           // setSetpoint(30);
         // }
-        if (!RobotContainer.claw.isIntakeDeactivated() && RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
+        if (RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
         setSetpoint(90);
+        setWristPosition(false);
+        }
+        else {
+        setSetpoint(idleSetpoint);
         setWristPosition(false);
         }
         break;

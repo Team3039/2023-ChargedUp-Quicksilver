@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.LockWheels;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.taxi.ChargeStationBalanceTaxi;
 import frc.robot.auto.commands.chargestation.taxi.DriveOntoChargeStationTaxi;
 import frc.robot.auto.commands.chargestation.taxi.DrivePastChargeStationTaxi;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -24,20 +24,20 @@ import frc.robot.subsystems.Drive;
 public class ChargeStationTaxiAuto extends SequentialCommandGroup {
 
   /** Creates a new ChargeStationAuto. */
-  public ChargeStationTaxiAuto(Drive s_Swerve) {
+  public ChargeStationTaxiAuto(Drive swerve) {
     addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-        new InstantCommand(() -> s_Swerve.setGyro(0)),
-        new ActuateLowToHighGrid(),
+        new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
+        new InstantCommand(() -> swerve.setGyro(0)),
+        new ActuateLowToHighGridAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),
         new SetClawIdleMode(),
-        new ActuateToIdle(),
-        new DrivePastChargeStationTaxi(s_Swerve),
+        new ActuateToIdleAuto(),
+        new DrivePastChargeStationTaxi(swerve),
         new WaitCommand(1),
-        new DriveOntoChargeStationTaxi(s_Swerve),
-        new ChargeStationBalanceTaxi(s_Swerve),
-        new LockWheels(s_Swerve),
-        new InstantCommand(() -> s_Swerve.setGyro(180)));
+        new DriveOntoChargeStationTaxi(swerve),
+        new ChargeStationBalanceTaxi(swerve),
+        new LockWheels(swerve),
+        new InstantCommand(() -> swerve.setGyro(180)));
   }
 }

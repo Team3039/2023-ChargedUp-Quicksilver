@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -25,11 +25,11 @@ public class SingleHighAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
       new InstantCommand(() -> s_Swerve.setGyro(0)),
-      new ActuateLowToHighGrid(),
+      new ActuateLowToHighGridAuto(),
       new SetClawReleaseMode(),
       new WaitCommand(0.5),
       new SetClawIdleMode(),
-      new ActuateToIdle(),
+      new ActuateToIdleAuto(),
       new InstantCommand(() -> s_Swerve.setGyro(180))
       // new DriveOntoChargeStation(s_Swerve),
       // new ChargeStationBalance(s_Swerve),

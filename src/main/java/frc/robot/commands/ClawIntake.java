@@ -33,7 +33,7 @@ public class ClawIntake extends CommandBase {
     if (RobotContainer.elevator.getPosition() < 30) {
     Wrist.setSetpoint(setpointW);
     RobotContainer.wrist.setState(WristState.POSITION);
-    new WaitCommand(0.5);
+    new WaitCommand(0.2);
     Elevator.setSetpoint(setpointE);
     RobotContainer.elevator.setState(ElevatorState.POSITION);
     RobotContainer.claw.isSnappingAllowed(isSnappingAllowed);

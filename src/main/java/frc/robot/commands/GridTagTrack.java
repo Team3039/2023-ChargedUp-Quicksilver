@@ -16,19 +16,20 @@ public class GridTagTrack extends CommandBase {
 
 	private double xAxis = 0;
 	private double yAxis = 0;
+	
 	private double rotation = 0;
 	private Translation2d translation;
 	private boolean fieldRelative;
 	private boolean openLoop;
 	private double ySetPoint = 0.0;
-	private double xSetPoint = -0.82;
+	private double xSetPoint = -0.66;
 	private Drive drive;
 	private Vision vision;
 	@SuppressWarnings("unused")
 	private InterpolatedPS4Gamepad controller;
 
-	private PIDController xController = new PIDController(0.5, 0.2, 0.0);
-	private PIDController yController = new PIDController(0.5, 0.2, 0.0);
+	private PIDController xController = new PIDController(0.3, 0.2, 0.0);
+	private PIDController yController = new PIDController(0.3, 0.2, 0.0);
 
 	public GridTagTrack(Drive drive, Vision vision, InterpolatedPS4Gamepad controller, boolean fieldRelative,
 			boolean openLoop, double ySetPoint) {
@@ -52,6 +53,8 @@ public class GridTagTrack extends CommandBase {
 	@Override
 	public void initialize() {
 		vision.setState(VisionState.TRACKING);
+		vision.getCameraResult();
+		vision.recieveTarget();
 		if (vision.result.hasTargets()) {
 			drive.resetOdometry(new Pose2d(new Translation2d(-vision.getX(), -vision.getY()),
 					new Rotation2d()));
@@ -62,7 +65,7 @@ public class GridTagTrack extends CommandBase {
 	public void execute() {
 		if (vision.getState().equals(VisionState.TRACKING)) {
 			yAxis = -1 * yController.calculate(drive.getPose().getY(), ySetPoint);
-			yAxis = MathUtil.clamp(yAxis, -.2, .2);
+			yAxis = MathUtil.clamp(yAxis, -.4, .4);
 			System.out.println(yAxis + " Y ");
 
 			if (Math.abs(ySetPoint - drive.getPose().getY()) < 0.03) {
@@ -70,13 +73,13 @@ public class GridTagTrack extends CommandBase {
 			}
 			// yAxis = -controller.interpolatedLeftXAxis();
 
-			xAxis = -1 * xController.calculate(drive.getPose().getX(), xSetPoint);
-			xAxis = MathUtil.clamp(xAxis, -.2, .2);
-			System.out.println(xAxis + " X ");
-			if (Math.abs(xSetPoint - drive.getPose().getX()) < 0.03) {
-				xAxis = 0;
-			}
-			// xAxis = -controller.interpolatedLeftYAxis();
+			// xAxis = -1 * xController.calculate(drive.getPose().getX(), xSetPoint);
+			// xAxis = MathUtil.clamp(xAxis, -.2, .2);
+			// System.out.println(xAxis + " X ");
+			// if (Math.abs(xSetPoint - drive.getPose().getX()) < 0.03) {
+			// 	xAxis = 0;
+			// }
+			xAxis = -controller.interpolatedLeftYAxis();
 
 			// (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
 			translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
@@ -86,9 +89,12 @@ public class GridTagTrack extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		if (vision.getState().equals(VisionState.DRIVE)) {
+		// if (((Math.abs(drive.getPose().getX() - xSetPoint) < .02) && 
+		if (Math.abs(drive.getPose().getY() - ySetPoint) < .04) {
 			return true;
 		}
 		return false;
 	}
 }
+
+

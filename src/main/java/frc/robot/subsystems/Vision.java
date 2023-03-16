@@ -69,8 +69,10 @@ public class Vision extends SubsystemBase {
    * camera.
    */
   public void recieveTarget() {
-    if (result.hasTargets()) {
-      target = result.getBestTarget();
+    if (result != null) {
+      if (result.hasTargets()) {
+        target = result.getBestTarget();
+      }
     }
   }
 
@@ -124,27 +126,26 @@ public class Vision extends SubsystemBase {
     return 0;
   }
 
-  // public Pose3d getVisionMeasurement() {
-  // Transform3d camToTargetTrans =
-  // result.getBestTarget().getBestCameraToTarget();
-  // Pose3d camPose =
-  // Constants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
-  // return camPose.transformBy(Constants.Vision.cameraToRobot).toPose2d()
-  // }
+  public void getCameraResult() {
+    result = visionCamera.getLatestResult();
+  }
+
+  public void setDriverMode(boolean driverMode) {
+     visionCamera.setDriverMode(driverMode);
+  }
 
   @Override
   public void periodic() {
     SmartDashboard.putString("Vision State", String.valueOf(getState()));
-    if (visionCamera.getDriverMode()) {
-      visionCamera.setDriverMode(false);
-    }
-    result = visionCamera.getLatestResult();
-    recieveTarget();
 
     switch (visionState) {
       case DRIVE:
+        setDriverMode(true);
         break;
       case TRACKING:
+        setDriverMode(false);
+        getCameraResult();
+        recieveTarget();
         if (result.hasTargets()) {
           // System.out.println(PhotonUtils.estimateFieldToRobotAprilTag(
           // target.getBestCameraToTarget(),

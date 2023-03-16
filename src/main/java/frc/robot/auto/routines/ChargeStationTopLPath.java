@@ -18,10 +18,10 @@ import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.Lpath.ChargeStationBalanceLPath;
 import frc.robot.auto.commands.chargestation.Lpath.DriveOntoChargeStationLPath;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -37,21 +37,21 @@ public class ChargeStationTopLPath extends SequentialCommandGroup {
     addCommands(
     new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getChargeStationTopLPath().getInitialHolonomicPose())),
     new InstantCommand(() -> swerve.setGyro(0)),
-    new ActuateLowToHighGrid(),
+    new ActuateLowToHighGridAuto(),
     new SetClawReleaseMode(),
     new WaitCommand(0.5),
     new SetClawIdleMode(),
-    new ActuateToIdle(),
+    new ActuateToIdleAuto(),
     new ParallelDeadlineGroup(
       topLPath,
       new SequentialCommandGroup(
           new WaitCommand(.8),
-          new SetClawIntakeMode()),
+          new SetClawIntakeMode())),
     new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
     new RotateRobotToSetpoint(swerve, 180, 1),
     new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
     new DriveOntoChargeStationLPath(swerve),
     new ChargeStationBalanceLPath(swerve),
-    new LockWheels(swerve)));
+    new LockWheels(swerve));
   }
 }
