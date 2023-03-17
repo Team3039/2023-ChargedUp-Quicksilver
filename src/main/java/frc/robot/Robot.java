@@ -75,8 +75,8 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Top Two Piece", new TopTwoPieceAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Grab", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
 
-    usbCamera = CameraServer.startAutomaticCapture();
-    outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+    // usbCamera = CameraServer.startAutomaticCapture();
+    // outputStream = CameraServer.putVideo("Rectangle", 640, 480);
 
   }
 

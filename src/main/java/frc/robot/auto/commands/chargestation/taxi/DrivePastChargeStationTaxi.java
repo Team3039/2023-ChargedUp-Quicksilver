@@ -28,7 +28,7 @@ double highestRoll = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      translation = new Translation2d(-0.5, 0).times(Constants.Swerve.MAX_SPEED);
+      translation = new Translation2d(-0.4, 0).times(Constants.Swerve.MAX_SPEED);
     drive.drive(translation, 0, true, true);
     System.out.println(lowestRoll + "     AUTO    ");
     if(lowestRoll > drive.gyro.getRoll()){

@@ -60,7 +60,7 @@ public final class Constants {
 
       public static final class Elevator {
             // Elevator PID //
-            public static final double ELEVATOR_KP = 0.04;
+            public static final double ELEVATOR_KP = 0.05;
             public static final double ELEVATOR_KI = 0;
             public static final double ELEVATOR_KD = 0;
 
@@ -171,7 +171,7 @@ public final class Constants {
 
             /* Max Speed */
             public static final double MAX_ANGULAR_VELOCITY = 11.5;
-            public static final double MAX_SPEED = 4.5;
+            public static final double MAX_SPEED = 5.5;
 
             /* Module Constants */
             // BEVEL GEARS FACE RADIO FOR OFFSETS

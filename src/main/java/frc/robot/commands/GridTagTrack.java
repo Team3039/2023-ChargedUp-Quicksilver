@@ -79,7 +79,7 @@ public class GridTagTrack extends CommandBase {
 			// if (Math.abs(xSetPoint - drive.getPose().getX()) < 0.03) {
 			// 	xAxis = 0;
 			// }
-			xAxis = -controller.interpolatedLeftYAxis();
+			xAxis = -controller.interpolatedLeftYAxis() * .4;
 
 			// (forward/back, left/right) the controller axis is rotated from the Translation 2d axis
 			translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);

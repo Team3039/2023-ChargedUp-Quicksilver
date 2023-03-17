@@ -35,7 +35,7 @@ public class ClawRelease extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (timer.advanceIfElapsed(0.3)) {
+    if (timer.advanceIfElapsed(0.4)) {
       RobotContainer.claw.setState(ClawState.RELEASE);
       timer.stop();
       timer.reset();

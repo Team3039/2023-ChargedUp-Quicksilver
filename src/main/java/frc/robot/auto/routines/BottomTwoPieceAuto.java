@@ -47,7 +47,7 @@ public class BottomTwoPieceAuto extends SequentialCommandGroup {
 								new WaitCommand(.8),
 								new SetClawIntakeMode())),
 				new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-				new RotateRobotToSetpoint(swerve, -360, 0.5),
+				new RotateRobotToSetpoint(swerve, 0, 0.5),
 				new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
 				new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
 				new ActuateLowToHighGridAuto(),
