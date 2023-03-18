@@ -200,5 +200,6 @@ public class SwerveModule extends SubsystemBase{
         // if (moduleNumber == 0) {
         // System.out.println(getPosition());
         // }
+        // System.out.println(driveMotor.get());
   }
 }

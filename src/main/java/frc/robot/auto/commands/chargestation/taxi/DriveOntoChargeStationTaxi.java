@@ -27,7 +27,7 @@ double highestRoll = 0;
   @Override
   public void execute() {
     if (highestRoll < 10) {
-      translation = new Translation2d(0.3, 0).times(Constants.Swerve.MAX_SPEED);
+      translation = new Translation2d(0.40, 0).times(Constants.Swerve.MAX_SPEED);
     }
     drive.drive(translation, 0, true, true);
     System.out.println(highestRoll + "     AUTO    ");
