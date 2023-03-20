@@ -144,7 +144,7 @@ public class RobotContainer {
 
     operatorL1.whileTrue(new ClawIntake(0, 6 + wrist.getWristOffset(), false));
     operatorL2.whileTrue(new ClawIntake(30, 65 + wrist.getWristOffset(), false));
-    operatorR1.whileTrue(new ClawIntake(19.5, -6.5 + wrist.getWristOffset(), true));
+    operatorR1.whileTrue(new ClawIntake(19.5, -3.5 + wrist.getWristOffset(), true));
     driverR2.whileTrue(new ClawRelease());
     operatorR2.whileTrue(new ClawRelease());
 
