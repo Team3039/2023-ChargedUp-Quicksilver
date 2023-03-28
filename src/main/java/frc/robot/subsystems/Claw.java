@@ -55,6 +55,8 @@ public class Claw extends SubsystemBase {
 		claw.setInverted(true);
 
 		timer.reset();
+
+		claw.setStatusFramePeriod(255, 0);
 	}
 
 	public void setState(ClawState state) {
@@ -93,7 +95,7 @@ public class Claw extends SubsystemBase {
 		else {
 			pH.enableCompressorAnalog(100, 120);
 		}
-		SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
+		// SmartDashboard.putNumber("Claw Current", claw.getStatorCurrent());
 		SmartDashboard.putBoolean("Is Intake Deactivated", isIntakeDeactivated());
 		SmartDashboard.putString("Claw State", String.valueOf(getState()));
 

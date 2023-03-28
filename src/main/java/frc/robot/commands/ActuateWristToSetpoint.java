@@ -12,9 +12,11 @@ import frc.robot.subsystems.Wrist.WristState;
 public class ActuateWristToSetpoint extends CommandBase {
 
   double setpoint = 0;
-  public ActuateWristToSetpoint(double setpoint) {
+  double tolerance = 0;
+  public ActuateWristToSetpoint(double setpoint, double tolerance) {
     addRequirements(RobotContainer.wrist);
     this.setpoint = setpoint;
+    this.tolerance = tolerance;
   }
 
   // Called when the command is initially scheduled.
@@ -37,6 +39,6 @@ public class ActuateWristToSetpoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.wrist.isAtSetpoint(false);
+    return RobotContainer.wrist.isAtSetpoint(false, tolerance);
   }
 }

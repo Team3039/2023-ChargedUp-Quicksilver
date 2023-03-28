@@ -23,6 +23,7 @@ import frc.robot.auto.routines.SingleHighAuto;
 import frc.robot.auto.routines.SingleHighTaxiAuto;
 import frc.robot.auto.routines.SingleLowAuto;
 import frc.robot.auto.routines.SingleLowTaxiAuto;
+import frc.robot.auto.routines.TopThreePieceAuto;
 import frc.robot.auto.routines.TopTwoPieceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithGrabAuto;
 import frc.robot.subsystems.Claw.ClawState;
@@ -74,7 +75,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Bottom Two Piece With Grab", new BottomTwoPieceWithGrabAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece", new TopTwoPieceAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Grab", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
-
+    autoChooser.addOption("Top Three Piece", new TopThreePieceAuto(RobotContainer.drive));
     // usbCamera = CameraServer.startAutomaticCapture();
     // outputStream = CameraServer.putVideo("Rectangle", 640, 480);
 

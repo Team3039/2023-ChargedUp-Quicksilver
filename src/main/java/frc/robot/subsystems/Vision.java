@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import java.io.IOException;
+import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -13,6 +15,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -96,35 +99,14 @@ public class Vision extends SubsystemBase {
     return 0;
   }
 
-  /**
-   * @return The X (forward/back) distance from the target, corrected to be
-   *         field orientated forward/back instead of robot orientated
-   **/
-  public double getFieldOrientedX(double robotAngle) {
-    if (visionState.equals(VisionState.TRACKING)) {
-      if (result.hasTargets()) {
-        double hypotenuse = Math.hypot(getX() + Units.inchesToMeters(13.25), getY() + Units.inchesToMeters(13.25));
-        double fieldOrientedTheta = Math.acos((getX() + Units.inchesToMeters(13.25)) / hypotenuse) - robotAngle;
-        return (Math.cos(fieldOrientedTheta) * hypotenuse) - Units.inchesToMeters(13.25);
-      }
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    if (photonPoseEstimator == null) {
+        // The field layout failed to load, so we cannot estimate poses.
+        return Optional.empty();
     }
-    return 0;
-  }
-
-  /**
-   * @return The Y (left/right) distance from the target, corrected to be
-   *         field orientated left/right instead of robot orientated
-   **/
-  public double getFieldOrientedY(double robotAngle) {
-    if (visionState.equals(VisionState.TRACKING)) {
-      if (result.hasTargets()) {
-        double hypotenuse = Math.hypot(getX(), getY());
-        double fieldOrientedTheta = Math.asin(getY() / hypotenuse) - robotAngle;
-        return Math.sin(fieldOrientedTheta) * hypotenuse;
-      }
-    }
-    return 0;
-  }
+    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+    return photonPoseEstimator.update();
+}
 
   public void getCameraResult() {
     result = visionCamera.getLatestResult();

@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
@@ -17,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.SwerveModule;
 
 public class Drive extends SubsystemBase {
@@ -225,6 +229,19 @@ public class Drive extends SubsystemBase {
     //     );
     // }
 
+    public void updatePoseEstimation() {
+        swervePoseEstimator.update(getYaw(), getPositions());
+
+        Optional<EstimatedRobotPose> result =
+               RobotContainer.vision.getEstimatedGlobalPose(swervePoseEstimator.getEstimatedPosition());
+
+        if (result.isPresent()) {
+            EstimatedRobotPose camPose = result.get();
+            swervePoseEstimator.addVisionMeasurement(
+                    camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+        }
+    }
+
     @Override
     public void periodic() {
         // System.out.println(getStates()[0]);
@@ -239,8 +256,7 @@ public class Drive extends SubsystemBase {
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getPositions());
-        swervePoseEstimator.update(getYaw(), getPositions());
-        
+        updatePoseEstimation();
 
         SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
         SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());

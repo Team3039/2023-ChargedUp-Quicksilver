@@ -4,80 +4,71 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class LEDs extends SubsystemBase {
 
-	public enum LEDState {
-		IDLE,
-		CUBE,
-		CONE
-	}
+	public DigitalOutput[] outputs = {
+		new DigitalOutput(Constants.Ports.LED_OUTPUT_A),
+		new DigitalOutput(Constants.Ports.LED_OUTPUT_B),
+		new DigitalOutput(Constants.Ports.LED_OUTPUT_C)
+	};
 
-	public LEDState ledState = LEDState.IDLE;
+	// White Fade. Active while booting up (Not referenced in code) 
+	private boolean[] whiteFade = {false, false, false};
+
+	// Turns LEDs Off. Active during teleop and autonomous when no other states are active
+	private boolean[] ledsOff = {true, true, true};
+
+	// Fire Code in red. Active when disabled while on the red alliance
+	private boolean[] redFire = {false, true, false};
+	
+	// Fire Code in blue. Active when disabled while on the blue alliance
+	private boolean[] blueFire = {false, true, true};
+
+	// Yellow Fade. Active in teleop when driver signals that they want a Cone
+	private boolean[] yellowFade = {true, false, false};
+
+	// Purple Fade. Active in teleop when driver signals that they want a Cube
+	private boolean[] purpleFade = {true, true, false};
+
+	private boolean[] states;
 
 	public PowerDistribution pDH = new PowerDistribution(9, ModuleType.kRev);
-
-	public final int LEDcount = 50;
-
-	// private int rainbowStart = 0;
 
 	public boolean desiresCone = false;
 	public boolean desiresCube = false;
 
-	public AddressableLED leds = new AddressableLED(9);
-	public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDcount);
+	public LEDs() {}
 
-	public LEDs() {
-		leds.setLength(LEDcount);
-		leds.setData(buffer);
-		leds.start();
+	public void setDesiredPiece(boolean cone, boolean cube) {
+		desiresCone = cone;
+		desiresCube = cube;
 	}
 
-	public LEDState getState() {
-		return ledState;
+	public boolean getDesiresCone() {
+		return desiresCone;
 	}
-
-	public void setState(LEDState state) {
-		ledState = state;
+	
+	public boolean getDesiresCube() {
+		return desiresCube;
 	}
-
-	public void setColorRGB(int r, int g, int b) {
-		for (var i = 0; i < buffer.getLength(); i++) {
-			buffer.setRGB(i, r, g, b);
-
-		}
-		leds.setData(buffer);
-	}
-
-	// private void rainbow() {
-	// // For every pixel
-	// for (var i = 0; i < buffer.getLength(); i++) {
-	// // Calculate the hue - hue is easier for rainbows because the color
-	// // shape is a circle so only one value needs to precess
-	// final var hue = (rainbowStart + (i * 180 / buffer.getLength())) % 180;
-	// // Set the value
-	// buffer.setHSV(i, hue, 255, 128);
-	// }
-	// // Increase by to make the rainbow "move"
-	// rainbowStart += 3;
-	// // Check bounds
-	// rainbowStart %= 180;
-	// }
 
 	@Override
 	public void periodic() {
 		SmartDashboard.putBoolean("Desires Cube", desiresCube);
 		SmartDashboard.putBoolean("Desires Cone", desiresCone);
 
-
+		// System.out.println("" + outputs[0].get() + "  " + outputs[1].get() + "  " + outputs[2].get());
+		
 		if (DriverStation.isTeleopEnabled()) {
 			if (RobotContainer.claw.isIntakeDeactivated()) {
 				pDH.setSwitchableChannel(true);
@@ -89,27 +80,28 @@ public class LEDs extends SubsystemBase {
 		else {
 			pDH.setSwitchableChannel(true);
 		}
-		switch (ledState) {
-			case IDLE:
-				if (DriverStation.isDisabled()) {
-					// rainbow();
-				} else {
-					setColorRGB(0, 0, 0);
-				}
-				desiresCone = false;
-				desiresCube = false;
-				break;
-			case CONE:
-				setColorRGB(50, 50, 0);
-				desiresCone = true;
-				desiresCube = false;
-				break;
-			case CUBE:
-				setColorRGB(50, 0, 50);
-				desiresCone = false;
-				desiresCube = true;
-				break;
+		
+		if (DriverStation.isDisabled()) {
+			if (DriverStation.getAlliance().equals(Alliance.Red)) {
+				states = redFire;
+			}
+			else {
+				states = blueFire;
+			}
 		}
-
+		else {
+			if (desiresCone == true) {
+				states = yellowFade;
+			}
+			else if (desiresCube == true) {
+				states = purpleFade;
+			}
+			else {
+				states = ledsOff;
+			}
+		}
+		for (int i = 0; i < 3; i++) {
+			outputs[i].set(states[i]);
+		}
 	}
 }

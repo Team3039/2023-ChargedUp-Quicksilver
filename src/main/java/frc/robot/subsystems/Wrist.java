@@ -130,9 +130,9 @@ public class Wrist extends SubsystemBase {
     return ticksToDegrees(wrist.getSelectedSensorPosition());
   }
 
-  public boolean isAtSetpoint(boolean isProfiled) {
-    return Math.abs(setpointWrist - ticksToDegrees(wrist.getSelectedSensorPosition())) <= 5;
-  }
+	public boolean isAtSetpoint(boolean isProfiled, double tolerance) {
+		return Math.abs((setpointWrist - ticksToDegrees(wrist.getSelectedSensorPosition()))) <= tolerance;
+	}
 
   public double getWristOffset() {
     return wristSetpointOffset;
@@ -152,9 +152,9 @@ public class Wrist extends SubsystemBase {
     // SmartDashboard.putNumber("Wrist Current Output", wrist.getStatorCurrent());
     // System.out.println(setpointWrist);
     SmartDashboard.putNumber("Wrist Angle", getWristPosition());
-    SmartDashboard.putString("Wrist State", String.valueOf(getState()));
+    // SmartDashboard.putString("Wrist State", String.valueOf(getState()));
     // SmartDashboard.putNumber("Wrist Offset", getWristOffset());
-    SmartDashboard.putNumber("Wrist Setpoint", getSetpoint());
+    // SmartDashboard.putNumber("Wrist Setpoint", getSetpoint());
     idleSetpoint = getState().equals(WristState.IDLE) ? idleSetpoint : setpointWrist;
     
 

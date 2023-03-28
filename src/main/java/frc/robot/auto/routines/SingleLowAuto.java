@@ -25,7 +25,7 @@ public class SingleLowAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
       new InstantCommand(() -> s_Swerve.setGyro(0)),
-      new ActuateWristToSetpoint(20),
+      new ActuateWristToSetpoint(20, 3),
       new SetClawReleaseMode(),
       new WaitCommand(0.5),
       new SetClawIdleMode(),

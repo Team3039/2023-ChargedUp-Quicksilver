@@ -17,7 +17,7 @@ public class ActuateLowToPreScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(65),
+      new ActuateWristToSetpoint(65, 20),
       new ActuateElevatorToSetpoint(40, 3)
     );
   }

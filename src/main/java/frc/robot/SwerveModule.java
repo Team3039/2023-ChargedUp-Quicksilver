@@ -51,6 +51,7 @@ public class SwerveModule extends SubsystemBase{
         cancoder.configMagnetOffset(moduleConstants.angleOffset);
         
         configureDevices();
+        // configureDevices();
 
         lastAngle = getState().angle.getDegrees();
 
@@ -69,9 +70,7 @@ public class SwerveModule extends SubsystemBase{
             driveController.setReference(velocity * 2.8, CANSparkMax.ControlType.kVelocity, 0, feedforward.calculate(velocity));
         }
 
-        double angle = Math.abs(desiredState.speedMetersPerSecond) <= Constants.Swerve.MAX_SPEED * 0.01
-        ? lastAngle
-        : desiredState.angle.getDegrees();
+        double angle = Math.abs(desiredState.speedMetersPerSecond) <= Constants.Swerve.MAX_SPEED * 0.01 ? lastAngle : desiredState.angle.getDegrees();
 
         // double angle = desiredState.angle.getDegrees();
         // System.out.println(angleOutput + "   hdgjhsd   " + moduleNumber);
@@ -200,6 +199,6 @@ public class SwerveModule extends SubsystemBase{
         // if (moduleNumber == 0) {
         // System.out.println(getPosition());
         // }
-        // System.out.println(driveMotor.get());
+        // System.out.println(driveMotor.getAppliedOutput());
   }
 }

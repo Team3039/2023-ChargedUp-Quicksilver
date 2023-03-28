@@ -41,6 +41,11 @@ public class PPTrajectoryGenerator {
             new PathConstraints(4.0, 4.0));
     }
 
+    public static PathPlannerTrajectory getTopPath3rdPiece() {
+        return PathPlanner.loadPath("Top 3rd Piece", 
+            new PathConstraints(4.0, 4.0));
+    }
+
     public static PathPlannerTrajectory getTopPathDriveOut() {
         return PathPlanner.loadPath("Top Path Drive Out", 
             new PathConstraints(4.0, 4.0));      
@@ -60,6 +65,7 @@ public class PPTrajectoryGenerator {
         return PathPlanner.loadPath("Charge Station Bottom L Path", 
             new PathConstraints(4.0, 4.0));
     }
+
 
     public PPTrajectoryGenerator() {
         eventMap = new HashMap<>();

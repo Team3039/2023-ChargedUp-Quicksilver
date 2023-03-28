@@ -18,7 +18,7 @@ import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
-import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
@@ -37,7 +37,7 @@ public class BottomTwoPieceAuto extends SequentialCommandGroup {
 		addCommands(
 				new InstantCommand(
 						() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),
-				new ActuateLowToHighGridAuto(),
+				new ActuateLowToHighGridConeAuto(),
 				new SetClawReleaseMode(),
 				new WaitCommand(0.5),
 				new ActuateToIdleAuto(),
@@ -50,7 +50,7 @@ public class BottomTwoPieceAuto extends SequentialCommandGroup {
 				new RotateRobotToSetpoint(swerve, 0, 0.5),
 				new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
 				new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-				new ActuateLowToHighGridAuto(),
+				new ActuateLowToHighGridConeAuto(),
 				new SetClawReleaseMode(),
 				new WaitCommand(0.5),
 				new SetClawIdleMode(),

@@ -33,7 +33,7 @@ public class SingleLowTaxiAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOut().getInitialHolonomicPose())),
         new InstantCommand(() -> swerve.setGyro(0)),
-        new ActuateWristToSetpoint(20),
+        new ActuateWristToSetpoint(20, 3),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),
         new SetClawIdleMode(),

@@ -15,7 +15,7 @@ import frc.robot.auto.PPTrajectoryGenerator;
 import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
-import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Drive;
 
@@ -33,7 +33,7 @@ public class SingleHighTaxiAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOut().getInitialHolonomicPose())),
         new InstantCommand(() -> swerve.setGyro(0)),
-        new ActuateLowToHighGridAuto(),
+        new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),
         new SetClawIdleMode(),
