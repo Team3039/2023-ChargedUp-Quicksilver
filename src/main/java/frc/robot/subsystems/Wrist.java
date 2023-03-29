@@ -58,12 +58,13 @@ public class Wrist extends SubsystemBase {
   double wristSetpointOffset = 0;
 
   public Wrist() {
+    // wrist.configFactoryDefault();%
     wrist.setNeutralMode(NeutralMode.Brake);
 
     // Wrist must start in the vertical position in order to be legal. DONT FORGET TO DO THIS PLS
     wrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    wrist.setInverted(true);
-    wrist.setSensorPhase(true);
+    // wrist.setInverted(true);
+    // wrist.setSensorPhase(true);
     
     wrist.configForwardSoftLimitEnable(true);
     wrist.configReverseSoftLimitEnable(true);
@@ -103,11 +104,11 @@ public class Wrist extends SubsystemBase {
           feedForward.calculate(Math.toRadians(profiledController.getSetpoint().position),
               profiledController.getSetpoint().velocity));
     } else {
-      wrist.set(ControlMode.PercentOutput, -1 * MathUtil.clamp(controller.calculate(
+      wrist.set(ControlMode.PercentOutput, MathUtil.clamp(controller.calculate(
           ticksToDegrees(wrist.getSelectedSensorPosition()),
-          setpointWrist), -.18, .2),
+          setpointWrist), -.25, .3),
           DemandType.ArbitraryFeedForward,
-          -1 * (Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
+          (Math.cos(Math.toRadians(ticksToDegrees(wrist.getSelectedSensorPosition()))) * Constants.Wrist.WRIST_KG +
               Constants.Wrist.WRIST_KS));
     }
   }

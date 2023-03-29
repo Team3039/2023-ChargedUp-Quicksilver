@@ -66,7 +66,10 @@ public class PPTrajectoryGenerator {
             new PathConstraints(4.0, 4.0));
     }
 
-
+    public static PathPlannerTrajectory getBalanceAfterTopTwoPiece() {
+        return PathPlanner.loadPath("Balance After Top Two Piece", 
+        new PathConstraints(4.0, 4.0));
+    }
     public PPTrajectoryGenerator() {
         eventMap = new HashMap<>();
         // eventMap.put("Claw Idle", new SetClawIdleMode());

@@ -17,7 +17,7 @@ public class ActuateLowToHighGridCubeAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(72, 10),
+      new ActuateWristToSetpoint(68, 5),
       new ActuateElevatorToSetpoint(60, 10)
     );
   }

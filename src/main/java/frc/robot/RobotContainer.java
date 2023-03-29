@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.auto.routines.ChargeStationAuto;
+import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
 import frc.robot.commands.ForceIdle;
@@ -19,9 +22,10 @@ import frc.robot.commands.SetElevatorManualOverride;
 import frc.robot.commands.SetLEDS;
 import frc.robot.commands.SetWristManualOverride;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToHighGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToMidGrid;
-import frc.robot.commands.ElevatorRoutines.ActuateLowToPreScore;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToHighConeGrid;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToHighCubeGrid;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToMidConeGrid;
+import frc.robot.commands.ElevatorRoutines.ActuateLowToMidCube;
 import frc.robot.commands.ElevatorRoutines.ActuateToIdle;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Claw;
@@ -118,13 +122,15 @@ public class RobotContainer {
     );
     driverOptions.onTrue(new InstantCommand(() -> drive.setGyro(0)));
 
-    driverCircle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.62));
-    driverSquare.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.50));
-    driverTriangle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.05));
+    // driverCircle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.62));
+    // driverSquare.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.50));
+    // driverTriangle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.05));
 
     driverX.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
 
     driverL2.onTrue(new SetLEDS());
+
+    // driverStart.whileTrue(new ChargeStationBalance(drive));
 
     // operatorSquare.whileTrue(new SetElevatorPercent(.20));
     // operatorTriangle.whileTrue(new SetElevatorPercent(-.10));
@@ -135,16 +141,17 @@ public class RobotContainer {
     // operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
     // operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
 
-    operatorCircle.onTrue(new ActuateLowToPreScore());
-    operatorSquare.onTrue(new ActuateLowToMidGrid());
-    operatorTriangle.onTrue(new ActuateLowToHighGrid());
+    operatorCircle.onTrue(new ActuateLowToMidCube());
+    operatorSquare.onTrue(new ActuateLowToMidConeGrid());
+    operatorTriangle.onTrue(new ActuateLowToHighConeGrid());
+    operatorR3.onTrue(new ActuateLowToHighCubeGrid());
     operatorX.onTrue(new ActuateToIdle());
 
     operatorPadButton.whileTrue(new ForceIdle());
 
     operatorL1.whileTrue(new ClawIntake(0, 6 + wrist.getWristOffset(), false));
-    operatorL2.whileTrue(new ClawIntake(30, 65 + wrist.getWristOffset(), false));
-    operatorR1.whileTrue(new ClawIntake(19.5, -3.5 + wrist.getWristOffset(), true));
+    operatorL2.whileTrue(new ClawIntake(30, 70 + wrist.getWristOffset(), false));
+    operatorR1.whileTrue(new ClawIntake(17.5, -6.5 + wrist.getWristOffset(), true));
     driverR2.whileTrue(new ClawRelease());
     operatorR2.whileTrue(new ClawRelease());
 

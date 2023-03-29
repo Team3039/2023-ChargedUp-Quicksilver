@@ -51,7 +51,7 @@ public class ChargeStationTopLPath extends SequentialCommandGroup {
     new RotateRobotToSetpoint(swerve, 180, 1),
     new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
     new DriveOntoChargeStationLPath(swerve),
-    new ChargeStationBalanceLPath(swerve),
+    // new ChargeStationBalanceLPath(swerve),
     new LockWheels(swerve));
   }
 }

@@ -27,10 +27,13 @@ double highestRoll = 0;
   @Override
   public void execute() {
     if (highestRoll > -10) {
-      translation = new Translation2d(-0.3, 0).times(Constants.Swerve.MAX_SPEED);
+      translation = new Translation2d(-0.40, 0).times(Constants.Swerve.MAX_SPEED);
+    }
+    if(drive.gyro.getRoll() > -11.5 && highestRoll < -12) {
+      translation = new Translation2d(-0.10, 0).times(Constants.Swerve.MAX_SPEED);
     }
     else {
-      translation = new Translation2d(-0.2, 0).times(Constants.Swerve.MAX_SPEED);
+      translation = new Translation2d(-0.20, 0).times(Constants.Swerve.MAX_SPEED);
     }
     drive.drive(translation, 0, true, true);
     System.out.println(highestRoll + "     AUTO    ");
@@ -50,7 +53,7 @@ double highestRoll = 0;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   if(drive.gyro.getRoll() > -10  && highestRoll < -12) {
+   if(drive.gyro.getRoll() > -9.5  && highestRoll < -11.3) {
     System.out.println("Finished Docking");
     return true;
    }

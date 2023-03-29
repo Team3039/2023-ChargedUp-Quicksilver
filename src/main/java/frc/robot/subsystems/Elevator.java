@@ -75,6 +75,8 @@ public class Elevator extends SubsystemBase {
 		// elevatorA.burnFlash();
 		elevator.burnFlash();
 
+		// elevator.setStatusFramePeriod();
+
 		controller.setTolerance(3);
 		profiledController.setTolerance(3);
 	}

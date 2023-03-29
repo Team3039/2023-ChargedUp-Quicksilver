@@ -30,7 +30,7 @@ public class ChargeStationAuto extends SequentialCommandGroup {
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
         new DriveOntoChargeStation(swerve),
-        new ChargeStationBalance(swerve),
+        // new ChargeStationBalance(swerve),
         new LockWheels(swerve),
         new InstantCommand(() -> swerve.setGyro(180)));
   }

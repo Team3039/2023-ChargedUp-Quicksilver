@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -23,8 +22,11 @@ import frc.robot.auto.routines.SingleHighAuto;
 import frc.robot.auto.routines.SingleHighTaxiAuto;
 import frc.robot.auto.routines.SingleLowAuto;
 import frc.robot.auto.routines.SingleLowTaxiAuto;
-import frc.robot.auto.routines.TopThreePieceAuto;
+import frc.robot.auto.routines.TopThreePieceThirdHybridAuto;
+import frc.robot.auto.routines.TopThreePieceThirdKeepAuto;
+import frc.robot.auto.routines.TopThreePieceThirdMidAuto;
 import frc.robot.auto.routines.TopTwoPieceAuto;
+import frc.robot.auto.routines.TopTwoPieceWithBalanceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithGrabAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Elevator;
@@ -66,7 +68,6 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Charge Station Normal", new ChargeStationAuto(RobotContainer.drive));
     autoChooser.addOption("Charge Station Top L Path", new ChargeStationTopLPath(RobotContainer.drive));
     autoChooser.addOption("Charge Station Bottom L Path", new ChargeStationBottomLPath(RobotContainer.drive));
-    // autoChooser.addOption("Drive Straight", new DriveStraight(RobotContainer.drive));
     autoChooser.addOption("Single High", new SingleHighAuto(RobotContainer.drive));
     autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));
@@ -75,7 +76,11 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Bottom Two Piece With Grab", new BottomTwoPieceWithGrabAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece", new TopTwoPieceAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Grab", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
-    autoChooser.addOption("Top Three Piece", new TopThreePieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Three Piece Third Mid", new TopThreePieceThirdMidAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Three Piece Third Hybrid", new TopThreePieceThirdHybridAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Three Piece Third Keep", new TopThreePieceThirdKeepAuto(RobotContainer.drive));
+    autoChooser.addOption("Top Two Piece With Balance", new TopTwoPieceWithBalanceAuto(RobotContainer.drive));
+
     // usbCamera = CameraServer.startAutomaticCapture();
     // outputStream = CameraServer.putVideo("Rectangle", 640, 480);
 

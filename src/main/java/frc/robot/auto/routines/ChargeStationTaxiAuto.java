@@ -36,7 +36,7 @@ public class ChargeStationTaxiAuto extends SequentialCommandGroup {
         new DrivePastChargeStationTaxi(swerve),
         new WaitCommand(1),
         new DriveOntoChargeStationTaxi(swerve),
-        new ChargeStationBalanceTaxi(swerve),
+        // new ChargeStationBalanceTaxi(swerve),
         new LockWheels(swerve),
         new InstantCommand(() -> swerve.setGyro(180)));
   }

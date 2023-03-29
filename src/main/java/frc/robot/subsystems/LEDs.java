@@ -17,28 +17,34 @@ import frc.robot.RobotContainer;
 public class LEDs extends SubsystemBase {
 
 	public DigitalOutput[] outputs = {
-		new DigitalOutput(Constants.Ports.LED_OUTPUT_A),
-		new DigitalOutput(Constants.Ports.LED_OUTPUT_B),
-		new DigitalOutput(Constants.Ports.LED_OUTPUT_C)
+			new DigitalOutput(Constants.Ports.LED_OUTPUT_A),
+			new DigitalOutput(Constants.Ports.LED_OUTPUT_B),
+			new DigitalOutput(Constants.Ports.LED_OUTPUT_C)
 	};
 
-	// White Fade. Active while booting up (Not referenced in code) 
-	private boolean[] whiteFade = {false, false, false};
+	// White Fade. Active while booting up (Not referenced in code)
+	private boolean[] whiteFade = { false, false, false };
 
-	// Turns LEDs Off. Active during teleop and autonomous when no other states are active
-	private boolean[] ledsOff = {true, true, true};
+	// Turns LEDs Off. Active during teleop and autonomous when no other states are
+	// active
+	private boolean[] ledsOff = { true, true, true };
 
 	// Fire Code in red. Active when disabled while on the red alliance
-	private boolean[] redFire = {false, true, false};
-	
+	private boolean[] redFire = { false, true, false };
+
 	// Fire Code in blue. Active when disabled while on the blue alliance
-	private boolean[] blueFire = {false, true, true};
+	private boolean[] blueFire = { false, true, true };
 
 	// Yellow Fade. Active in teleop when driver signals that they want a Cone
-	private boolean[] yellowFade = {true, false, false};
+	private boolean[] yellowFade = { true, false, false };
 
 	// Purple Fade. Active in teleop when driver signals that they want a Cube
-	private boolean[] purpleFade = {true, true, false};
+	private boolean[] purpleFade = { true, true, false };
+
+	// Red Wipe. Active in teleop when the intake is deactivated (Should have a game
+	// piece, might not if it got locked prematurely, in which case operator must
+	// press the pad button)
+	private boolean[] redWipe = { false, false, true };
 
 	private boolean[] states;
 
@@ -47,7 +53,8 @@ public class LEDs extends SubsystemBase {
 	public boolean desiresCone = false;
 	public boolean desiresCube = false;
 
-	public LEDs() {}
+	public LEDs() {
+	}
 
 	public void setDesiredPiece(boolean cone, boolean cube) {
 		desiresCone = cone;
@@ -57,7 +64,7 @@ public class LEDs extends SubsystemBase {
 	public boolean getDesiresCone() {
 		return desiresCone;
 	}
-	
+
 	public boolean getDesiresCube() {
 		return desiresCube;
 	}
@@ -67,37 +74,36 @@ public class LEDs extends SubsystemBase {
 		SmartDashboard.putBoolean("Desires Cube", desiresCube);
 		SmartDashboard.putBoolean("Desires Cone", desiresCone);
 
-		// System.out.println("" + outputs[0].get() + "  " + outputs[1].get() + "  " + outputs[2].get());
-		
+		// System.out.println("" + outputs[0].get() + " " + outputs[1].get() + " " +
+		// outputs[2].get());
+
 		if (DriverStation.isTeleopEnabled()) {
 			if (RobotContainer.claw.isIntakeDeactivated()) {
 				pDH.setSwitchableChannel(true);
-			}
-			else {
+			} else {
 				pDH.setSwitchableChannel(false);
 			}
-		}
-		else {
+		} else {
 			pDH.setSwitchableChannel(true);
 		}
-		
+
 		if (DriverStation.isDisabled()) {
 			if (DriverStation.getAlliance().equals(Alliance.Red)) {
 				states = redFire;
-			}
-			else {
+			} else {
 				states = blueFire;
 			}
-		}
-		else {
-			if (desiresCone == true) {
-				states = yellowFade;
-			}
-			else if (desiresCube == true) {
-				states = purpleFade;
-			}
-			else {
-				states = ledsOff;
+		} else {
+			if (RobotContainer.claw.isIntakeDeactivated()) {
+				states = redWipe;
+			} else {
+				if (desiresCone == true) {
+					states = yellowFade;
+				} else if (desiresCube == true) {
+					states = purpleFade;
+				} else {
+					states = ledsOff;
+				}
 			}
 		}
 		for (int i = 0; i < 3; i++) {

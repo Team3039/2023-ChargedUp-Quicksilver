@@ -11,16 +11,14 @@ import frc.robot.commands.ActuateWristToSetpoint;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ActuateLowToMidGrid extends SequentialCommandGroup {
-  /** Creates a new ActuateToMidGrid. */
-  public ActuateLowToMidGrid() {
+public class ActuateLowToMidCube extends SequentialCommandGroup {
+  /** Creates a new ActuateLowToSingleStation. */
+  public ActuateLowToMidCube() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(50, 10),
-      new ActuateElevatorToSetpoint(70, 3),
-      new ActuateWristToSetpoint(10, 3)
-
+      new ActuateWristToSetpoint(65, 5),
+      new ActuateElevatorToSetpoint(40, 5)
     );
   }
 }

@@ -28,7 +28,7 @@ public class Drive extends SubsystemBase {
     public SwerveModule[] swerveMods;
     public Pigeon2 gyro = new Pigeon2(4);
     public SwerveDriveOdometry swerveOdometry;
-    public SwerveDrivePoseEstimator swervePoseEstimator;
+    // public SwerveDrivePoseEstimator swervePoseEstimator;
 
     public boolean isHighGear = false;
 
@@ -47,7 +47,7 @@ public class Drive extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions());
 
-        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions(), new Pose2d());
+        // swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getPositions(), new Pose2d());
         isHighGear = false;
     }
 
@@ -229,18 +229,18 @@ public class Drive extends SubsystemBase {
     //     );
     // }
 
-    public void updatePoseEstimation() {
-        swervePoseEstimator.update(getYaw(), getPositions());
+    // public void updatePoseEstimation() {
+    //     swervePoseEstimator.update(getYaw(), getPositions());
 
-        Optional<EstimatedRobotPose> result =
-               RobotContainer.vision.getEstimatedGlobalPose(swervePoseEstimator.getEstimatedPosition());
+    //     Optional<EstimatedRobotPose> result =
+    //            RobotContainer.vision.getEstimatedGlobalPose(swervePoseEstimator.getEstimatedPosition());
 
-        if (result.isPresent()) {
-            EstimatedRobotPose camPose = result.get();
-            swervePoseEstimator.addVisionMeasurement(
-                    camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-        }
-    }
+    //     if (result.isPresent()) {
+    //         EstimatedRobotPose camPose = result.get();
+    //         swervePoseEstimator.addVisionMeasurement(
+    //                 camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+    //     }
+    // }
 
     @Override
     public void periodic() {
@@ -256,16 +256,16 @@ public class Drive extends SubsystemBase {
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getPositions());
-        updatePoseEstimation();
+        // updatePoseEstimation();
 
         SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
-        SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
+        // SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
+        // SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
 
-        for (SwerveModule mod : swerveMods) {
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-        }
+        // for (SwerveModule mod : swerveMods) {
+        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+        // }
     }
 }

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.auto.commands.AutoElevatorRoutines;
+package frc.robot.commands.ElevatorRoutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ActuateElevatorToSetpoint;
@@ -11,15 +11,16 @@ import frc.robot.commands.ActuateWristToSetpoint;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ActuateLowToHighGridConeAuto extends SequentialCommandGroup {
-  /** Creates a new ActuateLowToHighGrid. */
-  public ActuateLowToHighGridConeAuto() {
+public class ActuateLowToMidConeGrid extends SequentialCommandGroup {
+  /** Creates a new ActuateToMidGrid. */
+  public ActuateLowToMidConeGrid() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ActuateWristToSetpoint(65, 5),
-      new ActuateElevatorToSetpoint(85, 15),
-      new ActuateWristToSetpoint(30, 3)
+      new ActuateWristToSetpoint(50, 5),
+      new ActuateElevatorToSetpoint(70, 5),
+      new ActuateWristToSetpoint(10, 5)
+
     );
   }
 }
