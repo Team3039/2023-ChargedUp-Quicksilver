@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
@@ -24,6 +25,7 @@ import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Wrist.WristState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -51,12 +53,16 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
                 new WaitCommand(.8),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
+                new WaitCommand(2.6),
+                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
+            new SequentialCommandGroup(
                 new WaitCommand(4),
                 new ActuateLowToHighGridCubeAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-        new RotateRobotToSetpoint(swerve, 0, 0.7),
-        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new PrintCommand("Try To Rotate, Check Gyro Here"),
+        // new RotateRobotToSetpoint(swerve, Drive.initialGyroAngle, 0.7),
+        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new SetClawReleaseMode(),
         new WaitCommand(0.1),
         new SetClawIdleMode(),
@@ -65,8 +71,11 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             TopThirdPiece,
             new SequentialCommandGroup(
-                new WaitCommand(.8),
-                new SetClawIntakeMode())),       
+                new WaitCommand(1),
+                new SetClawIntakeMode()),
+            new SequentialCommandGroup(
+                new WaitCommand(2.4),
+                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),       
         new ActuateWristToSetpoint(20, 20),
         new SetClawReleaseMode(),
         new SetClawIdleMode(),

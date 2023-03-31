@@ -148,7 +148,7 @@ public class Claw extends SubsystemBase {
 				break;
 			case RELEASE:
 				deactivateIntake = false;
-				setWheelSpeed(-0.5);
+				setWheelSpeed(-0.3);
 		}
 	}
 }

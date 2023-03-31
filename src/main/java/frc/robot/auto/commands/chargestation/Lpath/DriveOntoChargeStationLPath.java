@@ -29,7 +29,7 @@ double highestRoll = 0;
     if (highestRoll > -10) {
       translation = new Translation2d(0.40, 0).times(Constants.Swerve.MAX_SPEED);
     }
-    if(drive.gyro.getRoll() > -11.5 && highestRoll < -12) {
+    else if(drive.gyro.getRoll() > -11.5 && highestRoll < -12) {
       translation = new Translation2d(0.10, 0).times(Constants.Swerve.MAX_SPEED);
     }
     else {

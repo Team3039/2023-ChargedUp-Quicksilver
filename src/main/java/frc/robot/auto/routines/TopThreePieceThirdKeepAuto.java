@@ -23,6 +23,7 @@ import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridCubeAuto
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Wrist.WristState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -50,12 +51,15 @@ public class TopThreePieceThirdKeepAuto extends SequentialCommandGroup {
                 new WaitCommand(.8),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
+                new WaitCommand(2.6),
+                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
+            new SequentialCommandGroup(
                 new WaitCommand(4),
                 new ActuateLowToHighGridCubeAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-        new RotateRobotToSetpoint(swerve, 0, 0.7),
-        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        // new RotateRobotToSetpoint(swerve, Drive.initialGyroAngle, 0.7),
+        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new SetClawReleaseMode(),
         new WaitCommand(0.1),
         new SetClawIdleMode(),
@@ -64,8 +68,11 @@ public class TopThreePieceThirdKeepAuto extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             TopThirdPiece,
             new SequentialCommandGroup(
-                new WaitCommand(.8),
-                new SetClawIntakeMode())),    
+                new WaitCommand(1),
+                new SetClawIntakeMode()),
+            new SequentialCommandGroup(
+                new WaitCommand(2.4),
+                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),    
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),        
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))

@@ -19,9 +19,11 @@ import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridCubeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Wrist.WristState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -46,12 +48,16 @@ public class TopTwoPieceAuto extends SequentialCommandGroup {
             TopTwoPiece,
             new SequentialCommandGroup(
                 new WaitCommand(.8),
-                new SetClawIntakeMode())),
+                new SetClawIntakeMode()),
+            new SequentialCommandGroup(
+              new WaitCommand(2.6),
+              new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        // new RotateRobotToSetpoint(swerve, 0, 0.5),
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new InstantCommand(() -> System.out.println("EPIC ROTATE")),
+        new RotateRobotToSetpoint(swerve,  0, 0.7),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-        new ActuateLowToHighGridConeAuto(),
+        new ActuateLowToHighGridCubeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),
         new SetClawIdleMode(),

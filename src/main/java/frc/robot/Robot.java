@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.routines.BottomTwoPieceAuto;
 import frc.robot.auto.routines.BottomTwoPieceWithGrabAuto;
 import frc.robot.auto.routines.ChargeStationAuto;
@@ -29,6 +30,7 @@ import frc.robot.auto.routines.TopTwoPieceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithBalanceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithGrabAuto;
 import frc.robot.subsystems.Claw.ClawState;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Wrist;
@@ -62,6 +64,8 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
 
     SmartDashboard.putData("Auto Selector", autoChooser);
+
+    SmartDashboard.putData("Zero Gyro", new InstantCommand(() -> RobotContainer.drive.setGyro(0)));
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothing());
     autoChooser.addOption("Charge Station Taxi", new ChargeStationTaxiAuto(RobotContainer.drive));
@@ -114,6 +118,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    Drive.initialGyroAngle = RobotContainer.drive.getAngle();
     autoCommand = autoChooser.getSelected();
     if (autoCommand != null) {
       autoCommand.schedule();

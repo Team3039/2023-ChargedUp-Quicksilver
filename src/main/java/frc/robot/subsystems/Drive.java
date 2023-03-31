@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,6 +34,8 @@ public class Drive extends SubsystemBase {
     public boolean isHighGear = false;
 
     public double[] previousPose = new double[2];
+
+    public static double initialGyroAngle = 0;
 
     public Drive() {
         setGyro(0);
@@ -245,7 +248,7 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         // System.out.println(getStates()[0]);
-        // System.out.println(getAngle());
+        System.out.println(getAngle());
         // System.out.println(getRoll() + " Roll");
         // System.out.println(getPitch() + " Pitch");
 

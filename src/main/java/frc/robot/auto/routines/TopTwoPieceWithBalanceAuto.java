@@ -25,6 +25,7 @@ import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.normal.DriveOntoChargeStation;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Wrist.WristState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -51,6 +52,9 @@ public class TopTwoPieceWithBalanceAuto extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new WaitCommand(.8),
                 new SetClawIntakeMode()),
+            new SequentialCommandGroup(
+              new WaitCommand(2.6),
+              new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
             new SequentialCommandGroup(
                 new WaitCommand(3.7),
                 new ActuateLowToHighGridCubeAuto())),
