@@ -40,7 +40,10 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
-        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+        new ParallelDeadlineGroup(
+            new WaitCommand(.3), 
+            new SetClawIntakeMode()),
+        new SetClawIdleMode(),
         new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),
@@ -54,8 +57,8 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
                 new WaitCommand(4),
                 new ActuateLowToPreScoreAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        // new RotateRobotToSetpoint(swerve, 0, 0.5),
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new RotateRobotToSetpoint(swerve, 0, 0.5),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
         new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
@@ -64,11 +67,7 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
         new ActuateToIdleAuto(),
         new InstantCommand(() -> swerve
             .resetOdometry(PPTrajectoryGenerator.getTopPathDriveOut().getInitialHolonomicPose())),
-        new ParallelDeadlineGroup(
-            TopDriveOut,
-            new SequentialCommandGroup(
-                new WaitCommand(.8),
-                new SetClawIntakeMode())),
+        TopDriveOut,
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)));
   }
 }

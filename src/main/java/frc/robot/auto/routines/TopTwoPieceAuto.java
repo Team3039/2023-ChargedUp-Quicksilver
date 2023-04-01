@@ -40,6 +40,10 @@ public class TopTwoPieceAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+        new ParallelDeadlineGroup(
+          new WaitCommand(.3), 
+          new SetClawIntakeMode()),
+        new SetClawIdleMode(),
         new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),

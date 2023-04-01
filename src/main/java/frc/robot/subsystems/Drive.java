@@ -1,14 +1,10 @@
 package frc.robot.subsystems;
 
-import java.util.Optional;
 import java.util.function.Supplier;
-
-import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,10 +15,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.SwerveModule;
+import frc.robot.commands.ZeroGyroContinuous;
 
 public class Drive extends SubsystemBase {
 
@@ -36,6 +34,8 @@ public class Drive extends SubsystemBase {
     public double[] previousPose = new double[2];
 
     public static double initialGyroAngle = 0;
+
+    public boolean resetGyro = false;
 
     public Drive() {
         setGyro(0);
@@ -245,8 +245,15 @@ public class Drive extends SubsystemBase {
     //     }
     // }
 
+    public void isResetGyro(boolean isReset) {
+        resetGyro = isReset;
+    }
+
     @Override
     public void periodic() {
+        if (resetGyro && !DriverStation.isEnabled()) {
+            setGyro(0);
+        }
         // System.out.println(getStates()[0]);
         System.out.println(getAngle());
         // System.out.println(getRoll() + " Roll");
@@ -261,7 +268,7 @@ public class Drive extends SubsystemBase {
         swerveOdometry.update(getYaw(), getPositions());
         // updatePoseEstimation();
 
-        SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
+        SmartDashboard.putNumber("Pigeon Reading", getAngle());
         // SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
         // SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
 

@@ -39,7 +39,10 @@ public class BottomTwoPieceWithGrabAuto extends SequentialCommandGroup {
 		addCommands(
 				new InstantCommand(
 						() -> swerve.resetOdometry(PPTrajectoryGenerator.getBottomPathTwoPiece().getInitialHolonomicPose())),
-				new ActuateLowToHighGridConeAuto(),
+				new ParallelDeadlineGroup(
+					new WaitCommand(.3), 
+					new SetClawIntakeMode()),
+				new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),new ActuateLowToHighGridConeAuto(),
 				new SetClawReleaseMode(),
 				new WaitCommand(0.5),
 				new ActuateToIdleAuto(),

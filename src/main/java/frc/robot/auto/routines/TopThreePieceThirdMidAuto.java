@@ -41,10 +41,13 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
 
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
-        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+        new ParallelDeadlineGroup(
+			new WaitCommand(.3), 
+			new SetClawIntakeMode()),
+        new SetClawIdleMode(), 
         new ActuateLowToHighGridConeAuto(),     
         new SetClawReleaseMode(),
-        new WaitCommand(0.1),
+        new WaitCommand(0.15),
         new ActuateToIdleAuto(),
         new ParallelDeadlineGroup(
             TopTwoPiece,
@@ -56,8 +59,8 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
                 new ActuateLowToHighGridCubeAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-        // new RotateRobotToSetpoint(swerve,  Drive.initialGyroAngle, 0.7),
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new RotateRobotToSetpoint(swerve,  0, 0.7),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new SetClawReleaseMode(),
         new WaitCommand(0.1),
         new SetClawIdleMode(),
@@ -69,7 +72,7 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
                 new WaitCommand(1),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
-                new WaitCommand(2.4),
+                new WaitCommand(3),
                 new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
             new SequentialCommandGroup(
                 new WaitCommand(3.7),

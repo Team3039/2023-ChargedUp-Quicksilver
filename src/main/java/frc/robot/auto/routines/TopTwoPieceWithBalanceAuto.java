@@ -41,8 +41,11 @@ public class TopTwoPieceWithBalanceAuto extends SequentialCommandGroup {
     Command DriveToBalance = autoBuilder.fullAuto(PPTrajectoryGenerator.getBalanceAfterTopTwoPiece());
 
     addCommands(
-        new InstantCommand(
-            () -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+        new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+        new ParallelDeadlineGroup(
+          new WaitCommand(.2), 
+          new SetClawIntakeMode()),
+        new SetClawIdleMode(),
         new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.15),

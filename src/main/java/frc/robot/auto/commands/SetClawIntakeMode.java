@@ -5,6 +5,7 @@
 package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -22,6 +23,7 @@ public class SetClawIntakeMode extends CommandBase {
   public void initialize() {
     RobotContainer.claw.setState(ClawState.INTAKE);
     if (RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
+      new WaitCommand(0.1);
       Wrist.setSetpoint(9.5);
       RobotContainer.wrist.setState(WristState.POSITION);
       }

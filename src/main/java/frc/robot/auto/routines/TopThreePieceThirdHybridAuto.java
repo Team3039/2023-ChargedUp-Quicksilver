@@ -42,10 +42,13 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
 
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
-        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+        new ParallelDeadlineGroup(
+			new WaitCommand(.2), 
+			new SetClawIntakeMode()),
+        new SetClawIdleMode(),
         new ActuateLowToHighGridConeAuto(),     
         new SetClawReleaseMode(),
-        new WaitCommand(0.1),
+        new WaitCommand(0.15),
         new ActuateToIdleAuto(),
         new ParallelDeadlineGroup(
             TopTwoPiece,
@@ -53,18 +56,17 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
                 new WaitCommand(.8),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
-                new WaitCommand(2.6),
+                new WaitCommand(2.8),
                 new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
             new SequentialCommandGroup(
-                new WaitCommand(4),
+                new WaitCommand(3.7),
                 new ActuateLowToHighGridCubeAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new RotateRobotToSetpoint(swerve, 0, 0.7),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-        new PrintCommand("Try To Rotate, Check Gyro Here"),
-        // new RotateRobotToSetpoint(swerve, Drive.initialGyroAngle, 0.7),
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
         new SetClawReleaseMode(),
-        new WaitCommand(0.1),
+        new WaitCommand(0.2),
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPath3rdPiece().getInitialHolonomicPose())),
@@ -74,7 +76,7 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
                 new WaitCommand(1),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
-                new WaitCommand(2.4),
+                new WaitCommand(3),
                 new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),       
         new ActuateWristToSetpoint(20, 20),
         new SetClawReleaseMode(),

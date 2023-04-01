@@ -6,12 +6,16 @@ package frc.robot.auto.routines;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.RobotContainer;
 import frc.robot.auto.commands.SetClawIdleMode;
+import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.SetWristIdleMode;
 import frc.robot.commands.ActuateWristToSetpoint;
+import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -24,6 +28,10 @@ public class SingleLowAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
+      new ParallelDeadlineGroup(
+					new WaitCommand(.3), 
+					new SetClawIntakeMode()),
+			new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
       new InstantCommand(() -> s_Swerve.setGyro(0)),
       new ActuateWristToSetpoint(20, 3),
       new SetClawReleaseMode(),

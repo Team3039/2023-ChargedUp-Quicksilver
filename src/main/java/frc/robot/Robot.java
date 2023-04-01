@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.routines.BottomTwoPieceAuto;
 import frc.robot.auto.routines.BottomTwoPieceWithGrabAuto;
 import frc.robot.auto.routines.ChargeStationAuto;
@@ -29,6 +28,7 @@ import frc.robot.auto.routines.TopThreePieceThirdMidAuto;
 import frc.robot.auto.routines.TopTwoPieceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithBalanceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithGrabAuto;
+import frc.robot.commands.ZeroGyroContinuous;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -49,6 +49,9 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private SendableChooser<Boolean> resetGyroToggle = new SendableChooser<>();
+
+  
 
   UsbCamera usbCamera;
   // usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 160, 90, 40);
@@ -64,8 +67,10 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
 
     SmartDashboard.putData("Auto Selector", autoChooser);
+    SmartDashboard.putData("Reset Gyro Toggle", resetGyroToggle);
 
-    SmartDashboard.putData("Zero Gyro", new InstantCommand(() -> RobotContainer.drive.setGyro(0)));
+
+    // SmartDashboard.putData("Zero Gyro", new ZeroGyroContinuous());
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothing());
     autoChooser.addOption("Charge Station Taxi", new ChargeStationTaxiAuto(RobotContainer.drive));
@@ -84,6 +89,10 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Top Three Piece Third Hybrid", new TopThreePieceThirdHybridAuto(RobotContainer.drive));
     autoChooser.addOption("Top Three Piece Third Keep", new TopThreePieceThirdKeepAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Balance", new TopTwoPieceWithBalanceAuto(RobotContainer.drive));
+
+    resetGyroToggle.addOption("YES", true);
+    resetGyroToggle.addOption("NO", false);
+
 
     // usbCamera = CameraServer.startAutomaticCapture();
     // outputStream = CameraServer.putVideo("Rectangle", 640, 480);
@@ -105,7 +114,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-      // Get the UsbCamera from CameraServer
+    if (resetGyroToggle.getSelected() != null) {
+    RobotContainer.drive.isResetGyro(resetGyroToggle.getSelected());
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
