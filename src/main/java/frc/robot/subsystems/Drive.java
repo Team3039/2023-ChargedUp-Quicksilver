@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,19 +19,17 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.SwerveModule;
-import frc.robot.commands.ZeroGyroContinuous;
 
 public class Drive extends SubsystemBase {
 
     public SwerveModule[] swerveMods;
     public Pigeon2 gyro = new Pigeon2(4);
     public SwerveDriveOdometry swerveOdometry;
-    // public SwerveDrivePoseEstimator swervePoseEstimator;
+    public SwerveDrivePoseEstimator swervePoseEstimator;
 
     public boolean isHighGear = false;
 
@@ -232,18 +234,18 @@ public class Drive extends SubsystemBase {
     //     );
     // }
 
-    // public void updatePoseEstimation() {
-    //     swervePoseEstimator.update(getYaw(), getPositions());
+    public void updatePoseEstimation() {
+        swervePoseEstimator.update(getYaw(), getPositions());
 
-    //     Optional<EstimatedRobotPose> result =
-    //            RobotContainer.vision.getEstimatedGlobalPose(swervePoseEstimator.getEstimatedPosition());
+        Optional<EstimatedRobotPose> result =
+               RobotContainer.vision.getEstimatedGlobalPose(swervePoseEstimator.getEstimatedPosition());
 
-    //     if (result.isPresent()) {
-    //         EstimatedRobotPose camPose = result.get();
-    //         swervePoseEstimator.addVisionMeasurement(
-    //                 camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-    //     }
-    // }
+        if (result.isPresent()) {
+            EstimatedRobotPose camPose = result.get();
+            swervePoseEstimator.addVisionMeasurement(
+                    camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+        }
+    }
 
     public void isResetGyro(boolean isReset) {
         resetGyro = isReset;
@@ -265,8 +267,12 @@ public class Drive extends SubsystemBase {
 
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
-        swerveOdometry.update(getYaw(), getPositions());
-        // updatePoseEstimation();
+        if (DriverStation.isAutonomousEnabled()) {
+            swerveOdometry.update(getYaw(), getPositions());
+        }
+        else {
+            updatePoseEstimation();
+        }
 
         SmartDashboard.putNumber("Pigeon Reading", getAngle());
         // SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());

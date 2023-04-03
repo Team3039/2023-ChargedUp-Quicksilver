@@ -99,14 +99,14 @@ public class Vision extends SubsystemBase {
     return 0;
   }
 
-//   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-//     if (photonPoseEstimator == null) {
-//         // The field layout failed to load, so we cannot estimate poses.
-//         return Optional.empty();
-//     }
-//     photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-//     return photonPoseEstimator.update();
-// }
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    if (photonPoseEstimator == null) {
+        // The field layout failed to load, so we cannot estimate poses.
+        return Optional.empty(); 
+    }
+    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+    return photonPoseEstimator.update();
+}
 
   public void getCameraResult() {
     result = visionCamera.getLatestResult();
