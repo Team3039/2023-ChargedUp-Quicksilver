@@ -41,7 +41,7 @@ public class TopThreePieceThirdKeepAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
         new ParallelDeadlineGroup(
-			new WaitCommand(.2), 
+			new WaitCommand(.3), 
 			new SetClawIntakeMode()),
         new SetClawIdleMode(),
         new ActuateLowToHighGridConeAuto(),     
@@ -54,17 +54,14 @@ public class TopThreePieceThirdKeepAuto extends SequentialCommandGroup {
                 new WaitCommand(.8),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
-                new WaitCommand(3),
-                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
-            new SequentialCommandGroup(
-                new WaitCommand(3.7),
+                new WaitCommand(4),
                 new ActuateLowToHighGridCubeAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
         new RotateRobotToSetpoint(swerve, 0, 0.7),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
         new SetClawReleaseMode(),
-        new WaitCommand(0.15),
+        new WaitCommand(0.1),
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPath3rdPiece().getInitialHolonomicPose())),
@@ -74,7 +71,7 @@ public class TopThreePieceThirdKeepAuto extends SequentialCommandGroup {
                 new WaitCommand(1),
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
-                new WaitCommand(3.2),
+                new WaitCommand(3),
                 new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),    
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),        
