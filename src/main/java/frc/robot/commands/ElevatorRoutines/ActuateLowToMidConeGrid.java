@@ -18,8 +18,8 @@ public class ActuateLowToMidConeGrid extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ActuateWristToSetpoint(50, 5),
-      new ActuateElevatorToSetpoint(70, 5),
-      new ActuateWristToSetpoint(10, 5)
+      new ActuateElevatorToSetpoint(65, 35),
+      new ActuateWristToSetpoint(5, 5)
 
     );
   }

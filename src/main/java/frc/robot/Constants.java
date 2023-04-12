@@ -140,10 +140,10 @@ public final class Constants {
 
 		/* Ramp Rates and Current Limits */
 		public static final double DRIVE_CLOSED_LOOP_RAMP = 0;
-		public static final double DRIVE_OPEN_LOOP_RAMP = 0;
+		public static final double DRIVE_OPEN_LOOP_RAMP = 0.25;
 		public static final int ANGLE_MOTOR_SMART_CURRENT = 25;
 		public static final double ANGLE_MOTOR_SECONDARY_LIMIT = 40;
-		public static final int DRIVE_MOTOR_SMART_CURRENT = 35;
+		public static final int DRIVE_MOTOR_SMART_CURRENT = 40;
 		public static final double DRIVE_MOTOR_SECONDARY_LIMIT = 60;
 
 		/* Angle Motor PID */

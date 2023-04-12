@@ -45,13 +45,11 @@ public class SwerveModule extends SubsystemBase{
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         integratedAngleEncoder = angleMotor.getEncoder();
         integratedAngleController = angleMotor.getPIDController();
-      
-        /* Angle Encoder Config */
+     
         cancoder = new CANCoder(moduleConstants.cancoderID);
         cancoder.configMagnetOffset(moduleConstants.angleOffset);
         
-        configureDevices();
-        // configureDevices();
+        configureDevices();   
 
         lastAngle = getState().angle.getDegrees();
 
@@ -194,11 +192,12 @@ public class SwerveModule extends SubsystemBase{
         integratedAngleController.setReference(90, ControlType.kPosition);
     }
 
+    public double getDriveOutput(){
+        return driveMotor.get();
+    }
+
     @Override
     public void periodic() {
-        // if (moduleNumber == 0) {
-        // System.out.println(getPosition());
-        // }
-        // System.out.println(driveMotor.getAppliedOutput());
+        integratedAngleEncoder.setPosition(cancoder.getAbsolutePosition() - angleOffset);
   }
 }

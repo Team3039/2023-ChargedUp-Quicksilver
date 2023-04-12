@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -28,7 +29,6 @@ import frc.robot.auto.routines.TopThreePieceThirdMidAuto;
 import frc.robot.auto.routines.TopTwoPieceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithBalanceAuto;
 import frc.robot.auto.routines.TopTwoPieceWithGrabAuto;
-import frc.robot.commands.ZeroGyroContinuous;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
   
 
   UsbCamera usbCamera;
-  // usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 160, 90, 40);
   CvSource outputStream;
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -94,8 +93,8 @@ public class Robot extends TimedRobot {
     resetGyroToggle.addOption("NO", false);
 
 
-    // usbCamera = CameraServer.startAutomaticCapture();
-    // outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+    usbCamera = CameraServer.startAutomaticCapture();
+    outputStream = CameraServer.putVideo("Rectangle", 640, 480);
 
   }
 
