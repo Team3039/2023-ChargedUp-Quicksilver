@@ -23,7 +23,7 @@ public class SetClawIntakeMode extends CommandBase {
   public void initialize() {
     RobotContainer.claw.setState(ClawState.INTAKE);
     if (RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
-      new WaitCommand(0.2);
+      new WaitCommand(0.3);
       Wrist.setSetpoint(9.5);
       RobotContainer.wrist.setState(WristState.POSITION);
       }

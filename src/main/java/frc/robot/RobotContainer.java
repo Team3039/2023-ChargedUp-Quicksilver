@@ -15,6 +15,7 @@ import frc.robot.auto.routines.ChargeStationAuto;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
+import frc.robot.commands.ClawSnapperManual;
 import frc.robot.commands.ForceIdle;
 import frc.robot.commands.GridTagTrack;
 import frc.robot.commands.RotateTo180;
@@ -151,15 +152,17 @@ public class RobotContainer {
 
     operatorL1.whileTrue(new ClawIntake(0, 6 + wrist.getWristOffset(), false));
     operatorL2.whileTrue(new ClawIntake(30, 70 + wrist.getWristOffset(), false));
-    operatorR1.whileTrue(new ClawIntake(18, -6.5 + wrist.getWristOffset(), true));
+    operatorR1.whileTrue(new ClawIntake(19, -4 + wrist.getWristOffset(), true));
     driverR2.whileTrue(new ClawRelease());
     operatorR2.whileTrue(new ClawRelease());
 
     operatorStart.toggleOnTrue(new SetElevatorManualOverride());
     operatorStart.toggleOnTrue(new SetWristManualOverride());
 
-    driverL1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(1)));
-    driverR1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(-1)));
+    // driverL1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(1)));
+    // driverR1.onTrue(new InstantCommand(() -> wrist.changeWristOffset(-1)));
+
+    driverL1.toggleOnTrue(new ClawSnapperManual());
   }
 
   public Command getAutonomousCommand() {

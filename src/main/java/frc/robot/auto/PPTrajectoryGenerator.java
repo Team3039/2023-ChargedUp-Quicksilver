@@ -70,6 +70,36 @@ public class PPTrajectoryGenerator {
         return PathPlanner.loadPath("Balance After Top Two Piece", 
         new PathConstraints(4.0, 4.0));
     }
+
+    public static PathPlannerTrajectory getDriveOverWireCover() {
+        return PathPlanner.loadPath("Drive Over Wire Cover", 
+        new PathConstraints(1.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getWireCoverGrabFirstPiece() {
+        return PathPlanner.loadPath("Wire Cover Grab First Piece", 
+        new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getWireCoverGrabSecondPiece() {
+        return PathPlanner.loadPath("Wire Cover Grab Second Piece", 
+        new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getWireCoverDriveToDispensePiece() {
+        return PathPlanner.loadPath("Wire Cover Drive To Dispense Piece", 
+        new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getWireCoverDriveBackToWireCover() {
+        return PathPlanner.loadPath("Wire Cover Drive Back To Wire Cover", 
+        new PathConstraints(4.0, 4.0));
+    }
+
+    public static PathPlannerTrajectory getWireCoverDriveBackOverWireCover() {
+        return PathPlanner.loadPath("Wire Cover Drive Back Over Wire Cover", 
+        new PathConstraints(1.0, 4.0));
+    }
     public PPTrajectoryGenerator() {
         eventMap = new HashMap<>();
         // eventMap.put("Claw Idle", new SetClawIdleMode());
