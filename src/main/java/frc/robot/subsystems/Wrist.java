@@ -161,12 +161,6 @@ public class Wrist extends SubsystemBase {
 
     switch (wristState) {
       case IDLE:
-        // System.out.println(setpointWrist);
-        // if (RobotContainer.claw.isIntakeDeactivated()) {
-        //   setSetpoint(20);
-        // } else {
-          // setSetpoint(30);
-        // }
         if (RobotContainer.elevator.getState().equals(ElevatorState.IDLE)) {
         setSetpoint(90);
         setWristPosition(false);

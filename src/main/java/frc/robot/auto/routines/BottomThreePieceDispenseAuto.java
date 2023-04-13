@@ -14,11 +14,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.auto.PPTrajectoryGenerator;
+import frc.robot.auto.commands.RotateRobotToSetpoint;
 import frc.robot.auto.commands.SetClawIdleMode;
 import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto;
-import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToPreScoreAuto;
+import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridCubeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Claw.ClawState;
@@ -44,45 +45,52 @@ public class BottomThreePieceDispenseAuto extends SequentialCommandGroup {
  
 
     addCommands(
-        // new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOverWireCover().getInitialHolonomicPose())),
-        // new ParallelDeadlineGroup(
-		// 	new WaitCommand(.3), 
-		// 	new SetClawIntakeMode()),
-        // new SetClawIdleMode(), 
-        // new ActuateLowToHighGridConeAuto(),     
-        // new SetClawReleaseMode(),
-        // new WaitCommand(0.15),
-        // new ActuateToIdleAuto(),
-        // driveOverWireCover,
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        // new SetClawIntakeMode(),
-        // new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOverWireCover().getInitialHolonomicPose())),
-        // grabFirstPiece,
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        // new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
-        // driveToDispensePiece,
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
-        // new ActuateWristToSetpoint(60, 20),    
-        // new SetClawReleaseMode(),    
-        // new WaitCommand(0.1),
-        // new SetClawIdleMode(),
-        // new ActuateToIdleAuto(),
-        // new ParallelDeadlineGroup(
-        //     TopThirdPiece,
-        //     new SequentialCommandGroup(
-        //         new WaitCommand(1),
-        //         new SetClawIntakeMode()),
-        //     new SequentialCommandGroup(
-        //         new WaitCommand(3),
-        //         new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
-        //     new SequentialCommandGroup(
-        //         new WaitCommand(3.7),
-        //         new ActuateLowToPreScoreAuto())),
-        // new SetClawReleaseMode(),
-        // new WaitCommand(0.1),
-        // new SetClawIdleMode(),
-        // new ActuateToIdleAuto(),        
-        // new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false))
+        new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOverWireCover().getInitialHolonomicPose())),
+        new ParallelDeadlineGroup(
+			new WaitCommand(.3), 
+			new SetClawIntakeMode()),
+        new SetClawIdleMode(), 
+        new ActuateLowToHighGridConeAuto(),     
+        new SetClawReleaseMode(),
+        new WaitCommand(0.15),
+        new ActuateToIdleAuto(),
+        driveOverWireCover,
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new SetClawIntakeMode(),
+        new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getDriveOverWireCover().getInitialHolonomicPose())),
+        grabFirstPiece,
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+        driveToDispensePiece,
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new ActuateWristToSetpoint(60, 20),    
+        new SetClawReleaseMode(),    
+        new WaitCommand(0.1),
+        new SetClawIdleMode(),
+        new ActuateToIdleAuto(),
+        new ParallelDeadlineGroup(
+            grabSecondPiece,
+            new SequentialCommandGroup(
+                new WaitCommand(0.2),
+                new SetClawIntakeMode())),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)),
+        new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+        driveBackToWireCover,
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new ParallelDeadlineGroup(
+          driveBackOverWireCover,
+          new SequentialCommandGroup(
+            new WaitCommand(0.5),
+            new ActuateLowToHighGridCubeAuto())),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+         new RotateRobotToSetpoint(swerve,  0, 0.7),
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new SetClawReleaseMode(),
+        new WaitCommand(0.1),
+        new SetClawIdleMode(),
+        new ActuateToIdleAuto()
+    
         );
   }
 }
