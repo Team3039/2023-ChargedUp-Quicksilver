@@ -71,8 +71,8 @@ public class PPTrajectoryGenerator {
         new PathConstraints(4.0, 4.0));
     }
 
-    public static PathPlannerTrajectory getDriveOverWireCover() {
-        return PathPlanner.loadPath("Drive Over Wire Cover", 
+    public static PathPlannerTrajectory getWireCoverDriveOverWireCover() {
+        return PathPlanner.loadPath("Wire Cover Drive Over Wire Cover", 
         new PathConstraints(1.0, 4.0));
     }
 

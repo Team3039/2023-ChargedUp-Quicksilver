@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auto.routines.BottomThreePieceDispenseAuto;
 import frc.robot.auto.routines.BottomTwoPieceAuto;
 import frc.robot.auto.routines.BottomTwoPieceWithGrabAuto;
 import frc.robot.auto.routines.ChargeStationAuto;
@@ -88,6 +89,8 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Top Three Piece Third Hybrid", new TopThreePieceThirdHybridAuto(RobotContainer.drive));
     autoChooser.addOption("Top Three Piece Third Keep", new TopThreePieceThirdKeepAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Balance", new TopTwoPieceWithBalanceAuto(RobotContainer.drive));
+    autoChooser.addOption("Bottom Three Piece Dispense", new BottomThreePieceDispenseAuto(RobotContainer.drive));
+
 
     resetGyroToggle.addOption("YES", true);
     resetGyroToggle.addOption("NO", false);

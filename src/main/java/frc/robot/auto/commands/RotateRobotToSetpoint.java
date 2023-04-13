@@ -18,7 +18,7 @@ public class RotateRobotToSetpoint extends CommandBase {
   double rotation;
   double duration;
 
-  private PIDController rotController = new PIDController(0.04, 0.6, 0.00);
+  private PIDController rotController = new PIDController(0.045, 0.6, 0.00);
 
   private Timer timer = new Timer();
 
