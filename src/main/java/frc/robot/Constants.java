@@ -107,6 +107,9 @@ public final class Constants {
 		public static final double X_TOLLERENCE = 0.01;
 		public static final double Y_TOLLERENCE = 0.02;
 		public static final double THETA_TOLLERENCE = 0.02;
+
+		public static final double FIELD_LENGTH_METERS = 16.54175;
+		public static final double FIELD_WIDTH_METERS = 8.0137;
 	}
 
 	public static final class Swerve {

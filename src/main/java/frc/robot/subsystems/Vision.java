@@ -32,8 +32,6 @@ public class Vision extends SubsystemBase {
   public VisionState visionState = VisionState.DRIVE;
 
   public PhotonCamera visionCamera = new PhotonCamera("Arducam_OV9281_USB_Camera");
-  // public PhotonCamera driverCamera = new
-  // PhotonCamera("Microsoft_LifeCam_HD-3000");
   public PhotonPipelineResult result;
   public PhotonTrackedTarget target;
 

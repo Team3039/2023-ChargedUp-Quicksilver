@@ -247,10 +247,14 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    public Pose2d getPoseEstimate() {
+        return swervePoseEstimator.getEstimatedPosition();
+    }
+
     public void isResetGyro(boolean isReset) {
         resetGyro = isReset;
     }
-
+    
     @Override
     public void periodic() {
         if (resetGyro && !DriverStation.isEnabled()) {
