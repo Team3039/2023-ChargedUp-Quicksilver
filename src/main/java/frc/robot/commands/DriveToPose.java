@@ -11,6 +11,7 @@ import static frc.robot.Constants.Vision.Y_D;
 import static frc.robot.Constants.Vision.Y_I;
 import static frc.robot.Constants.Vision.Y_P;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,26 +39,26 @@ public class DriveToPose extends CommandBase {
       3 * 0.4,
       5);
 
-  private final ProfiledPIDController xController;
-  private final ProfiledPIDController yController;
-  private final ProfiledPIDController thetaController;
+  private final PIDController xController;
+  private final PIDController yController;
+  private final PIDController thetaController;
 
   private final Drive swerve;
   private final Pose2d initialPose;
   private final Pose2d goalPose;
   private final boolean useAllianceColor;
 
-  public DriveToPose (Drive swerve, Pose2d initialPose, Pose2d goalPose, boolean useAllianceColor) {
+  public DriveToPose (Drive swerve, Pose2d goalPose, boolean useAllianceColor) {
     this.swerve = swerve;
-    this.initialPose = initialPose;
+    this.initialPose = swerve.getPoseEstimate();
     this.goalPose = goalPose;
     this.useAllianceColor = useAllianceColor;
 
-    xController = new ProfiledPIDController(X_P, X_I, X_D, DEFAULT_XY_CONSTRAINTS);
-    yController = new ProfiledPIDController(Y_P, Y_I, Y_D, DEFAULT_XY_CONSTRAINTS);
+    xController = new PIDController(X_P, X_I, X_D);
+    yController = new PIDController(Y_P, Y_I, Y_D);
     xController.setTolerance(TRANSLATION_TOLERANCE);
     yController.setTolerance(TRANSLATION_TOLERANCE);
-    thetaController = new ProfiledPIDController(THETA_P, THETA_I, THETA_D, DEFAULT_OMEGA_CONSTRAINTS);
+    thetaController = new PIDController(THETA_P, THETA_I, THETA_D);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(THETA_TOLERANCE);
 
@@ -73,39 +74,36 @@ public class DriveToPose extends CommandBase {
       Translation2d transformedTranslation = new Translation2d(pose.getX(), FIELD_WIDTH_METERS - pose.getY());
       Rotation2d transformedHeading = pose.getRotation().times(-1);
       pose = new Pose2d(transformedTranslation, transformedHeading);
-    }
-    thetaController.setGoal(pose.getRotation().getRadians());
-    xController.setGoal(pose.getX());
-    yController.setGoal(pose.getY());  
+    } 
   }
 
   public boolean atGoal() {
-    return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
+    return xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint();
   }
 
   private void resetPIDControllers() {
     var robotPose = initialPose;
-    thetaController.reset(robotPose.getRotation().getRadians());
-    xController.reset(robotPose.getX());
-    yController.reset(robotPose.getY());
+    thetaController.reset();
+    xController.reset();
+    yController.reset();
   }
 
   @Override
   public void execute() {
-    var robotPose = initialPose;
+    var robotPose = swerve.getPoseEstimate();
     // Drive to the goal
-    var xSpeed = xController.calculate(robotPose.getX());
-    if (xController.atGoal()) {
+    var xSpeed = xController.calculate(robotPose.getX(), goalPose.getX());
+    if (xController.atSetpoint()) {
       xSpeed = 0;
     }
 
-    var ySpeed = yController.calculate(robotPose.getY());
-    if (yController.atGoal()) {
+    var ySpeed = yController.calculate(robotPose.getY(), goalPose.getY());
+    if (yController.atSetpoint()) {
       ySpeed = 0;
     }
 
-    var omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
-    if (thetaController.atGoal()) {
+    var omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
+    if (thetaController.atSetpoint()) {
       omegaSpeed = 0;
     }
 

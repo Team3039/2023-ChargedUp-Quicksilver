@@ -43,7 +43,7 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
         new ParallelDeadlineGroup(
 			new WaitCommand(.3), 
-			new SetClawIntakeMode()),
+            new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
         new SetClawIdleMode(), 
         new ActuateLowToHighGridConeAuto(),     
         new SetClawReleaseMode(),
@@ -54,6 +54,9 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new WaitCommand(.8),
                 new SetClawIntakeMode()),
+            new SequentialCommandGroup(
+                new WaitCommand(2.8),
+                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE))),
             new SequentialCommandGroup(
                 new WaitCommand(4),
                 new ActuateLowToHighGridCubeAuto())),

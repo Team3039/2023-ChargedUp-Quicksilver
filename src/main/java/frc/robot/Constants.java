@@ -31,9 +31,6 @@ public final class Constants {
 	public static final class Ports {
 		public static final int PIGEON_2 = 4;
 
-		public static final int CLAW_LEFT_WHEELS = 13;
-		public static final int CLAW_RIGHT_WHEELS = 12;
-
 		public static final int ELEVATOR_A = 9;
 		public static final int ELEVATOR_B = 10;
 
@@ -92,15 +89,15 @@ public final class Constants {
 				new Translation3d(Units.inchesToMeters(13.25), 0, 0),
 				new Rotation3d(0, Units.degreesToRadians(-20), 0));
 
-		public static final double X_P = 1.0;
+		public static final double X_P = -2;
 		public static final double X_I = 0.0;
 		public static final double X_D = 0;
 
-		public static final double Y_P = 1.0;
+		public static final double Y_P = -2;
 		public static final double Y_I = 0.0;
 		public static final double Y_D = 0;
 
-		public static final double THETA_P = .8;
+		public static final double THETA_P = 1.2;
 		public static final double THETA_I = 0.0;
 		public static final double THETA_D = 0;
 

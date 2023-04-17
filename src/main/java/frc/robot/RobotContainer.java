@@ -4,21 +4,20 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.auto.routines.ChargeStationAuto;
-import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.ClawIntake;
 import frc.robot.commands.ClawRelease;
 import frc.robot.commands.ClawSnapperManual;
+import frc.robot.commands.DriveToPose;
 import frc.robot.commands.ForceIdle;
-import frc.robot.commands.GridTagTrack;
-import frc.robot.commands.RotateTo180;
+import frc.robot.commands.RotateTo90;
 import frc.robot.commands.SetElevatorManualOverride;
 import frc.robot.commands.SetLEDS;
 import frc.robot.commands.SetWristManualOverride;
@@ -127,7 +126,7 @@ public class RobotContainer {
     // driverSquare.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, -0.50));
     // driverTriangle.whileTrue(new GridTagTrack(drive, vision, driverPad, true, true, 0.05));
 
-    driverX.whileTrue(new RotateTo180(drive, driverPad, true, true, 0));
+    driverR1.whileTrue(new RotateTo90(drive, driverPad, true, true, 0));
 
     driverL2.onTrue(new SetLEDS());
 
@@ -141,6 +140,11 @@ public class RobotContainer {
     // operatorSquare.toggleOnTrue(new ActuateToSetpoint(75, 20));
     // operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
     // operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
+
+    driverX.whileTrue(new DriveToPose(drive, new Pose2d(14.22, 7.5, new Rotation2d(90)), true));
+    
+    // Cube Shelf Grid 1
+    driverTriangle.whileTrue(new DriveToPose(drive, new Pose2d(14.65, 1.07, new Rotation2d(0)), false));
 
     operatorCircle.onTrue(new ActuateLowToMidCube());
     operatorSquare.onTrue(new ActuateLowToMidConeGrid());

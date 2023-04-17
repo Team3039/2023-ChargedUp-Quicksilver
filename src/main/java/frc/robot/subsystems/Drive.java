@@ -269,14 +269,16 @@ public class Drive extends SubsystemBase {
         // System.out.println(getRoll());     
         // System.out.println(getAngle());  
 
+        System.out.println(swervePoseEstimator.getEstimatedPosition());
+
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
-        // if (DriverStation.isAutonomousEnabled()) {
+        if (DriverStation.isAutonomousEnabled()) {
             swerveOdometry.update(getYaw(), getPositions());
-        // }
-        // else {
-        //     updatePoseEstimation();
-        // }
+        }
+        else {
+            updatePoseEstimation();
+        }
 
         SmartDashboard.putNumber("Pigeon Reading", getAngle());
         // SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());

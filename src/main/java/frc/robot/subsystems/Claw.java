@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -138,7 +137,7 @@ public class Claw extends SubsystemBase {
 					timer.reset();
 					timer.start();
 				} else if (!deactivateIntake) {
-					setWheelSpeed(0.6);
+					setWheelSpeed(0.8);
 				}
 				if (deactivateIntake && timer.get() > 0.1) {
 					setWheelSpeed(0);
@@ -149,11 +148,7 @@ public class Claw extends SubsystemBase {
 				break;
 			case RELEASE:
 				deactivateIntake = false;
-				if (DriverStation.isAutonomous()) {
-					setWheelSpeed(-0.9);
-				} else {
-					setWheelSpeed(-0.7);
-				}
+				setWheelSpeed(-0.8);
 		}
 	}
 }

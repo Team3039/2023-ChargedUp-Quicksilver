@@ -3,18 +3,20 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.subsystems.Drive;
 
-public class RotateTo180 extends CommandBase {
+public class RotateTo90 extends CommandBase {
 
     private double rotation = 0;
     private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
-    private double rotSetPoint = 180;
+    private double rotSetPoint = 90;
 
     private Drive drive;
     private InterpolatedPS4Gamepad controller;
@@ -24,7 +26,7 @@ public class RotateTo180 extends CommandBase {
     /**
      * Driver control
      */
-    public RotateTo180(Drive drive, InterpolatedPS4Gamepad controller, boolean fieldRelative, boolean openLoop, double ySetPoint) {
+    public RotateTo90(Drive drive, InterpolatedPS4Gamepad controller, boolean fieldRelative, boolean openLoop, double ySetPoint) {
         this.drive = drive;
         addRequirements(drive);
         
@@ -34,6 +36,10 @@ public class RotateTo180 extends CommandBase {
 
         rotController.reset();
         rotController.setIntegratorRange(-0.2, 0.2);
+
+        if (DriverStation.getAlliance().equals(Alliance.Red)) {
+            rotSetPoint += 180;
+        }
       }
 
     @Override
@@ -41,7 +47,7 @@ public class RotateTo180 extends CommandBase {
         double xAxis = -controller.interpolatedLeftYAxis();
         double yAxis = -controller.interpolatedLeftXAxis();
         rotation = rotController.calculate(Math.abs(drive.getAngle()), rotSetPoint);
-        rotation += yAxis;
+        // rotation += yAxis;
         if (drive.getAngle() < 0) {
             rotation *= -1;
         }
@@ -50,7 +56,7 @@ public class RotateTo180 extends CommandBase {
             rotation = 0;
         }
         
-        translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);;
+        translation = new Translation2d(xAxis, yAxis).times(Constants.Swerve.MAX_SPEED);
         drive.drive(translation, rotation, fieldRelative, openLoop);
     }
 

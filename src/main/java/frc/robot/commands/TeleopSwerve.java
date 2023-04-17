@@ -36,9 +36,9 @@ public class TeleopSwerve extends CommandBase {
 			double xAxis = -controller.interpolatedLeftYAxis();
 			double yAxis = -controller.interpolatedLeftXAxis();
 			double rAxis = controller.interpolatedRightXAxis();
-			if (RobotContainer.elevator.getPosition() > 37) {
-				xAxis *= .4;
-				yAxis *= .4;
+			if (RobotContainer.elevator.getPosition() > 42) {
+				xAxis *= .5;
+				yAxis *= .5;
 				rAxis *= .25;
 			}
 			// (forward/back, left/right) the controller axis is rotated from the

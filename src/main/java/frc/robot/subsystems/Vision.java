@@ -18,9 +18,11 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Vision extends SubsystemBase {
 
@@ -29,9 +31,9 @@ public class Vision extends SubsystemBase {
     TRACKING
   }
 
-  public VisionState visionState = VisionState.DRIVE;
+  public VisionState visionState = VisionState.TRACKING;
 
-  public PhotonCamera visionCamera = new PhotonCamera("Arducam_OV9281_USB_Camera");
+  public PhotonCamera visionCamera = new PhotonCamera("Limelight");
   public PhotonPipelineResult result;
   public PhotonTrackedTarget target;
 
@@ -44,6 +46,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     visionCamera.setDriverMode(true);
+    setState(VisionState.TRACKING);
   }
 
   public VisionState getState() {
@@ -117,7 +120,6 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putString("Vision State", String.valueOf(getState()));
-
     switch (visionState) {
       case DRIVE:
         setDriverMode(true);
@@ -127,10 +129,7 @@ public class Vision extends SubsystemBase {
         getCameraResult();
         recieveTarget();
         if (result.hasTargets()) {
-          // System.out.println(PhotonUtils.estimateFieldToRobotAprilTag(
-          // target.getBestCameraToTarget(),
-          // aprilTagFieldLayout.getTagPose(target.getFiducialId()).get(),
-          // Constants.Vision.cameraToRobot));
+
 
         }
     }
