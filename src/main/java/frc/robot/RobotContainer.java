@@ -141,10 +141,10 @@ public class RobotContainer {
     // operatorX.toggleOnTrue(new ActuateToSetpoint(45, 0));
     // operatorTriangle.toggleOnTrue(new ActuateToSetpoint(82, 60));
 
-    driverX.whileTrue(new DriveToPose(drive, new Pose2d(14.22, 7.5, new Rotation2d(90)), true));
+    // driverX.whileTrue(new DriveToPose(drive, new Pose2d(14.22, 7.5, new Rotation2d(90)), true));
     
     // Cube Shelf Grid 1
-    driverTriangle.whileTrue(new DriveToPose(drive, new Pose2d(14.65, 1.07, new Rotation2d(0)), false));
+    driverTriangle.whileTrue(new DriveToPose(drive, new Pose2d(14.65, 1.07, new Rotation2d(0)), true));
 
     operatorCircle.onTrue(new ActuateLowToMidCube());
     operatorSquare.onTrue(new ActuateLowToMidConeGrid());

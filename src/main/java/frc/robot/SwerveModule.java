@@ -30,6 +30,7 @@ public class SwerveModule extends SubsystemBase{
     private SparkMaxPIDController driveController;
     private SparkMaxPIDController integratedAngleController;
     private double lastAngle;
+    private Rotation2d currentAngle = new Rotation2d();
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.DRIVE_KS,
             Constants.Swerve.DRIVE_KV, Constants.Swerve.DRIVE_KA);
@@ -156,13 +157,13 @@ public class SwerveModule extends SubsystemBase{
 
     public SwerveModuleState getState() {
         double velocity = driveEncoder.getVelocity();
-        Rotation2d angle = Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+        Rotation2d angle = currentAngle;
         return new SwerveModuleState(velocity, angle);
     }
 
     public SwerveModulePosition getPosition() {
         double position = driveEncoder.getPosition(); 
-        Rotation2d angle = Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+        Rotation2d angle = currentAngle;
         return new SwerveModulePosition(position, angle);
     }
 
@@ -198,6 +199,7 @@ public class SwerveModule extends SubsystemBase{
 
     @Override
     public void periodic() {
+        currentAngle = Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
         integratedAngleEncoder.setPosition(cancoder.getAbsolutePosition() - angleOffset);
   }
 }

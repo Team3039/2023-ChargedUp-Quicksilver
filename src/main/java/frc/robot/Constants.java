@@ -89,15 +89,15 @@ public final class Constants {
 				new Translation3d(Units.inchesToMeters(13.25), 0, 0),
 				new Rotation3d(0, Units.degreesToRadians(-20), 0));
 
-		public static final double X_P = -2;
+		public static final double X_P = 2.7;
 		public static final double X_I = 0.0;
 		public static final double X_D = 0;
 
-		public static final double Y_P = -2;
+		public static final double Y_P = 2.7;
 		public static final double Y_I = 0.0;
 		public static final double Y_D = 0;
 
-		public static final double THETA_P = 1.2;
+		public static final double THETA_P = 2;
 		public static final double THETA_I = 0.0;
 		public static final double THETA_D = 0;
 

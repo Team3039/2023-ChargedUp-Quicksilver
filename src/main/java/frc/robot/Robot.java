@@ -12,14 +12,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auto.routines.BlueChargeStationTaxiTwoPieceAuto;
 import frc.robot.auto.routines.BottomThreePieceDispenseAuto;
-import frc.robot.auto.routines.BottomTwoPieceAuto;
-import frc.robot.auto.routines.BottomTwoPieceWithGrabAuto;
+import frc.robot.auto.routines.BottomTwoPieceBlueAuto;
+import frc.robot.auto.routines.BottomTwoPieceRedAuto;
 import frc.robot.auto.routines.ChargeStationAuto;
 import frc.robot.auto.routines.ChargeStationBottomLPath;
 import frc.robot.auto.routines.ChargeStationTaxiAuto;
+import frc.robot.auto.routines.ChargeStationTaxiGrabAuto;
 import frc.robot.auto.routines.ChargeStationTopLPath;
 import frc.robot.auto.routines.DoNothing;
+import frc.robot.auto.routines.RedChargeStationTaxiTwoPieceAuto;
 import frc.robot.auto.routines.SingleHighAuto;
 import frc.robot.auto.routines.SingleHighTaxiAuto;
 import frc.robot.auto.routines.SingleLowAuto;
@@ -81,8 +84,8 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Single High Taxi", new SingleHighTaxiAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low", new SingleLowAuto(RobotContainer.drive));
     autoChooser.addOption("Single Low Taxi", new SingleLowTaxiAuto(RobotContainer.drive));
-    autoChooser.addOption("Bottom Two Piece", new BottomTwoPieceAuto(RobotContainer.drive));
-    autoChooser.addOption("Bottom Two Piece With Grab", new BottomTwoPieceWithGrabAuto(RobotContainer.drive));
+    autoChooser.addOption("RED Bottom Two Piece", new BottomTwoPieceRedAuto(RobotContainer.drive));
+    autoChooser.addOption("BLUE Bottom Two Piece", new BottomTwoPieceBlueAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece", new TopTwoPieceAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Grab", new TopTwoPieceWithGrabAuto(RobotContainer.drive));
     autoChooser.addOption("Top Three Piece Third Mid", new TopThreePieceThirdMidAuto(RobotContainer.drive));
@@ -90,6 +93,9 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Top Three Piece Third Keep", new TopThreePieceThirdKeepAuto(RobotContainer.drive));
     autoChooser.addOption("Top Two Piece With Balance", new TopTwoPieceWithBalanceAuto(RobotContainer.drive));
     autoChooser.addOption("Bottom Three Piece Dispense", new BottomThreePieceDispenseAuto(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Taxi Red Two Piece", new RedChargeStationTaxiTwoPieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Taxi Blue Two Piece", new BlueChargeStationTaxiTwoPieceAuto(RobotContainer.drive));
+    autoChooser.addOption("Charge Station Taxi Grab", new ChargeStationTaxiGrabAuto(RobotContainer.drive));
 
 
     resetGyroToggle.addOption("YES", true);

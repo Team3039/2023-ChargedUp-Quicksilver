@@ -104,6 +104,10 @@ public class Drive extends SubsystemBase {
         swerveOdometry.resetPosition(getYaw(), getPositions(), pose);
     }
 
+    public void resetPoseEstimator(Pose2d pose) {
+        swervePoseEstimator.resetPosition(getYaw(), getPositions(), pose);
+    }
+
     public SwerveModuleState[] getStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : swerveMods) {
@@ -273,12 +277,12 @@ public class Drive extends SubsystemBase {
 
         previousPose[0] = swerveOdometry.getPoseMeters().getX();
         previousPose[1] = swerveOdometry.getPoseMeters().getY();
-        if (DriverStation.isAutonomousEnabled()) {
+        // if (DriverStation.isAutonomousEnabled()) {
             swerveOdometry.update(getYaw(), getPositions());
-        }
-        else {
+        // }
+        // else {
             updatePoseEstimation();
-        }
+        // }
 
         SmartDashboard.putNumber("Pigeon Reading", getAngle());
         // SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());

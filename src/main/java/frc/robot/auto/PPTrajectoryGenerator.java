@@ -73,7 +73,7 @@ public class PPTrajectoryGenerator {
 
     public static PathPlannerTrajectory getWireCoverDriveOverWireCover() {
         return PathPlanner.loadPath("Wire Cover Drive Over Wire Cover", 
-        new PathConstraints(1.0, 4.0));
+        new PathConstraints(1.50, 4.0));
     }
 
     public static PathPlannerTrajectory getWireCoverGrabFirstPiece() {
@@ -98,7 +98,17 @@ public class PPTrajectoryGenerator {
 
     public static PathPlannerTrajectory getWireCoverDriveBackOverWireCover() {
         return PathPlanner.loadPath("Wire Cover Drive Back Over Wire Cover", 
-        new PathConstraints(1.0, 4.0));
+        new PathConstraints(1.5, 4.0));
+    }
+
+    public static PathPlannerTrajectory getWireCoverEndRotate() {
+        return PathPlanner.loadPath("Wire Cover End Rotate", 
+        new PathConstraints(3, 4.0));
+    }
+
+    public static PathPlannerTrajectory getMidTaxiGrabPiece() {
+        return PathPlanner.loadPath("Mid Taxi Grab Piece", 
+        new PathConstraints(3, 4.0));
     }
     public PPTrajectoryGenerator() {
         eventMap = new HashMap<>();

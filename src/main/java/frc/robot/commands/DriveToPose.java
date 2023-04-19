@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import static frc.robot.Constants.Vision.FIELD_WIDTH_METERS;
+import static frc.robot.Constants.Vision.FIELD_LENGTH_METERS;
 import static frc.robot.Constants.Vision.THETA_D;
 import static frc.robot.Constants.Vision.THETA_I;
 import static frc.robot.Constants.Vision.THETA_P;
@@ -28,7 +29,7 @@ import frc.robot.subsystems.Drive;
  */
 public class DriveToPose extends CommandBase {
   
-  private static final double TRANSLATION_TOLERANCE = 0.02;
+  private static final double TRANSLATION_TOLERANCE = 0.05;
   private static final double THETA_TOLERANCE = Units.degreesToRadians(2.0);
 
   /** Default constraints are 90% of max speed, accelerate to full speed in 1/3 second */
@@ -45,7 +46,7 @@ public class DriveToPose extends CommandBase {
 
   private final Drive swerve;
   private final Pose2d initialPose;
-  private final Pose2d goalPose;
+  private Pose2d goalPose;
   private final boolean useAllianceColor;
 
   public DriveToPose (Drive swerve, Pose2d goalPose, boolean useAllianceColor) {
@@ -71,10 +72,12 @@ public class DriveToPose extends CommandBase {
     resetPIDControllers();
     var pose = goalPose;
     if (useAllianceColor && DriverStation.getAlliance() == DriverStation.Alliance.Red) {
-      Translation2d transformedTranslation = new Translation2d(pose.getX(), FIELD_WIDTH_METERS - pose.getY());
-      Rotation2d transformedHeading = pose.getRotation().times(-1);
-      pose = new Pose2d(transformedTranslation, transformedHeading);
+    //   Translation2d transformedTranslation = new Translation2d(FIELD_LENGTH_METERS - pose.getX(), pose.getY());
+    //   Rotation2d transformedHeading = pose.getRotation().times(-1);
+    //   pose = new Pose2d(transformedTranslation, transformedHeading);
     } 
+    goalPose = pose;
+    
   }
 
   public boolean atGoal() {
