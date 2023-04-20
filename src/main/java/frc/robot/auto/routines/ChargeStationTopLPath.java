@@ -22,6 +22,7 @@ import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.Lpath.DriveOntoChargeStationLPath;
+import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 
@@ -37,10 +38,11 @@ public class ChargeStationTopLPath extends SequentialCommandGroup {
 
     addCommands(
     new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getChargeStationTopLPath().getInitialHolonomicPose())),
-    new ParallelDeadlineGroup(
+    new ActuateWristToSetpoint(70, 5),
+        new ParallelDeadlineGroup(
 			new WaitCommand(.3), 
-			new SetClawIntakeMode()),
-		new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),
+            new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
+        new SetClawIdleMode(), 
     new InstantCommand(() -> swerve.setGyro(0)),
     new ActuateLowToHighGridConeAuto(),
     new SetClawReleaseMode(),

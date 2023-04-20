@@ -23,6 +23,7 @@ import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridCubeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.normal.DriveOntoChargeStation;
+import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Wrist.WristState;
@@ -42,10 +43,11 @@ public class TopTwoPieceWithBalanceAuto extends SequentialCommandGroup {
 
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+        new ActuateWristToSetpoint(70, 5),
         new ParallelDeadlineGroup(
-          new WaitCommand(.2), 
-          new SetClawIntakeMode()),
-        new SetClawIdleMode(),
+			new WaitCommand(.3), 
+            new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
+        new SetClawIdleMode(), 
         new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.15),

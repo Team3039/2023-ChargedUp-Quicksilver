@@ -150,7 +150,7 @@ public class Claw extends SubsystemBase {
 			case RELEASE:
 				deactivateIntake = false;
 				if (DriverStation.isAutonomousEnabled())  {
-					setWheelSpeed(-0.95);
+					setWheelSpeed(-0.8);
 				}
 				else {
 					setWheelSpeed(-0.8);

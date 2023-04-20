@@ -81,7 +81,7 @@ public class BottomTwoPieceRedAuto extends SequentialCommandGroup {
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
         endRotate,
-        new RotateRobotToSetpoint(swerve, 0, 1)
+        new RotateRobotToSetpoint(swerve, 180, 1)
         );
   }
 }

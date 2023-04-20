@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.auto.commands.LockWheels;
 import frc.robot.auto.commands.SetClawIdleMode;
-import frc.robot.auto.commands.SetClawIntakeMode;
 import frc.robot.auto.commands.SetClawReleaseMode;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
 import frc.robot.auto.commands.chargestation.normal.DriveOntoChargeStation;
+import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 
@@ -27,10 +27,11 @@ public class ChargeStationAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(new Pose2d())),
         new InstantCommand(() -> swerve.setGyro(0)),
+        new ActuateWristToSetpoint(70, 5),
         new ParallelDeadlineGroup(
-					new WaitCommand(.3), 
-					new SetClawIntakeMode()),
-				new InstantCommand(() -> RobotContainer.claw.setState(ClawState.PASSIVE)),        
+			new WaitCommand(.3), 
+            new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
+        new SetClawIdleMode(),       
         new ActuateLowToHighGridConeAuto(),
         new SetClawReleaseMode(),
         new WaitCommand(0.5),

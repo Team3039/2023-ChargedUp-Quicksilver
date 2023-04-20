@@ -22,6 +22,7 @@ import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridConeAuto
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToHighGridCubeAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateLowToPreScoreAuto;
 import frc.robot.auto.commands.AutoElevatorRoutines.ActuateToIdleAuto;
+import frc.robot.commands.ActuateWristToSetpoint;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Wrist.WristState;
@@ -41,6 +42,7 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
 
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+        new ActuateWristToSetpoint(70, 5),
         new ParallelDeadlineGroup(
 			new WaitCommand(.3), 
             new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
@@ -80,6 +82,7 @@ public class TopThreePieceThirdMidAuto extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new WaitCommand(3.7),
                 new ActuateLowToPreScoreAuto())),
+        new InstantCommand(() -> swerve.setGyro(180)),
         new SetClawReleaseMode(),
         new WaitCommand(0.1),
         new SetClawIdleMode(),

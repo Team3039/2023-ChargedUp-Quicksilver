@@ -42,10 +42,11 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
 
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getTopPathTwoPiece().getInitialHolonomicPose())),
+        new ActuateWristToSetpoint(70, 5),
         new ParallelDeadlineGroup(
-			new WaitCommand(.2), 
-			new SetClawIntakeMode()),
-        new SetClawIdleMode(),
+			new WaitCommand(.3), 
+            new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
+        new SetClawIdleMode(), 
         new ActuateLowToHighGridConeAuto(),     
         new SetClawReleaseMode(),
         new WaitCommand(0.15),
@@ -77,7 +78,8 @@ public class TopThreePieceThirdHybridAuto extends SequentialCommandGroup {
                 new SetClawIntakeMode()),
             new SequentialCommandGroup(
                 new WaitCommand(3),
-                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),       
+                new InstantCommand(() -> RobotContainer.wrist.setState(WristState.PASSIVE)))),   
+        new InstantCommand(() -> swerve.setGyro(180)),    
         new ActuateWristToSetpoint(20, 20),
         new SetClawReleaseMode(),
         new SetClawIdleMode(),
