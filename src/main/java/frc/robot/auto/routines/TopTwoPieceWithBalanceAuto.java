@@ -76,6 +76,7 @@ public class TopTwoPieceWithBalanceAuto extends SequentialCommandGroup {
         DriveToBalance,
         new DriveOntoChargeStation(swerve),
         new LockWheels(swerve),
+        new InstantCommand(() -> swerve.setGyro(180)),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)));
   }
 }

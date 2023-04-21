@@ -27,6 +27,8 @@ import frc.robot.commands.DriveToPose;
 import frc.robot.subsystems.Claw.ClawState;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Wrist.WristState;
+import frc.robot.commands.ActuateWristToSetpoint;
+
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -49,9 +51,10 @@ public class BottomTwoPieceRedAuto extends SequentialCommandGroup {
 
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getWireCoverDriveOverWireCover().getInitialHolonomicPose())),
+        new ActuateWristToSetpoint(70, 5),
         new ParallelDeadlineGroup(
-			new WaitCommand(.3), 
-			new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
+      new WaitCommand(.3), 
+            new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
         new SetClawIdleMode(), 
         new ActuateLowToHighGridConeAuto(),     
         new SetClawReleaseMode(),
@@ -80,8 +83,9 @@ public class BottomTwoPieceRedAuto extends SequentialCommandGroup {
         new WaitCommand(0.1),
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
-        endRotate,
-        new RotateRobotToSetpoint(swerve, 180, 1)
+        // endRotate,
+        // new RotateRobotToSetpoint(swerve, 180, 1)
+        new InstantCommand(() -> swerve.setGyro(180))
         );
   }
 }

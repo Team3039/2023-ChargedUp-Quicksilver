@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -50,7 +51,7 @@ public class BottomTwoPieceBlueAuto extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> swerve.resetOdometry(PPTrajectoryGenerator.getWireCoverDriveOverWireCover().getInitialHolonomicPose())),
         new ParallelDeadlineGroup(
-			new WaitCommand(.15), 
+			new WaitCommand(.3), 
 			new InstantCommand(() -> RobotContainer.claw.setState(ClawState.INTAKE))),
         new SetClawIdleMode(), 
         new ActuateLowToHighGridConeAuto(),     
@@ -71,17 +72,20 @@ public class BottomTwoPieceBlueAuto extends SequentialCommandGroup {
         new RotateRobotToSetpoint(swerve, 0, .5),
         driveBackOverWireCover,
         new ParallelDeadlineGroup(
-          new DriveToPose(swerve, new Pose2d(1.9, 1.07, new Rotation2d(0)), false),
+          new DriveToPose(swerve, new Pose2d(1.9, 1.07, new Rotation2d(Units.degreesToRadians(180))), false),
           new SequentialCommandGroup(
-            new WaitCommand(0.3),
+            new WaitCommand(0.1),
             new ActuateLowToHighGridCubeAuto())),
         new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new WaitCommand(0.2),
         new SetClawReleaseMode(),
         new WaitCommand(0.1),
         new SetClawIdleMode(),
         new ActuateToIdleAuto(),
-        endRotate,
-        new RotateRobotToSetpoint(swerve, 180, 1)
+        // endRotate,
+        // new RotateRobotToSetpoint(swerve, 180, 1)
+        new InstantCommand(() -> swerve.setGyro(180))
+
         );
   }
 }

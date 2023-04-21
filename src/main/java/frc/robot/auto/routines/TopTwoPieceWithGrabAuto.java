@@ -72,6 +72,8 @@ public class TopTwoPieceWithGrabAuto extends SequentialCommandGroup {
         new InstantCommand(() -> swerve
             .resetOdometry(PPTrajectoryGenerator.getTopPathDriveOut().getInitialHolonomicPose())),
         TopDriveOut,
-        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)));
+        new InstantCommand(() -> swerve.drive(new Translation2d(), 0, true, false)),
+        new InstantCommand(() -> swerve.setGyro(0))
+    );
   }
 }

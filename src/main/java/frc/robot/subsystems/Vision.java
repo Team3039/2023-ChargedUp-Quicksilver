@@ -33,7 +33,7 @@ public class Vision extends SubsystemBase {
 
   public VisionState visionState = VisionState.TRACKING;
 
-  public PhotonCamera visionCamera = new PhotonCamera("Limelight");
+  public PhotonCamera visionCamera = new PhotonCamera("OV5647");
   public PhotonPipelineResult result;
   public PhotonTrackedTarget target;
 

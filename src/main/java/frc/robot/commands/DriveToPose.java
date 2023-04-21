@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
@@ -48,6 +49,9 @@ public class DriveToPose extends CommandBase {
   private final Pose2d initialPose;
   private Pose2d goalPose;
   private final boolean useAllianceColor;
+  private double x = X_P;
+  private double y = Y_P;
+  private double theta = THETA_P;
 
   public DriveToPose (Drive swerve, Pose2d goalPose, boolean useAllianceColor) {
     this.swerve = swerve;
@@ -55,8 +59,12 @@ public class DriveToPose extends CommandBase {
     this.goalPose = goalPose;
     this.useAllianceColor = useAllianceColor;
 
-    xController = new PIDController(X_P, X_I, X_D);
-    yController = new PIDController(Y_P, Y_I, Y_D);
+    if (DriverStation.getAlliance().equals(Alliance.Blue)) {
+      x *= -1;
+      y *= -1;
+    }
+    xController = new PIDController(x, X_I, X_D);
+    yController = new PIDController(y, Y_I, Y_D);
     xController.setTolerance(TRANSLATION_TOLERANCE);
     yController.setTolerance(TRANSLATION_TOLERANCE);
     thetaController = new PIDController(THETA_P, THETA_I, THETA_D);
